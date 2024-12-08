@@ -1,64 +1,60 @@
-import micropub from './micropub';
-import {DEFAULT_REACJI} from '../constants';
-
-const KEYS = [
-  'defaultToCurrentPage',
-  'autoSlug',
-  'closeAfterPosting',
-  'debugLog',
-  'reacji',
-  'slug',
-  'syndicateTo',
-];
+import micropub from "./micropub";
+import storage from "./storage";
+import { DEFAULT_REACJI } from "../constants";
 
 const DEFAULT_SETTINGS = {
-  defaultToCurrentPage: false,
-  autoSlug: false,
-  closeAfterPosting: true,
-  debugLog: false,
-  reacji: DEFAULT_REACJI,
-  slug: 'mp-slug',
-  syndicateTo: 'mp-syndicate-to',
+	defaultToCurrentPage: false,
+	autoSlug: false,
+	closeAfterPosting: true,
+	debugLog: false,
+	reacji: [...DEFAULT_REACJI],
+	slug: "mp-slug",
+	syndicateTo: "mp-syndicate-to",
 };
+Object.freeze(DEFAULT_SETTINGS);
+const KEYS = Object.keys(DEFAULT_SETTINGS);
 
-export function getSettings() {
-  const settings = JSON.parse(localStorage.getItem('settings'));
-  if (settings) {
-    return settings;
-  }
-  return DEFAULT_SETTINGS;
+function copySettings(originalSettings) {
+	return KEYS.reduce((newCopy, key) => {
+		newCopy[key] = originalSettings[key];
+		return newCopy;
+	}, {});
 }
 
-export function saveSettings(settings) {
-  const clean = {};
-  KEYS.forEach(key => {
-    clean[key] = settings[key];
-  });
-  localStorage.setItem('settings', JSON.stringify(clean));
+export async function getSettings() {
+	const settings = await storage.get("settings");
+	if (settings) {
+		return settings;
+	}
+	const newSettings = { ...DEFAULT_SETTINGS };
+	await saveSettings(newSettings);
+	return newSettings;
 }
 
-export function saveAuthenticationDetails(domain, token, micropubEndpoint) {
-  if (domain) {
-    localStorage.setItem('domain', domain);
-    micropub.options.me = domain;
-  }
-  if (token) {
-    localStorage.setItem('token', token);
-    micropub.options.token = token;
-  }
-  if (micropubEndpoint) {
-    localStorage.setItem('micropubEndpoint', micropubEndpoint);
-    micropub.options.micropubEndpoint = micropubEndpoint;
-  }
+export async function saveSettings(settings) {
+	await storage.set({ settings: copySettings(settings) });
 }
 
-export function getSyndicateOptions() {
-  const options = localStorage.getItem('syndicateTo');
-  if (options && options !== 'undefined') {
-    return JSON.parse(options);
-  } else {
-    // Fix bad data from omnibear v1.0.0 bug that saved 'undefined' to localStorage
-    localStorage.setItem('syndicateTo', '[]');
-    return [];
-  }
+export async function saveAuthenticationDetails(
+	domain,
+	token,
+	micropubEndpoint
+) {
+	if (domain) {
+		await storage.set({ domain });
+		micropub.options.me = domain;
+	}
+	if (token) {
+		await storage.set({ token });
+		micropub.options.token = token;
+	}
+	if (micropubEndpoint) {
+		await storage.set({ micropubEndpoint });
+		micropub.options.micropubEndpoint = micropubEndpoint;
+	}
+}
+
+export async function getSyndicateOptions() {
+	const { syndicateTo = [] } = await storage.get(["syndicateTo"]);
+	return syndicateTo;
 }

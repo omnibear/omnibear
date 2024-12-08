@@ -1,6 +1,6 @@
-import { useContext } from 'preact/hooks';
-import AppContext from '../../contexts/App';
-import Settings from '../../contexts/Settings';
+import { useContext } from "preact/hooks";
+import AppContext from "../../contexts/App";
+import Settings from "../../contexts/Settings";
 
 export default function QuickReplies() {
   const app = useContext(AppContext);
@@ -16,7 +16,7 @@ export default function QuickReplies() {
       {reacji.map((content) => (
         <Reacji
           content={content}
-          isSending={app.isSending}
+          isSending={app.isSending.value}
           send={app.addQuickReply}
         />
       ))}
@@ -27,11 +27,7 @@ export default function QuickReplies() {
 function Reacji({ content, isSending, send }) {
   return (
     <li key={content}>
-      <button
-        type="button"
-        onClick={() => this.send(content)}
-        disabled={isSending}
-      >
+      <button type="button" onClick={() => send(content)} disabled={isSending}>
         {content}
       </button>
     </li>

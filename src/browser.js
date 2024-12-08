@@ -1,6 +1,4 @@
-if (typeof browser === 'undefined' && typeof chrome !== 'undefined') {
-  // Chrome
-  var browser = chrome;
-}
+import browser from "webextension-polyfill";
 
+// TODO: Replace with direct imports to polyfill
 export default browser;

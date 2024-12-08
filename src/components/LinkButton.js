@@ -1,4 +1,4 @@
-import {h, Component} from 'preact';
+import { Component } from "preact";
 
 export default class LinkButton extends Component {
   render() {
@@ -9,7 +9,7 @@ export default class LinkButton extends Component {
     );
   }
 
-  handleClick = e => {
+  handleClick = (e) => {
     e.preventDefault();
     this.props.onClick();
   };

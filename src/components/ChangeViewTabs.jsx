@@ -1,16 +1,16 @@
-import { useContext } from 'preact/hooks';
-import AppContext from '../contexts/App';
-import Auth from '../contexts/Auth';
-import SettingsContext from '../contexts/Settings';
-import Login from './svg/Login';
-import Pen from './svg/Pen';
-import Reply from './svg/Reply';
-import Bookmark from './svg/Bookmark';
-import Heart from './svg/Heart';
-import Repost from './svg/Repost';
-import Logs from './svg/Logs';
-import Settings from './svg/Settings';
-import Tab from './Tab';
+import { useContext } from "preact/hooks";
+import AppContext from "../contexts/App";
+import Auth from "../contexts/Auth";
+import SettingsContext from "../contexts/Settings";
+import Login from "./svg/Login";
+import Pen from "./svg/Pen";
+import Reply from "./svg/Reply";
+import Bookmark from "./svg/Bookmark";
+import Heart from "./svg/Heart";
+import Repost from "./svg/Repost";
+import Logs from "./svg/Logs";
+import Settings from "./svg/Settings";
+import Tab from "./Tab";
 import {
   LOGIN,
   NOTE,
@@ -20,9 +20,9 @@ import {
   LIKE,
   LOGS,
   SETTINGS,
-} from '../constants';
+} from "../constants";
 
-const UNICODE_NBSP = '\u00a0';
+const UNICODE_NBSP = "\u00a0";
 const ICONS = {
   [LOGIN]: Login,
   [NOTE]: Pen,
@@ -41,7 +41,7 @@ export default function ChangeViewTabs() {
   return (
     <div className="side-nav">
       <img className="side-nav__logo" src="/icon.svg" alt="Omnibear Logo" />
-      {auth.isLoggedIn() ? (
+      {auth.isLoggedIn.value ? (
         <>
           <ViewTab type={NOTE} label="New note" />
           <ViewTab type={REPLY} label="Reply" />
@@ -52,7 +52,9 @@ export default function ChangeViewTabs() {
       ) : (
         <ViewTab type={LOGIN} label="Sign in" />
       )}
-      {settings.debugLog ? <Tab type={LOGS} label="Logs" onBottom /> : null}
+      {settings.debugLog.value ? (
+        <Tab type={LOGS} label="Logs" onBottom />
+      ) : null}
       <ViewTab type={SETTINGS} label="Settings" onBottom />
     </div>
   );
@@ -63,12 +65,12 @@ function ViewTab({ type, label, onBottom }) {
   const Icon = ICONS[type];
   return (
     <Tab
-      isActive={app.viewType === type}
+      isActive={app.viewType.value === type}
       onClick={() => app.setViewType(type)}
       onBottom={onBottom}
     >
       <Icon />
-      {label.replace(' ', UNICODE_NBSP)}
+      {label.replace(" ", UNICODE_NBSP)}
     </Tab>
   );
 }

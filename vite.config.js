@@ -1,30 +1,44 @@
-import { defineConfig } from 'vite';
-import preact from '@preact/preset-vite';
+import { readFileSync } from "node:fs";
+import { defineConfig } from "vite";
+import preact from "@preact/preset-vite";
+import webExtension, { readJsonFile } from "vite-plugin-web-extension";
+import { AUTH_SUCCESS_URL } from "./src/constants";
 
-// https://vitejs.dev/config/
+const target = process.env.TARGET || "chrome";
+
+function generateManifest() {
+	const manifest = readFileSync("src/manifest.json", "utf-8").replace(
+		"{{AUTH_SUCCESS_URL}}",
+		AUTH_SUCCESS_URL
+	);
+	const pkg = readJsonFile("package.json");
+	return {
+		...JSON.parse(manifest),
+		description: pkg.description,
+		version: pkg.version,
+	};
+}
+
+/**
+ * https://vitejs.dev/config/
+ * @type {import('vite').UserConfig}
+ */
 export default defineConfig({
-  plugins: [preact()],
-  build: {
-    rollupOptions: {
-      input: {
-        index: new URL('./index.html', import.meta.url).pathname,
-        page: new URL('./src/page.js', import.meta.url).pathname,
-        background: new URL('./src/background.js', import.meta.url).pathname,
-        // index: 'index.html',
-        // background: 'src/background.js',
-      },
-      // output: {
-      //   'src/background.js': 'background.js',
-      // },
-      output: {
-        entryFileNames: '[name].js',
-        // entryFileNames: (info) => {
-        //   return info.name === 'index' ? 'index.js' : 'background.js';
-        //   console.log(info, info.name);
-        //   return 'background.js';
-        // },
-        extend: true,
-      },
-    },
-  },
+	plugins: [
+		preact(),
+		webExtension({
+			manifest: generateManifest,
+			webExtConfig: {
+				startUrl: "https://omnibear.com",
+			},
+		}),
+	],
+	define: {
+		__BROWSER__: JSON.stringify(target),
+		// Set some globals used by libraries to avoid ReferenceErrors
+		global: {},
+		// process is in some npm deps (e.g. rel-parser via micropub-helper)
+		process: false,
+	},
+	sourcemap: true,
 });

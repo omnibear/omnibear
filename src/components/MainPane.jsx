@@ -1,12 +1,12 @@
-import { useContext } from 'preact/hooks';
-import AppContext from '../contexts/App';
-import LoginForm from './LoginForm';
-import NoteForm from './form/NoteForm';
-import LikeForm from './form/LikeForm';
-import RepostForm from './form/RepostForm';
-import SettingsForm from './settings/SettingsForm';
-import Message from './Message';
-import Logs from './log/Logs';
+import { useContext } from "preact/hooks";
+import AppContext from "../contexts/App";
+import LoginForm from "./LoginForm";
+import NoteForm from "./form/NoteForm";
+import LikeForm from "./form/LikeForm";
+import RepostForm from "./form/RepostForm";
+import SettingsForm from "./settings/SettingsForm";
+import Message from "./Message";
+import Logs from "./log/Logs";
 import {
   LOGIN,
   NOTE,
@@ -15,12 +15,12 @@ import {
   LOGS,
   SETTINGS,
   MESSAGE,
-} from '../constants';
+} from "../constants";
 
 export default function MainPane() {
   const app = useContext(AppContext);
 
-  switch (app.viewType) {
+  switch (app.viewType.value) {
     case LOGIN:
       return <LoginForm />;
     case SETTINGS:
@@ -34,7 +34,7 @@ export default function MainPane() {
     case MESSAGE:
       return (
         <div className="container container--full">
-          <Message message={store.flashMessage} />
+          <Message message={app.flashMessage.value} />
         </div>
       );
     default:

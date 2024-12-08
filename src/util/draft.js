@@ -1,28 +1,29 @@
-const KEYS = ['title', 'content', 'category', 'slug', 'syndicateTo', 'type'];
+import storage from "./storage";
 
-const EMPTY_DRAFT = {
-  title: '',
-  content: '',
-  category: [],
-  slug: '',
-  syndicateTo: [],
-  type: null,
-};
+export function createEmptyDraft() {
+	return {
+		title: "",
+		content: "",
+		category: [],
+		slug: "",
+		syndicateTo: [],
+		type: null,
+	};
+}
+const KEYS = Object.keys(createEmptyDraft());
 
-export function getDraft() {
-  const draft = JSON.parse(localStorage.getItem('draft'));
-  if (draft) {
-    return draft;
-  }
-  return EMPTY_DRAFT;
+export async function getDraft() {
+	const { draft } = await storage.get(["draft"]);
+	return draft || createEmptyDraft();
 }
 
-export function saveDraft(draft) {
-  const clean = {};
-  KEYS.forEach(key => {
-    clean[key] = draft[key];
-  });
-  localStorage.setItem('draft', JSON.stringify(clean));
+export async function saveDraft(draft) {
+	const clean = {};
+	KEYS.forEach((key) => {
+		clean[key] = draft[key];
+	});
+
+	await storage.set({ draft: clean });
 }
 
 // export function deleteDraft() {

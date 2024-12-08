@@ -1,121 +1,144 @@
-import __browser__ from './browser';
-import {getParamFromUrl} from './util/url';
-import {getAuthTab} from './util/utils';
-import {fetchToken, fetchSyndicationTargets} from './background/authentication';
-import {info, error} from './util/log';
+/**
+ * Run as a service worker in chromium browser or background page in Firefox
+ * Fetches auth token
+ */
+import __browser__ from "./browser";
+import storage from "./util/storage";
+import { getParamFromUrl } from "./util/url";
+import { AUTH_SUCCESS_URL } from "./constants";
+import { getAuthTab } from "./util/utils";
+import {
+	fetchToken,
+	fetchSyndicationTargets,
+} from "./background/authentication";
+import { info, error } from "./util/log";
 
 let authTabId = null;
 
 function handleMessage(request, sender) {
-  switch (request.action) {
-    case 'begin-auth':
-      handleBeginAuth(request.payload);
-      break;
-    case 'focus-window':
-      updateFocusedWindow(
-        sender.tab.id,
-        request.payload.pageEntry,
-        request.payload.selectedEntry,
-      );
-      break;
-    case 'select-entry':
-      selectEntry(request.payload);
-      break;
-    case 'clear-entry':
-      clearEntry();
-  }
+	console.log("Message received", request);
+	switch (request.action) {
+		case "begin-auth":
+			// TODO: Can delete this if tab open is moved to popup
+			handleBeginAuth(request.payload);
+			break;
+		case "focus-window":
+			updateFocusedWindow(
+				sender.tab.id,
+				request.payload.pageEntry,
+				request.payload.selectedEntry
+			);
+			break;
+		case "select-entry":
+			selectEntry(request.payload);
+			break;
+		case "clear-entry":
+			clearEntry();
+	}
 }
 
-function handleBeginAuth(payload) {
-  localStorage.setItem('domain', payload.domain);
-  localStorage.setItem('authEndpoint', payload.metadata.authEndpoint);
-  localStorage.setItem('tokenEndpoint', payload.metadata.tokenEndpoint);
-  localStorage.setItem('micropubEndpoint', payload.metadata.micropub);
-  __browser__.tabs.create({url: payload.authUrl}, tab => {
-    authTabId = tab.id;
-  });
+async function handleBeginAuth(payload) {
+	await storage.set({
+		domain: payload.domain,
+		authEndpoint: payload.metadata.authEndpoint,
+		tokenEndpoint: payload.metadata.tokenEndpoint,
+		micropubEndpoint: payload.metadata.micropub,
+	});
+	authTabId = await __browser__.tabs.create({ url: payload.authUrl });
 }
 
-function updateFocusedWindow(tabId, pageEntry, selectedEntry) {
-  localStorage.setItem('pageEntry', JSON.stringify(pageEntry));
-  localStorage.setItem('pageTabId', tabId);
-  if (selectedEntry) {
-    selectEntry(selectedEntry);
-  } else {
-    clearEntry();
-  }
+async function updateFocusedWindow(tabId, pageEntry, selectedEntry) {
+	await storage.set({
+		pageEntry: pageEntry,
+		pageTabId: tabId,
+		itemEntry: selectEntry,
+	});
 }
 
-function selectEntry(entry) {
-  localStorage.setItem('itemEntry', JSON.stringify(entry));
+async function selectEntry(itemEntry) {
+	await storage.set({
+		itemEntry,
+	});
 }
 
-function clearEntry() {
-  localStorage.removeItem('itemEntry');
+async function clearEntry() {
+	await storage.set({
+		itemEntry: undefined,
+	});
 }
 
-function handleTabChange(tabId, changeInfo, tab) {
-  if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
-    return;
-  }
-  var code = getParamFromUrl('code', changeInfo.url);
-  setTimeout(() => {
-    sendAuthStatusUpdate(`Retrieving access token…`);
-    fetchToken(code)
-      .then(() => {
-        sendAuthStatusUpdate('Fetching syndication targets…');
-        return fetchSyndicationTargets();
-      })
-      .then(() => {
-        sendAuthStatusUpdate(`Authentication complete.`);
-        authTabId = null;
-        setTimeout(() => {
-          __browser__.tabs.remove(tab.id);
-        }, 500);
-      })
-      .catch(err => {
-        error(err.message, err);
-      });
-  }, 500);
+async function handleTabChange(tabId, changeInfo, tab) {
+	const { authTabId } = await storage.get(["authTabId"]);
+	console.log("Processing tab change");
+	if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
+		return;
+	}
+	// During migration this was also implemented on the auth page content-script
+	// TODO: Determine if that is viable or if I should get it working here
+	var code = getParamFromUrl("code", changeInfo.url);
+	try {
+		sendAuthStatusUpdate(`Retrieving access token…`);
+		await fetchToken(code);
+		sendAuthStatusUpdate("Fetching syndication targets…");
+		await fetchSyndicationTargets();
+		sendAuthStatusUpdate(`Authentication complete.`);
+		authTabId = null;
+		__browser__.tabs.remove(tab.id);
+	} catch (err) {
+		error(err.message, err);
+	}
 }
 
-function sendAuthStatusUpdate(message) {
-  info(message);
-  getAuthTab().then(tab => {
-    __browser__.tabs.sendMessage(tab.id, {
-      action: 'auth-status-update',
-      payload: {message},
-    });
-  });
+async function sendAuthStatusUpdate(message) {
+	info(message);
+	const tab = getAuthTab();
+	__browser__.tabs.sendMessage(tab.id, {
+		action: "auth-status-update",
+		payload: { message },
+	});
 }
 
 function isAuthRedirect(changeInfo) {
-  var url = 'https://omnibear.com/auth/success';
-  return changeInfo.url && changeInfo.url.startsWith(url);
+	return changeInfo.url?.startsWith(AUTH_SUCCESS_URL);
 }
 
-__browser__.runtime.onMessage.addListener(handleMessage);
-__browser__.tabs.onUpdated.addListener(handleTabChange);
-__browser__.contextMenus.create({
-  title: 'Reply to entry',
-  contexts: ['page', 'selection'],
-  onclick: function() {
-    if (typeof browser === 'undefined') {
-      // Chrome
-      window.open(
-        'index.html?type=reply',
-        'extension_popup',
-        'width=450,height=580,status=no,scrollbars=yes,resizable=no,top=80,left=2000',
-      );
-    } else {
-      // Firefox (and others?)
-      browser.windows.create({
-        url: 'index.html?type=reply',
-        width: 450,
-        height: 580,
-        type: 'panel',
-        left: 2000,
-      });
-    }
-  },
-});
+function onContextClick(info, tab) {
+	if (__BROWSER__ === "chrome") {
+		// TODO: How does the popup know to open the reply view??
+		__browser__.action.openPopup();
+		// window.open(
+		// 	"index.html?type=reply",
+		// 	"extension_popup",
+		// 	"width=450,height=580,status=no,scrollbars=yes,resizable=no,top=80,left=2000"
+		// );
+	} else {
+		browser.windows.create({
+			url: "index.html?type=reply",
+			width: 450,
+			height: 580,
+			type: "panel",
+			left: 2000,
+		});
+	}
+}
+
+function registerListeners() {
+	console.log("Registering listeners");
+	__browser__.runtime.onMessage.addListener(handleMessage);
+	__browser__.tabs.onUpdated.addListener(handleTabChange);
+	// TODO: Should this only be created if logged in?
+	__browser__.contextMenus.create({
+		id: "Reply",
+		title: "Reply to entry",
+		contexts: ["page", "selection"],
+	});
+
+	__browser__.contextMenus.onClicked.addListener(onContextClick);
+}
+
+if (__BROWSER__ === "chrome") {
+	// Run as a service worker so this could be called multiple times
+	__browser__.runtime.onInstalled.addListener(registerListeners);
+} else {
+	registerListeners();
+}

@@ -1,8 +1,8 @@
-import { useState, useContext } from 'preact/hooks';
-import Settings from '../../contexts/Settings';
+import { useState, useContext } from "preact/hooks";
+import Settings from "../../contexts/Settings";
 
 export default function EmojiSettings() {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const settings = useContext(Settings);
 
   const deleteReacji = (index) => {
@@ -17,7 +17,7 @@ export default function EmojiSettings() {
     if (value && settings.reacji.indexOf(value) === -1) {
       settings.addReacji(value);
       settings.save();
-      this.setValue('');
+      setValue("");
     }
   };
 
@@ -25,14 +25,14 @@ export default function EmojiSettings() {
     <div>
       <label>Quick emoji</label>
       <div className="reacji-row">
-        {settings.reacji.map((char, i) => (
+        {settings.reacji.value.map((char, i) => (
           <Reacji key={char} char={char} index={i} onDelete={deleteReacji} />
         ))}
       </div>
       <div className="input-inline">
         <input
           type="text"
-          value={this.state.value}
+          value={value}
           onChange={(e) => {
             setValue(e.target.value);
           }}

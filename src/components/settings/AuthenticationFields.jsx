@@ -1,8 +1,9 @@
-import { useState, useContext } from 'preact/hooks';
-import Auth from '../../contexts/Auth';
+import { useContext } from "preact/hooks";
+import { signal } from "@preact/signals";
+import Auth from "../../contexts/Auth";
 
+const showFields = signal(false);
 export default function AuthenticationFields() {
-  cosnt[(showFields, setShowFields)] = useState(false);
   const auth = useContext(Auth);
 
   const update = (fn) => {
@@ -20,7 +21,7 @@ export default function AuthenticationFields() {
         you are having trouble authenticating and wish to do so manually.
       </div>
 
-      {showFields
+      {showFields.value
         ? [
             <div key="domain">
               <label htmlFor="domain">Me (domain name)</label>
@@ -28,7 +29,7 @@ export default function AuthenticationFields() {
                 id="domain"
                 type="text"
                 value={auth.domain}
-                onChange={this.update(auth.setDomain)}
+                onChange={update(auth.setDomain)}
                 placeholder="https://example.com"
               />
             </div>,
@@ -38,7 +39,7 @@ export default function AuthenticationFields() {
                 id="mp-endpoint"
                 type="text"
                 value={auth.micropubEndpoint}
-                onChange={this.update(auth.setMicropubEndpoint)}
+                onChange={update(auth.setMicropubEndpoint)}
                 placeholder="https://example.com/micropub"
               />
             </div>,
@@ -48,7 +49,7 @@ export default function AuthenticationFields() {
                 id="token"
                 type="text"
                 value={auth.token}
-                onChange={this.update(auth.setToken)}
+                onChange={update(auth.setToken)}
               />
             </div>,
           ]
@@ -57,10 +58,10 @@ export default function AuthenticationFields() {
         <button
           type="button"
           onClick={() => {
-            setShowFields(!showFields);
+            showFields.value = !showFields.value;
           }}
         >
-          {showFields ? 'Hide' : 'Show'}
+          {showFields.value ? "Hide" : "Show"}
         </button>
       </div>
     </fieldset>

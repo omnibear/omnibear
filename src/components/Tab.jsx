@@ -1,11 +1,17 @@
-export default function Tab({ isActive, isDisabled, onClick }) {
+export default function Tab({
+  isActive,
+  isDisabled,
+  onBottom,
+  onClick,
+  children,
+}) {
   const getClass = () => {
-    let classes = '';
-    if (this.props.isActive) {
-      classes += ' is-active';
+    let classes = "";
+    if (isActive) {
+      classes += " is-active";
     }
-    if (this.props.onBottom) {
-      classes += ' side-nav__bottom';
+    if (onBottom) {
+      classes += " side-nav__bottom";
     }
     return classes;
   };
@@ -13,13 +19,13 @@ export default function Tab({ isActive, isDisabled, onClick }) {
   return (
     <button
       className={getClass()}
-      disabled={this.props.isDisabled}
+      disabled={isDisabled}
       onClick={(e) => {
         e.preventDefault();
         onClick();
       }}
     >
-      {this.props.children}
+      {children}
     </button>
   );
 }

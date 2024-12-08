@@ -21,3 +21,7 @@ dist
 *.njsproj
 *.sln
 *.sw?
+
+# Config files
+.webextrc
+.webextrc.*

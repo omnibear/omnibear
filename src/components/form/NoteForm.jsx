@@ -1,37 +1,24 @@
-import { useState, useEffect, useContext, useRef } from 'preact/hooks';
-import AppContext from '../../contexts/App';
-import Draft from '../../contexts/Draft';
-import Settings from '../../contexts/Settings';
-import QuickReplies from './QuickReplies';
-import SyndicateInputs from './SyndicateInputs';
-import Message from '../Message';
+import { useState, useEffect, useContext, useRef } from "preact/hooks";
+import AppContext from "../../contexts/App";
+import Draft from "../../contexts/Draft";
+import Settings from "../../contexts/Settings";
+import QuickReplies from "./QuickReplies";
+import SyndicateInputs from "./SyndicateInputs";
+import Message from "../Message";
 
 export default function NoteForm() {
   const app = useContext(AppContext);
   const draft = useContext(Draft);
   const settings = useContext(Settings);
   const [syndicateOptions, setSyndicateOptions] = useState(
-    settings.getSyndicateOptions()
+    settings.syndicateOptions.value
   );
   const content = useRef(null);
 
-  useEffect(() => {
-    setTimeout(() => {
-      content.current.focus();
-    }, 150);
-    return () => {
-      draft.save();
-    };
-  }, []);
-
-  // componentDidUpdate() {
-  //   this.props.draft.save();
-  // }
-
-  const isLoading = app.isSending;
+  const isLoading = app.isSending.value;
   return (
-    <form className="container" onSubmit={app.send}>
-      {store.includeTitle ? (
+    <form className="container" onSubmit={app.sendNote}>
+      {app.includeTitle.value ? (
         <div>
           <label htmlFor="input-title">Title</label>
           <input
@@ -49,13 +36,11 @@ export default function NoteForm() {
         <textarea
           id="input-content"
           value={draft.content}
-          onInput={(e) => draft.setContent(e.target.value)}
-          onBlur={(e) => draft.setContent(e.target.value)}
+          onInput={(e) => (draft.content.value = e.target.value)}
+          onBlur={(e) => (draft.content.value = e.target.value)}
           rows="4"
           disabled={isLoading}
-          ref={(el) => {
-            this.content = el;
-          }}
+          ref={content}
         />
         <div className="input-extra">{draft.content.length}</div>
         <QuickReplies />
@@ -88,11 +73,13 @@ export default function NoteForm() {
         onUpdate={draft.setSyndicateList}
         isDisabled={isLoading}
       />
-      {store.flashMessage ? <Message message={store.flashMessage} /> : null}
+      {app.flashMessage.value ? (
+        <Message message={app.flashMessage.value} />
+      ) : null}
       <button
         type="submit"
         disabled={isLoading || !draft.content}
-        className={isLoading ? 'button is-loading' : 'button'}
+        className={isLoading ? "button is-loading" : "button"}
       >
         Post
       </button>

@@ -1,10 +1,11 @@
-import { render } from 'preact';
-import App from './components/App';
+import { render, h } from "preact";
+import App from "./components/App";
 // import store from './stores/store';
 // import authStore from './stores/authStore';
 // import draftStore from './stores/draftStore';
 // import settingsStore from './stores/settingsStore';
-// import './index.css';
+import "./fonts.css";
+import "./styles.css";
 
 // configure({ enforceActions: true });
 
@@ -15,13 +16,29 @@ import App from './components/App';
 //   settings: settingsStore,
 // };
 
-console.log('A');
-document.addEventListener('DOMContentLoaded', function () {
-  console.log('B');
-  if (window.location.search.includes('location=sidebar')) {
-    console.log('sidebar');
-    document.body.classList.add('sidebar');
-  }
+console.log("Loading UI");
 
-  render(<App />, document.getElementById('app'));
+window.addEventListener("error", function (e) {
+  // TODO: Remove this before publishing
+  document.getElementById(
+    "app"
+  ).innerHTML = `<p>Error rendering Omnibear: ${e}</p>`;
+  return false;
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("DOM Content Loaded");
+  if (window.location.search.includes("location=sidebar")) {
+    console.log("sidebar");
+    document.body.classList.add("sidebar");
+  }
+  document.getElementById("app").innerHTML = "DOM Content Loaded";
+
+  try {
+    render(h(App), document.getElementById("app"));
+  } catch (e) {
+    document.getElementById(
+      "app"
+    ).innerHTML = `<p>Error rendering Omnibear: ${e}</p>`;
+  }
 });

@@ -1,31 +1,25 @@
-/* LEGACY index file */
-import { h, render } from 'preact';
-import { configure } from 'mobx';
-import { Provider } from 'mobx-preact';
-import App from './components/App';
-import store from './stores/store';
-import authStore from './stores/authStore';
-import draftStore from './stores/draftStore';
-import settingsStore from './stores/settingsStore';
+import { render, h } from "preact";
+import App from "./components/App";
 
-configure({ enforceActions: true });
+// configure({ enforceActions: true });
 
-const stores = {
-  store,
-  auth: authStore,
-  draft: draftStore,
-  settings: settingsStore,
-};
+// Needed by lib
+globalThis.global = globalThis;
 
-document.addEventListener('DOMContentLoaded', function () {
-  if (window.location.search.includes('location=sidebar')) {
-    document.body.classList.add('sidebar');
-  }
+console.log("Loading UI");
 
-  render(
-    <Provider {...stores}>
-      <App />
-    </Provider>,
-    document.body
-  );
+document.addEventListener("DOMContentLoaded", function () {
+	console.log("DOM Content Loaded");
+	if (window.location.search.includes("location=sidebar")) {
+		console.log("sidebar");
+		document.body.classList.add("sidebar");
+	}
+
+	try {
+		render(h(App), document.getElementById("app"));
+	} catch (e) {
+		document.getElementById(
+			"app"
+		).innerHTML = `<p>Error rendering Omnibear: ${e}</p>`;
+	}
 });

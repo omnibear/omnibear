@@ -1,7 +1,7 @@
-import { useContext } from 'preact/hooks';
-import AppContext from '../contexts/App';
-import Auth from '../contexts/Auth';
-import { openLink } from '../util/utils';
+import { useContext } from "preact/hooks";
+import AppContext from "../contexts/App";
+import Auth from "../contexts/Auth";
+import { openLink } from "../util/utils";
 
 export default function Footer() {
   const app = useContext(AppContext);
@@ -9,7 +9,7 @@ export default function Footer() {
 
   return (
     <footer className="l-main__footer footer">
-      {auth.isLoggedIn()
+      {auth.isLoggedIn.value
         ? [
             <div key="message" className="footer__message">
               Authenticated to <strong>{auth.domain}</strong>
@@ -26,7 +26,7 @@ export default function Footer() {
               key="logout"
               className="button-link"
               type="button"
-              onClick={store.logout}
+              onClick={app.logout}
             >
               Logout
             </button>,

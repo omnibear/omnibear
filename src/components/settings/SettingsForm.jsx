@@ -1,15 +1,15 @@
-import { useContext } from 'preact/hooks';
-import Settings from '../../contexts/Settings';
-import EmojiSettings from './EmojiSettings';
-import EndpointFields from './EndpointFields';
-import AuthenticationFields from './AuthenticationFields';
+import { useContext } from "preact/hooks";
+import Settings from "../../contexts/Settings";
+import EmojiSettings from "./EmojiSettings";
+import EndpointFields from "./EndpointFields";
+import AuthenticationFields from "./AuthenticationFields";
 
 export default function SettingsForm() {
   const settings = useContext(Settings);
 
-  const updateBoolean = (fn) => {
+  const updateBoolean = (sig) => {
     return (event) => {
-      fn(event.target.checked);
+      sig.value = event.target.checked;
     };
   };
 
@@ -21,8 +21,8 @@ export default function SettingsForm() {
           <label>
             <input
               type="checkbox"
-              checked={settings.defaultToCurrentPage}
-              onChange={updateBoolean(settings.setDefaultToCurrentPage)}
+              checked={settings.defaultToCurrentPage.value}
+              onChange={updateBoolean(settings.defaultToCurrentPage)}
             />
             Always open in “Reply” mode
           </label>
@@ -30,8 +30,8 @@ export default function SettingsForm() {
           <label>
             <input
               type="checkbox"
-              checked={settings.autoSlug}
-              onChange={updateBoolean(settings.setAutoSlug)}
+              checked={settings.autoSlug.value}
+              onChange={updateBoolean(settings.autoSlug)}
             />
             Automatically generate slug from post content
           </label>
@@ -39,8 +39,8 @@ export default function SettingsForm() {
           <label>
             <input
               type="checkbox"
-              checked={settings.closeAfterPosting}
-              onChange={updateBoolean(settings.setCloseAfterPosting)}
+              checked={settings.closeAfterPosting.value}
+              onChange={updateBoolean(settings.closeAfterPosting)}
             />
             Close Omnibear window after posting
           </label>
@@ -48,8 +48,8 @@ export default function SettingsForm() {
           <label>
             <input
               type="checkbox"
-              checked={settings.debugLog}
-              onChange={updateBoolean(settings.setDebugLog)}
+              checked={settings.debugLog.value}
+              onChange={updateBoolean(settings.debugLog)}
             />
             Record debug logs
           </label>
