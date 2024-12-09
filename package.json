@@ -39,7 +39,7 @@
     "eslint-plugin-react": "^7.11.1",
     "fetch-mock": "^6.5.2",
     "form-data": "^2.1.2",
-    "jsdom": "^16.5.0",
+    "jsdom": "^16.7.0",
     "mocha": "^5.2.0",
     "mocha-webpack": "^2.0.0-beta.0",
     "sinon": "^6.1.5",
