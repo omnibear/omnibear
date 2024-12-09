@@ -1,16 +1,20 @@
 import { useContext } from "preact/hooks";
+import App from "../contexts/App";
 import Auth from "../contexts/Auth";
 import ChangeViewTabs from "./ChangeViewTabs";
 import Header from "./Header";
 import MainPane from "./MainPane";
 import Footer from "./Footer";
+import { LOGIN } from "../constants";
 
 export default function Layout() {
+  const app = useContext(App);
   const auth = useContext(Auth);
 
   const getClass = () => {
     // TODO: Can we remove this and let the CSS be adaptive?
-    const height = auth?.isLoggedIn.value ? "l-main--tall" : "l-main--short";
+    const height =
+      app?.viewType.value === LOGIN ? "l-main--short" : "l-main--tall";
     return `l-main ${height}`;
   };
 
