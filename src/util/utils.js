@@ -45,7 +45,7 @@ export function generateSlug(content) {
 	for (let i = 0, l = FROM.length; i < l; i++) {
 		formatted = formatted.replace(
 			new RegExp(FROM.charAt(i), "g"),
-			TO.charAt(i)
+			TO.charAt(i),
 		);
 	}
 	formatted = formatted.replace(NON_ALPHANUM, "");

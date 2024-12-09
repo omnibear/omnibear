@@ -26,7 +26,7 @@ function handleMessage(request, sender) {
 			updateFocusedWindow(
 				sender.tab.id,
 				request.payload.pageEntry,
-				request.payload.selectedEntry
+				request.payload.selectedEntry,
 			);
 			break;
 		case "select-entry":

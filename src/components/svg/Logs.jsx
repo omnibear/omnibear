@@ -1,4 +1,4 @@
-import {h, Component} from 'preact';
+import { h, Component } from "preact";
 
 export default class Logs extends Component {
   render() {

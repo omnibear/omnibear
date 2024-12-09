@@ -89,7 +89,9 @@ label,
 .checkbox {
 	display: block;
 	color: var(--gray-40);
-	font-family: Noto Serif, serif;
+	font-family:
+		Noto Serif,
+		serif;
 	font-size: 0.8rem;
 }
 label {
@@ -347,7 +349,9 @@ fieldset > * + * {
 .section-heading {
 	margin: 0 0 0.5rem;
 	font-size: 1.2rem;
-	font-family: Noto Serif, serif;
+	font-family:
+		Noto Serif,
+		serif;
 	font-weight: bold;
 }
 
@@ -396,7 +400,9 @@ fieldset > * + * {
 	padding: 0 1rem;
 	color: white;
 	font-size: 1rem;
-	font-family: Noto Serif, serif;
+	font-family:
+		Noto Serif,
+		serif;
 }
 
 .dropdown {

@@ -17,7 +17,7 @@ export function createDraftStore() {
 	const syndicateList = signal([]);
 
 	const tagsArray = computed(() =>
-		tags.value.trim().replace(/[\s+]/g, " ").split(" ")
+		tags.value.trim().replace(/[\s+]/g, " ").split(" "),
 	);
 	const isEmpty = computed(() => !content.value && !slug.value && !title.value);
 

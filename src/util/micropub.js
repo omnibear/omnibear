@@ -30,7 +30,7 @@ export function postNote(entry, aliases) {
 			[aliases.slug]: entry.slug,
 			[aliases.syndicateTo]: entry.syndicateList,
 		},
-		"form"
+		"form",
 	);
 }
 
@@ -44,7 +44,7 @@ export function postReply(entry, url, aliases) {
 			[aliases.slug]: entry.slug,
 			[aliases.syndicateTo]: entry.syndicateList,
 		},
-		"form"
+		"form",
 	);
 }
 
@@ -59,7 +59,7 @@ export function postBookmark(entry, url, aliases) {
 			[aliases.slug]: entry.slug,
 			[aliases.syndicateTo]: entry.syndicateList,
 		},
-		"form"
+		"form",
 	);
 }
 

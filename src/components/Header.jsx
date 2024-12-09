@@ -8,7 +8,7 @@ const headerViews = [NOTE, REPLY, BOOKMARK, LIKE, REPOST];
 export default function Header() {
   const app = useContext(AppContext);
   const showUrlSelector = [REPLY, BOOKMARK, LIKE, REPOST].includes(
-    app.viewType.value
+    app.viewType.value,
   );
 
   if (!headerViews.includes(app.viewType.value)) {

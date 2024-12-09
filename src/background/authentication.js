@@ -17,7 +17,7 @@ export async function fetchToken(code) {
 		const token = micropub.getToken(code);
 		if (!token) {
 			throw new Error(
-				"Token not found in token endpoint response. Missing expected field `access_token`"
+				"Token not found in token endpoint response. Missing expected field `access_token`",
 			);
 		}
 		await storage.set({ token });

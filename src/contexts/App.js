@@ -131,9 +131,9 @@ export function createAppState() {
 				postReply(
 					draftState, // TODO: Need to unwrap this
 					selectedEntry.value?.url,
-					settingsState.aliases.value
+					settingsState.aliases.value,
 				),
-			true
+			true,
 		);
 	}
 
@@ -143,9 +143,9 @@ export function createAppState() {
 				postBookmark(
 					draftState, // TODO: Unwrap
 					selectedEntry.value.url,
-					settingsState.aliases.value
+					settingsState.aliases.value,
 				),
-			true
+			true,
 		);
 	}
 

@@ -1,12 +1,11 @@
-
 .__omnibear-selected-item {
-  box-shadow: 0 0 25px hsl(41, 75%, 49%) !important;
+	box-shadow: 0 0 25px hsl(41, 75%, 49%) !important;
 }
 
 body.__omnibear-selected-item {
-  box-shadow: inset 0 0 25px hsl(41, 75%, 49%) !important;
+	box-shadow: inset 0 0 25px hsl(41, 75%, 49%) !important;
 }
 
 .tweet.__omnibear-selected-item {
-  z-index: 100;
+	z-index: 100;
 }

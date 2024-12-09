@@ -1,6 +1,6 @@
-import { useEffect } from 'preact/hooks';
-import LogItem from './LogItem';
-import { getLogs, clearLogs } from '../../util/log';
+import { useEffect } from "preact/hooks";
+import LogItem from "./LogItem";
+import { getLogs, clearLogs } from "../../util/log";
 
 export default function Logs({ onClose }) {
   const [logs, setLogs] = useState(getLogs());

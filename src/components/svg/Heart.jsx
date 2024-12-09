@@ -1,4 +1,4 @@
-import {h, Component} from 'preact';
+import { h, Component } from "preact";
 
 export default class Heart extends Component {
   render() {

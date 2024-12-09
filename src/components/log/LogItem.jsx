@@ -1,15 +1,15 @@
-import { useState } from 'preact/hooks';
-import LogDetails from './LogDetails';
+import { useState } from "preact/hooks";
+import LogDetails from "./LogDetails";
 
 export default function LogItem({ log }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const className = [
-    'log',
+    "log",
     `log--${log.type}`,
-    isExpanded ? 'is-expanded' : '',
-    log.data ? 'has-data' : '',
-  ].join(' ');
+    isExpanded ? "is-expanded" : "",
+    log.data ? "has-data" : "",
+  ].join(" ");
 
   const toggle = () => {
     if (log.data) {

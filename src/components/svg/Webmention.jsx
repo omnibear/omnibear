@@ -1,8 +1,8 @@
-import {h, Component} from 'preact';
+import { h, Component } from "preact";
 
 export default class Logs extends Component {
   render() {
-    const {title} = this.props;
+    const { title } = this.props;
     return (
       <svg className="svg-logs" viewBox="0 0 360 360">
         <desc>Webmention logo</desc>
