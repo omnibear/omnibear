@@ -1,5 +1,5 @@
-import { useState, useContext } from 'preact/hooks';
-import Settings from '../../contexts/Settings';
+import { useState, useContext } from "preact/hooks";
+import Settings from "../../contexts/Settings";
 
 export default function EndpointFields() {
   const [showFields, setShowFields] = useState(false);
@@ -21,7 +21,9 @@ export default function EndpointFields() {
                 id="slug"
                 type="text"
                 value={settings.slugFieldName}
-                onChange={(e) => settings.setSlugFieldName(e.target.value)}
+                onChange={(e) =>
+                  (settings.slugFieldName.value = e.target.value)
+                }
               />
               <div className="settings-form__description">
                 Choose the name of the field that the slug will be sent in. This
@@ -35,7 +37,7 @@ export default function EndpointFields() {
                 type="text"
                 value={settings.syndicateToFieldName}
                 onChange={(e) =>
-                  settings.setSyndicateToFieldName(e.target.value)
+                  (settings.syndicateToFieldName.value = e.target.value)
                 }
               />
               <div className="settings-form__description">
@@ -48,7 +50,7 @@ export default function EndpointFields() {
         : null}
       <div className="text-right">
         <button type="button" onClick={() => setShowFields(!showFields)}>
-          {showFields ? 'Hide' : 'Show'}
+          {showFields ? "Hide" : "Show"}
         </button>
       </div>
     </fieldset>

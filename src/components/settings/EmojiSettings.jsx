@@ -6,17 +6,15 @@ export default function EmojiSettings() {
   const settings = useContext(Settings);
 
   const deleteReacji = (index) => {
-    const reacji = settings.reacji;
+    const reacji = settings.reacji.value;
     const before = reacji.slice(0, index);
     const after = reacji.slice(index + 1);
-    settings.setReacji(before.concat(after));
-    settings.save();
+    settings.reacji.value = before.concat(after);
   };
 
   const addReacji = () => {
-    if (value && settings.reacji.indexOf(value) === -1) {
+    if (value && !settings?.reacji.value?.includes(value)) {
       settings.addReacji(value);
-      settings.save();
       setValue("");
     }
   };
