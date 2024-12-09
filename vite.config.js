@@ -16,6 +16,7 @@ function generateManifest() {
 		...JSON.parse(manifest),
 		description: pkg.description,
 		version: pkg.version,
+		homepage_url: pkg.homepage,
 	};
 }
 
