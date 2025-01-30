@@ -1,12 +1,11 @@
-## Seeking new ownership
-
-I have turned off domain renewal for https://omnibear.com. If anybody is interested in taking over this project, reach out to me at barkeep @ keithjgrant.com
-
-The browser extension needs to be upgraded (possibly partially rewritten) using the newer web extensions API. In the [retooling branch](https://github.com/keithjgrant/omnibear/tree/retooling) I've updated the tooling and refactored out the MobX dependency to get things modernized a bit, but the main conversion to [Web Manifest 3](https://github.com/keithjgrant/omnibear/issues/107) still needs to be done before this can work in today's browsers.
-
 # Omnibear
 
 For general usage information, see https://omnibear.com.
+
+## Extension Status
+
+This browser extension is in the process of being updated to newer web extension APIs.
+If you would like to be involved in updates, reach out to @aciccarello in a GitHub issue, via email, or in [indieweb-dev chat](https://chat.indieweb.org/dev/).
 
 ## Development
 
