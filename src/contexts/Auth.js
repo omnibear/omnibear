@@ -19,25 +19,26 @@ export function createAuthState() {
 	const isLoggedIn = computed(() => token.value && micropubEndpoint.value);
 
 	storage.get(["domain", "token", "micropubEndpoint"]).then((storedValues) => {
+		console.log("Reading stored values", storedValues);
 		domain.value = storedValues.domain;
 		token.value = storedValues.token;
 		micropubEndpoint.value = storedValues.micropubEndpoint;
 	});
 
 	effect(() => {
-		micropub.options.me = domain.value;
+		micropub.setOptions({ me: domain.value });
 		storage.set({ domain: domain.value });
 	});
 
 	effect(() => {
 		const normalizedToken = token.value?.trim();
-		micropub.options.token = normalizedToken;
+		micropub.setOptions({ token: normalizedToken });
 		storage.set({ token: token.value });
 	});
 
 	effect(() => {
 		const normalizedMicropubEndpoint = micropubEndpoint.value?.trim();
-		micropub.options.micropubEndpoint = normalizedMicropubEndpoint;
+		micropub.setOptions({ micropubEndpoint: normalizedMicropubEndpoint });
 		storage.set({ micropubEndpoint: micropubEndpoint.value });
 	});
 
@@ -59,11 +60,13 @@ export function createAuthState() {
 		try {
 			const url = await micropub.getAuthUrl();
 			log(`authorization_endpoint found: ${url}`);
+			const { authEndpoint, tokenEndpoint, micropubEndpoint } =
+				micropub.getOptions();
 			await storage.set({
 				domain: newDomain,
-				authEndpoint: micropub.options.authEndpoint,
-				tokenEndpoint: micropub.options.tokenEndpoint,
-				micropubEndpoint: micropub.options.micropubEndpoint,
+				authEndpoint,
+				tokenEndpoint,
+				micropubEndpoint,
 			});
 			authTabId = await __browser__.tabs.create({ url });
 			storage.set({ authTabId });
@@ -73,9 +76,9 @@ export function createAuthState() {
 					authUrl: url,
 					domain: newDomain,
 					metadata: {
-						authEndpoint: micropub.options.authEndpoint,
-						tokenEndpoint: micropub.options.tokenEndpoint,
-						micropub: micropub.options.micropubEndpoint,
+						authEndpoint,
+						tokenEndpoint,
+						micropub: micropubEndpoint,
 					},
 				},
 			});

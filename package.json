@@ -4,9 +4,16 @@
   "description": "A micropub browser extension",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build-only": "vite build",
+    "xdev": "vite",
+    "xbuild": "vite build",
+    "xbuild-only": "vite build",
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "postinstall": "wxt prepare",
     "preview": "vite preview",
     "//test": "mocha-webpack --webpack-config webpack.test.js \"src/**/*.test.js\""
   },
@@ -23,46 +30,16 @@
     "url": "https://github.com/keithjgrant/omnibear/issues"
   },
   "homepage": "https://omnibear.com",
-  "_devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.6",
-    "babel-loader": "^7.1.5",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.5",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
-    "chai": "^4.1.2",
-    "copy-webpack-plugin": "^4.5.2",
-    "eslint": "^5.4.0",
-    "eslint-plugin-jsx-a11y": "^6.1.1",
-    "eslint-plugin-react": "^7.11.1",
-    "fetch-mock": "^6.5.2",
-    "form-data": "^2.1.2",
-    "jsdom": "^16.5.0",
-    "mocha": "^5.2.0",
-    "mocha-webpack": "^2.0.0-beta.0",
-    "sinon": "^6.1.5",
-    "uglifyjs-webpack-plugin": "^1.3.0",
-    "webpack": "^4.16.5",
-    "webpack-cli": "^3.1.0",
-    "webpack-merge": "^4.1.4",
-    "webpack-node-externals": "^1.7.2",
-    "webpack-stream": "^5.1.1"
-  },
   "devDependencies": {
     "@preact/preset-vite": "^2.9.3",
-    "vite": "^6.0.3",
-    "vite-plugin-web-extension": "^4.0.0"
+    "vite-plugin-web-extension": "^4.0.0",
+    "wxt": "^0.19.24"
   },
   "dependencies": {
     "@preact/signals": "^1.3.1",
     "microformat-shiv": "^2.0.3",
-    "micropub-helper": "^1.6.2",
+    "micropub-helper": "^2.0.0",
     "parse-uri": "^1.0.9",
-    "preact": "^10.25.1",
-    "webextension-polyfill": "^0.12.0"
+    "preact": "^10.25.1"
   }
 }

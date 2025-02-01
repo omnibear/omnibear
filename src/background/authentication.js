@@ -10,18 +10,23 @@ export async function fetchToken(code) {
 		"tokenEndpoint",
 		"micropubEndpoint",
 	]);
-	micropub.options.me = domain;
-	micropub.options.tokenEndpoint = tokenEndpoint;
-	micropub.options.micropubEndpoint = micropubEndpoint;
+	micropub.setOptions({
+		me: domain,
+		tokenEndpoint: tokenEndpoint,
+		micropubEndpoint: micropubEndpoint,
+	});
+
 	try {
-		const token = micropub.getToken(code);
+		const token = await micropub.getToken(code);
 		if (!token) {
 			throw new Error(
-				"Token not found in token endpoint response. Missing expected field `access_token`",
+				"Token not found in token endpoint response. Missing expected field `access_token`"
 			);
 		}
 		await storage.set({ token });
-		micropub.options.token = token;
+		micropub.setOptions({
+			token,
+		});
 	} catch (err) {
 		error("Error fetching token", err);
 		const tab = getAuthTab();

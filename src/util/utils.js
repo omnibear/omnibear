@@ -1,5 +1,6 @@
 import __browser__ from "../browser";
 import storage from "./storage";
+import { AUTH_SUCCESS_URL } from "../constants";
 
 export function openLink(e) {
 	e.preventDefault();
@@ -13,14 +14,14 @@ export function clone(obj) {
 }
 
 export function getAuthTab() {
-	return new Promise(function (resolve, reject) {
-		__browser__.tabs.query({ url: AUTH_SUCCESS_URL + "*" }, function (tabs) {
-			if (tabs.length) {
-				resolve(tabs[0]);
-			} else {
-				reject("Auth tab not found");
-			}
-		});
+	return new Promise(async function (resolve, reject) {
+		const tabs = await __browser__.tabs.query({ url: AUTH_SUCCESS_URL + "*" });
+
+		if (tabs.length) {
+			resolve(tabs[0]);
+		} else {
+			reject("Auth tab not found");
+		}
 	});
 }
 
@@ -45,7 +46,7 @@ export function generateSlug(content) {
 	for (let i = 0, l = FROM.length; i < l; i++) {
 		formatted = formatted.replace(
 			new RegExp(FROM.charAt(i), "g"),
-			TO.charAt(i),
+			TO.charAt(i)
 		);
 	}
 	formatted = formatted.replace(NON_ALPHANUM, "");

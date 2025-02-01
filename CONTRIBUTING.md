@@ -6,8 +6,7 @@
 
 ## Tools
 
-- [Vite](https://vite.dev/)
-- [vite-plugin-web-extension](https://vite-plugin-web-extension.aklinker1.io/)
+- [WXT](https://wxt.dev/)
 
 ## Getting Started
 

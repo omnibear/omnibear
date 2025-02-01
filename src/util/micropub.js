@@ -14,11 +14,13 @@ export default micropub;
 storage
 	.get(["domain", "authEndpoint", "tokenEndpoint", "micropubEndpoint", "token"])
 	.then(({ domain, authEndpoint, tokenEndpoint, micropubEndpoint, token }) => {
-		(micropub.options.me = domain),
-			(micropub.options.authEndpoint = authEndpoint);
-		micropub.options.tokenEndpoint = tokenEndpoint;
-		micropub.options.micropubEndpoint = micropubEndpoint;
-		micropub.options.token = token;
+		micropub.setOptions({
+			me: domain,
+			authEndpoint,
+			tokenEndpoint,
+			micropubEndpoint,
+			token,
+		});
 	});
 
 export function postNote(entry, aliases) {
@@ -30,7 +32,7 @@ export function postNote(entry, aliases) {
 			[aliases.slug]: entry.slug,
 			[aliases.syndicateTo]: entry.syndicateList,
 		},
-		"form",
+		"form"
 	);
 }
 
@@ -44,7 +46,7 @@ export function postReply(entry, url, aliases) {
 			[aliases.slug]: entry.slug,
 			[aliases.syndicateTo]: entry.syndicateList,
 		},
-		"form",
+		"form"
 	);
 }
 
@@ -59,7 +61,7 @@ export function postBookmark(entry, url, aliases) {
 			[aliases.slug]: entry.slug,
 			[aliases.syndicateTo]: entry.syndicateList,
 		},
-		"form",
+		"form"
 	);
 }
 

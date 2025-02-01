@@ -22,6 +22,8 @@ dist
 *.sln
 *.sw?
 
+.wxt
+
 # Config files
 .webextrc
 .webextrc.*

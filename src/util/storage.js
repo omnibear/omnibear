@@ -1,3 +1,3 @@
-import __browser__ from "../browser";
+import browser from "../browser";
 
-export default __browser__.storage.local;
+export default browser.storage.local;

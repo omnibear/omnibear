@@ -9,6 +9,7 @@ import AppContext from "../../contexts/App";
 import DownArrow from "../svg/DownArrow";
 import WebmentionSvg from "../svg/Webmention";
 import { BOOKMARK, LIKE, REPOST } from "../../constants";
+import storage from "../../util/storage";
 
 async function loadOptions() {
   const { pageEntry = {} } = await storage.get(["pageEntry"]);
@@ -42,7 +43,7 @@ async function loadOptions() {
 export default function UrlSelector() {
   const app = useContext(AppContext);
   const [isOpen, setIsOpen] = useState(false);
-  const [options, setOptions] = useState(initialOptions);
+  const [options, setOptions] = useState([]);
   const [supportsWebmention, setSupportsWebmention] = useState(false);
 
   useEffect(async () => {
@@ -64,7 +65,9 @@ export default function UrlSelector() {
   };
 
   useEffect(() => {
-    if (options[1].isDisabled) {
+    if (options.length === 0) {
+      console.log("No options available");
+    } else if (options[1].isDisabled) {
       selectEntry(options[0], true);
     } else {
       selectEntry(options[1], true);
@@ -93,7 +96,7 @@ export default function UrlSelector() {
         break;
     }
     const option = findActiveOption();
-    const urlType = option.name ? ` ${option.name.toLowerCase()}` : "";
+    const urlType = option?.name ? ` ${option.name.toLowerCase()}` : "";
     return `${action}${urlType}:`;
   }
 

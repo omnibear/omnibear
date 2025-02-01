@@ -1,5 +1,5 @@
 import { createContext } from "preact";
-import { signal, batch, computed } from "@preact/signals";
+import { signal, batch, computed, effect } from "@preact/signals";
 import { draftState } from "./Draft";
 import { authState } from "./Auth";
 import { settingsState } from "./Settings";
@@ -32,6 +32,12 @@ export function createAppState() {
 	const flashMessage = signal();
 
 	const includeTitle = computed(() => viewType.value === BOOKMARK);
+
+	effect(() => {
+		if (authState.isLoggedIn.value && viewType.peek() === LOGIN) {
+			viewType.value = _determineInitialView();
+		}
+	});
 
 	function setViewType(type) {
 		batch(() => {
@@ -131,9 +137,9 @@ export function createAppState() {
 				postReply(
 					draftState, // TODO: Need to unwrap this
 					selectedEntry.value?.url,
-					settingsState.aliases.value,
+					settingsState.aliases.value
 				),
-			true,
+			true
 		);
 	}
 
@@ -143,9 +149,9 @@ export function createAppState() {
 				postBookmark(
 					draftState, // TODO: Unwrap
 					selectedEntry.value.url,
-					settingsState.aliases.value,
+					settingsState.aliases.value
 				),
-			true,
+			true
 		);
 	}
 

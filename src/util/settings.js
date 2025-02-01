@@ -38,19 +38,19 @@ export async function saveSettings(settings) {
 export async function saveAuthenticationDetails(
 	domain,
 	token,
-	micropubEndpoint,
+	micropubEndpoint
 ) {
 	if (domain) {
 		await storage.set({ domain });
-		micropub.options.me = domain;
+		micropub.setOptions({ me: domain });
 	}
 	if (token) {
 		await storage.set({ token });
-		micropub.options.token = token;
+		micropub.setOptions({ token });
 	}
 	if (micropubEndpoint) {
 		await storage.set({ micropubEndpoint });
-		micropub.options.micropubEndpoint = micropubEndpoint;
+		micropub.setOptions({ micropubEndpoint });
 	}
 }
 

@@ -1,4 +1,2 @@
-import browser from "webextension-polyfill";
-
-// TODO: Replace with direct imports to polyfill
-export default browser;
+// TODO: Replace with direct invocation
+export default /** @type import("webextension-polyfill") */ (browser);
