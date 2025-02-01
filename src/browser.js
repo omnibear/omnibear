@@ -1,6 +1,2 @@
-if (typeof browser === 'undefined' && typeof chrome !== 'undefined') {
-  // Chrome
-  var browser = chrome;
-}
-
-export default browser;
+// TODO: Replace with direct invocation
+export default /** @type import("webextension-polyfill") */ (browser);

@@ -1,76 +1,86 @@
-import {getSettings} from './settings';
+import storage from "./storage";
 
-const INFO = 'info';
-const WARNING = 'warning';
-const ERROR = 'error';
+const INFO = "info";
+const WARNING = "warning";
+const ERROR = "error";
+
+let logs = [];
+// Load from storage
+storage.get(["log"]).then(({ log: savedLog }) => {
+	if (savedLog) {
+		logs = savedLog;
+	}
+});
 
 export function getLogs() {
-  const log = JSON.parse(localStorage.getItem('log'));
-  if (log) {
-    return log;
-  }
-  return [];
+	return logs;
 }
 
-function saveLog(log) {
-  localStorage.setItem('log', JSON.stringify(log));
+async function saveLog(log) {
+	await storage.set({ log });
 }
 
 export function clearLogs() {
-  localStorage.setItem('log', '[]');
+	saveLog([]);
 }
 
 function formatDate(date) {
-  const day = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-  const time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
-  return `${day} ${time}`;
+	const day = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+	const time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
+	return `${day} ${time}`;
 }
 
-function append(message, data, type) {
-  if (!logsEnabled() && type !== ERROR) {
-    return;
-  }
-  const log = getLogs();
-  if (log.length > 100) {
-    log.unshift();
-  }
-  const entry = {
-    message,
-    type,
-    timestamp: formatDate(new Date()),
-  };
-  if (data) {
-    if (data instanceof Error) {
-      entry.data = serializeError(data);
-    } else {
-      entry.data = data;
-    }
-  }
-  log.push(entry);
-  saveLog(log);
+async function append(message, data, type) {
+	if (!(await logsEnabled()) && type !== ERROR) {
+		return;
+	}
+	const log = getLogs();
+	if (log.length > 100) {
+		log.unshift();
+	}
+	const entry = {
+		message,
+		type,
+		timestamp: formatDate(new Date()),
+	};
+	if (data) {
+		if (data instanceof Error) {
+			entry.data = serializeError(data);
+		} else {
+			entry.data = data;
+		}
+	}
+	log.push(entry);
+	saveLog(log);
 }
 
 function serializeError(err) {
-  return {
-    message: err.message,
-    stack: err.stack.trim().split('\n'),
-  };
+	return {
+		message: err.message,
+		stack: err.stack.trim().split("\n"),
+	};
 }
 
 export function info(message, data) {
-  append(message, data, INFO);
+	console.info(message, data);
+	append(message, data, INFO);
 }
 export default info;
 
 export function warning(message, data) {
-  append(message, data, WARNING);
+	console.warn(message, data);
+	append(message, data, WARNING);
 }
 
 export function error(message, data) {
-  append(message, data, ERROR);
+	console.error(message, data);
+	append(message, data, ERROR);
 }
 
-function logsEnabled() {
-  const settings = getSettings();
-  return settings.debugLog;
+async function logsEnabled() {
+	const settings = await storage.get("settings");
+	if (settings) {
+		return settings;
+	}
+	return settings.debugLog;
 }
