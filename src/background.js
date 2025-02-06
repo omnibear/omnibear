@@ -14,7 +14,7 @@ import {
 } from "./background/authentication";
 import { info, error } from "./util/log";
 
-export default async function main() {
+export default function main() {
 	let authTabId = null;
 
 	function handleMessage(request, sender) {
@@ -90,7 +90,7 @@ export default async function main() {
 
 	async function handleTabChange(tabId, changeInfo, tab) {
 		const { authTabId } = await storage.get(["authTabId"]);
-		console.log("Processing tab change");
+		console.log("Processing tab change", authTabId, tabId, changeInfo, tab);
 		if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
 			return;
 		}
@@ -158,10 +158,10 @@ export default async function main() {
 	}
 
 	// @ts-ignore
-	if (import.meta.env.BROWSER === "chrome") {
-		// Run as a service worker so this could be called multiple times
-		browser.runtime.onInstalled.addListener(registerListeners);
-	} else {
-		registerListeners();
-	}
+	// if (import.meta.env.BROWSER === "chrome") {
+	// Run as a service worker so this could be called multiple times
+	browser.runtime.onInstalled.addListener(registerListeners);
+	// } else {
+	// 	registerListeners();
+	// }
 }

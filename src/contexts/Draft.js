@@ -17,7 +17,8 @@ export function createDraftStore() {
 	const syndicateList = signal([]);
 
 	const tagsArray = computed(() =>
-		tags.value.trim().replace(/[\s+]/g, " ").split(" "),
+		// Consider switching to comma separated tags in the future (https://github.com/omnibear/omnibear/issues/76)
+		tags.value.trim().replace(/[\s+]/g, " ").split(" ").filter(Boolean)
 	);
 	const isEmpty = computed(() => !content.value && !slug.value && !title.value);
 
@@ -61,6 +62,23 @@ export function createDraftStore() {
 		});
 	}
 
+	function getEntity() {
+		const entity = {
+			type: type.value,
+			title: title.value,
+			content: content.value,
+			tagsArray: tagsArray.value,
+			slug: slug.value,
+			syndicateList: syndicateList.value,
+		};
+
+		if (type.value) {
+			entity.type = [type.value];
+		}
+
+		return entity;
+	}
+
 	return {
 		title,
 		content,
@@ -72,6 +90,7 @@ export function createDraftStore() {
 		isEmpty,
 		setSlug,
 		clear,
+		getEntity,
 	};
 }
 

@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 
-export default class Logs extends Component {
+export default class Webmention extends Component {
   render() {
     const { title } = this.props;
     return (

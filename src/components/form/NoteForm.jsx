@@ -11,13 +11,13 @@ export default function NoteForm() {
   const draft = useContext(Draft);
   const settings = useContext(Settings);
   const [syndicateOptions, setSyndicateOptions] = useState(
-    settings.syndicateOptions.value,
+    settings.syndicateOptions.value
   );
   const content = useRef(null);
 
   const isLoading = app.isSending.value;
   return (
-    <form className="container" onSubmit={app.sendNote}>
+    <form className="container" onSubmit={app.send}>
       {app.includeTitle.value ? (
         <div>
           <label htmlFor="input-title">Title</label>
@@ -52,7 +52,7 @@ export default function NoteForm() {
           type="text"
           placeholder="e.g. web  personal"
           value={draft.tags}
-          onChange={(e) => draft.setTags(e.target.value)}
+          onChange={(e) => (draft.tags.value = e.target.value)}
           disabled={isLoading}
         />
       </div>

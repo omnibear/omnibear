@@ -19,7 +19,6 @@ export function createAuthState() {
 	const isLoggedIn = computed(() => token.value && micropubEndpoint.value);
 
 	storage.get(["domain", "token", "micropubEndpoint"]).then((storedValues) => {
-		console.log("Reading stored values", storedValues);
 		domain.value = storedValues.domain;
 		token.value = storedValues.token;
 		micropubEndpoint.value = storedValues.micropubEndpoint;

@@ -127,15 +127,28 @@ export function createAppState() {
 		}
 	}
 
+	async function send() {
+		switch (viewType.value) {
+			case NOTE:
+				return sendNote();
+			case REPLY:
+				return sendReply();
+			case BOOKMARK:
+				return sendBookmark();
+		}
+	}
+
 	async function sendNote() {
-		return _send(() => postNote(draft.value, settingsState.aliases.value));
+		return _send(() =>
+			postNote(draftState.getEntity(), settingsState.aliases.value)
+		);
 	}
 
 	async function sendReply() {
 		return _send(
 			() =>
 				postReply(
-					draftState, // TODO: Need to unwrap this
+					draftState.getEntity(),
 					selectedEntry.value?.url,
 					settingsState.aliases.value
 				),
@@ -147,7 +160,7 @@ export function createAppState() {
 		return _send(
 			() =>
 				postBookmark(
-					draftState, // TODO: Unwrap
+					draftState.getEntity(),
 					selectedEntry.value.url,
 					settingsState.aliases.value
 				),
@@ -178,6 +191,7 @@ export function createAppState() {
 		setViewType,
 		setSelectedEntry,
 		logout,
+		send,
 		sendNote,
 		sendReply,
 		sendBookmark,

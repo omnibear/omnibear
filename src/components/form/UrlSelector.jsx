@@ -37,6 +37,7 @@ async function loadOptions() {
       isDisabled: true,
     });
   }
+  console.log("Options loaded", options);
   return options;
 }
 
@@ -48,7 +49,7 @@ export default function UrlSelector() {
 
   useEffect(async () => {
     setOptions(await loadOptions());
-  });
+  }, []);
 
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -77,7 +78,7 @@ export default function UrlSelector() {
     return () => {
       document.removeEventListener("click", close);
     };
-  }, []);
+  }, [options]);
 
   function getLabel() {
     let action;
@@ -128,6 +129,7 @@ export default function UrlSelector() {
               option={option}
               isOpen={isOpen}
               isActive={option.url === app.selectedEntry.value?.url}
+              onClick={() => selectEntry(option)}
             />
           ))}
         </div>
@@ -136,14 +138,14 @@ export default function UrlSelector() {
   );
 }
 
-function UrlOption({ option, isOpen, isActive }) {
+function UrlOption({ option, isOpen, isActive, onClick }) {
   return (
     <button
       type="button"
       className={`url-option${isActive ? " is-active" : ""} ${
         isOpen ? " is-in" : ""
       }`}
-      onClick={() => selectEntry(option)}
+      onClick={() => onClick(option)}
       disabled={option.isDisabled}
     >
       <div className="url-option__type">{option.name}</div>
