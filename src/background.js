@@ -60,6 +60,16 @@ export default function main() {
 			pageTabId,
 			itemEntry,
 		});
+		if (pageEntry?.webmention) {
+			browser.action.setBadgeText({ tabId: pageTabId, text: "W" });
+			browser.action.setTitle({
+				tabId: pageTabId,
+				title: "Omnibear - Page supports Webmentions",
+			});
+		} else {
+			browser.action.setBadgeText({ tabId: pageTabId, text: "" });
+			browser.action.setTitle({ tabId: pageTabId, title: "Omnibear" });
+		}
 	}
 
 	async function selectEntry(itemEntry = null) {
@@ -124,23 +134,23 @@ export default function main() {
 
 	function onContextClick(info, tab) {
 		//@ts-ignore
-		if (import.meta.env.BROWSER === "chrome") {
-			// TODO: How does the popup know to open the reply view??
-			browser.action.openPopup();
-			// window.open(
-			// 	"index.html?type=reply",
-			// 	"extension_popup",
-			// 	"width=450,height=580,status=no,scrollbars=yes,resizable=no,top=80,left=2000"
-			// );
-		} else {
-			browser.windows.create({
-				url: "index.html?type=reply",
-				width: 450,
-				height: 580,
-				type: "panel",
-				left: 2000,
-			});
-		}
+		// if (import.meta.env.BROWSER === "chrome") {
+		// TODO: How does the popup know to open the reply view??
+		browser.action.openPopup();
+		// window.open(
+		// 	"index.html?type=reply",
+		// 	"extension_popup",
+		// 	"width=450,height=580,status=no,scrollbars=yes,resizable=no,top=80,left=2000"
+		// );
+		// } else {
+		// 	browser.windows.create({
+		// 		url: "index.html?type=reply",
+		// 		width: 450,
+		// 		height: 580,
+		// 		type: "panel",
+		// 		left: 2000,
+		// 	});
+		// }
 	}
 
 	function registerListeners() {
