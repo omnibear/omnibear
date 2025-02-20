@@ -2,17 +2,6 @@ import __browser__ from "../browser";
 import { clearItem, focusClickedEntry, getCurrentItem } from "./entry";
 import { cleanUrl } from "../util/url";
 
-// function handleMessage(request) {
-// 	switch (request.action) {
-// 		case "fetch-token-error":
-// 			handleTokenError(request.payload.error);
-// 			break;
-// 		case "auth-status-update":
-// 			handleStatusUpdate(request.payload);
-// 			break;
-// 	}
-// }
-
 function sendFocusMessage() {
 	const supportsWebmention = pageSupportsWebmention();
 	const pageEntry = {

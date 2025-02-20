@@ -21,19 +21,34 @@ export function createSettingsState() {
 
 	storage.get(["settings", "syndicateTo"]).then((storedValues) => {
 		if (storedValues.settings) {
+			/**
+			 *
+			 * @param {ReturnType<typeof signal<boolean>>} stateSignal
+			 * @param {boolean | undefined} storedValueToCheck
+			 */
+			function setStateFromStorage(stateSignal, storedValueToCheck) {
+				if (storedValueToCheck != undefined) {
+					stateSignal.value = storedValueToCheck;
+				}
+			}
 			const storedSettings = storedValues.settings;
-			defaultToCurrentPage.value =
-				storedSettings.defaultToCurrentPage ?? defaultToCurrentPage.value;
-			autoSlug.value = storedSettings.autoSlug ?? autoSlug.value;
-			closeAfterPosting.valure =
-				storedSettings.closeAfterPosting ?? closeAfterPosting.value;
-			debugLog.value = storedSettings.debugLog ?? debugLog.value;
-			reacji.value = storedSettings.reacji ?? reacji.value;
-			slugFieldName.value = storedSettings.slugFieldName ?? slugFieldName.value;
-			syndicateToFieldName.value =
-				storedSettings.syndicateToFieldName ?? syndicateToFieldName.value;
+			setStateFromStorage(
+				defaultToCurrentPage,
+				storedSettings.defaultToCurrentPage
+			);
+			setStateFromStorage(autoSlug, storedSettings.autoSlug);
+			setStateFromStorage(closeAfterPosting, storedSettings.closeAfterPosting);
+			setStateFromStorage(debugLog, storedSettings.debugLog);
+			setStateFromStorage(reacji, storedSettings.reacji);
+			setStateFromStorage(slugFieldName, storedSettings.slugFieldName);
+			setStateFromStorage(
+				syndicateToFieldName,
+				storedSettings.syndicateToFieldName
+			);
 		}
-		storedValues.value = storedValues.settings;
+		if (storedValues.syndicateTo) {
+			syndicateOptions.value = storedValues.syndicateTo;
+		}
 	});
 
 	effect(() => {

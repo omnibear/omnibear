@@ -14,10 +14,15 @@ export default function NoteForm() {
     settings.syndicateOptions.value
   );
   const content = useRef(null);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    app.send();
+    return false;
+  };
 
   const isLoading = app.isSending.value;
   return (
-    <form className="container" onSubmit={app.send}>
+    <form className="container" onSubmit={onSubmit}>
       {app.includeTitle.value ? (
         <div>
           <label htmlFor="input-title">Title</label>

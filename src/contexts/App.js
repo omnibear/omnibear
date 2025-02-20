@@ -87,7 +87,8 @@ export function createAppState() {
 		if (settingsState.defaultToCurrentPage.value) {
 			return REPLY;
 		}
-		const type = getParamFromUrl("type", window.location.search);
+		const queryParams = new URLSearchParams(location.search);
+		const type = queryParams.get("type");
 		return type || NOTE;
 	}
 
@@ -101,15 +102,15 @@ export function createAppState() {
 		isSending.value = true;
 		try {
 			info(`Sending ${viewTypeName}...`);
-			const location = await sendFunction();
+			const micropubResponse = await sendFunction();
 			const message = `Sucessfully sent ${viewTypeName}`;
-			info(message, location);
+			info(message, micropubResponse);
 			batch(() => {
 				draftState.clear();
 				flashMessage.value = {
 					message,
 					type: MESSAGE_SUCCESS,
-					location,
+					location: micropubResponse,
 				};
 				viewType.value = MESSAGE;
 			});

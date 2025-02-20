@@ -148,6 +148,7 @@ export default function main() {
 		browser.runtime.onMessage.addListener(handleMessage);
 		browser.tabs.onUpdated.addListener(handleTabChange);
 		// TODO: Should this only be created if logged in?
+		// TODO: Shouldn't appear in the browser extension
 		browser.contextMenus.create({
 			id: "Reply",
 			title: "Reply to entry",
