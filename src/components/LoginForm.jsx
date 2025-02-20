@@ -17,12 +17,6 @@ export default function LoginForm() {
     }, 150);
   }, []);
 
-  // componentDidMount() {
-  //   setTimeout(() => {
-  //     this.input.focus();
-  //   }, 150);
-  // }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const normalized = getNormalizedDomain();
@@ -93,14 +87,3 @@ export default function LoginForm() {
     </form>
   );
 }
-
-// ??? old testing data?
-// getFields(domain) {
-//   return [
-//     'redirect_uri=https://omnibear.com/auth/success/',
-//     'client_id=https://omnibear.com',
-//     'response_type=code',
-//     'scope=create',
-//     `me=${domain}`,
-//   ].join('&');
-// }

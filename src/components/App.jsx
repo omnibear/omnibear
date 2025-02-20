@@ -4,9 +4,7 @@ import { AuthProvider } from "../contexts/Auth";
 import { SettingsProvider } from "../contexts/Settings";
 import { DraftProvider } from "../contexts/Draft";
 
-console.log("returning app renderer");
 export default function App() {
-  console.log("rendering app");
   return <Layout />;
   // return (
   //   <AppProvider>

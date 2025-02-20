@@ -9,7 +9,6 @@ export default function AuthenticationFields() {
   const update = (fn) => {
     return (event) => {
       fn(event.target.value);
-      // window.auth = auth; // debugging remnant?
     };
   };
 

@@ -1,10 +1,4 @@
-import {
-  useState,
-  useContext,
-  useCallback,
-  useEffect,
-  useMemo,
-} from "preact/hooks";
+import { useState, useContext, useCallback, useEffect } from "preact/hooks";
 import AppContext from "../../contexts/App";
 import DownArrow from "../svg/DownArrow";
 import WebmentionSvg from "../svg/Webmention";

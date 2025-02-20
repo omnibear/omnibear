@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "preact/hooks";
+import { useState, useContext, useRef } from "preact/hooks";
 import AppContext from "../../contexts/App";
 import Draft from "../../contexts/Draft";
 import Settings from "../../contexts/Settings";
