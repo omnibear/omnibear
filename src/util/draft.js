@@ -14,7 +14,7 @@ const KEYS = Object.keys(createEmptyDraft());
 
 export async function getDraft() {
 	const { draft } = await storage.get(["draft"]);
-	return draft || createEmptyDraft();
+	return { ...createEmptyDraft(), ...draft };
 }
 
 export async function saveDraft(draft) {

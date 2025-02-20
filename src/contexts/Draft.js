@@ -23,6 +23,15 @@ export function createDraftStore() {
 	);
 	const isEmpty = computed(() => !content.value && !slug.value && !title.value);
 
+	getDraft().then((draft) => {
+		title.value = draft.title;
+		content.value = draft.content;
+		tags.value = draft.category?.join(", ");
+		slug.value = draft.slug;
+		syndicateList.value = draft.syndicateTo;
+		type.value = draft.type;
+	});
+
 	effect(() => {
 		const shouldAutoSlug = !isSlugModified.value && settingsState.autoSlug;
 
