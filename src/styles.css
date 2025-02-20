@@ -113,7 +113,6 @@ label {
 	grid-template-columns: 3.125rem 1fr;
 	grid-template-rows: 1fr 1.8rem;
 	width: 100vw;
-	max-height: 100vh;
 }
 .l-main--short {
 	min-height: 200px;

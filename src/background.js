@@ -132,32 +132,15 @@ export default function main() {
 		return changeInfo.url?.startsWith(AUTH_SUCCESS_URL);
 	}
 
-	function onContextClick(info, tab) {
-		//@ts-ignore
-		// if (import.meta.env.BROWSER === "chrome") {
-		// TODO: How does the popup know to open the reply view??
+	function onContextClick() {
+		// TODO: Change to reply view if not the default
 		browser.action.openPopup();
-		// window.open(
-		// 	"index.html?type=reply",
-		// 	"extension_popup",
-		// 	"width=450,height=580,status=no,scrollbars=yes,resizable=no,top=80,left=2000"
-		// );
-		// } else {
-		// 	browser.windows.create({
-		// 		url: "index.html?type=reply",
-		// 		width: 450,
-		// 		height: 580,
-		// 		type: "panel",
-		// 		left: 2000,
-		// 	});
-		// }
 	}
 
 	function registerListeners() {
 		console.log("Registering listeners");
 		browser.runtime.onMessage.addListener(handleMessage);
 		browser.tabs.onUpdated.addListener(handleTabChange);
-		// TODO: Shouldn't appear in the browser extension
 		browser.contextMenus.create({
 			id: "Reply",
 			title: "Reply to entry",
@@ -168,11 +151,5 @@ export default function main() {
 		browser.contextMenus.onClicked.addListener(onContextClick);
 	}
 
-	// @ts-ignore
-	// if (import.meta.env.BROWSER === "chrome") {
-	// Run as a service worker so this could be called multiple times
 	browser.runtime.onInstalled.addListener(registerListeners);
-	// } else {
-	// 	registerListeners();
-	// }
 }
