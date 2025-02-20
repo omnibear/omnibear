@@ -9,16 +9,17 @@ export function createDraftStore() {
 
 	const title = signal(defaultDraft.title);
 	const content = signal(defaultDraft.content);
-	// TODO: Should the array form be primary??
-	const tags = signal(defaultDraft.category.join(" "));
+	const tags = signal(defaultDraft.category.join(", "));
 	const slug = signal(defaultDraft.slug);
 	const isSlugModified = signal(false);
 	const type = signal(defaultDraft.type);
 	const syndicateList = signal([]);
 
 	const tagsArray = computed(() =>
-		// Consider switching to comma separated tags in the future (https://github.com/omnibear/omnibear/issues/76)
-		tags.value.trim().replace(/[\s+]/g, " ").split(" ").filter(Boolean)
+		tags.value
+			.split(",")
+			.map((t) => t.trim())
+			.filter(Boolean)
 	);
 	const isEmpty = computed(() => !content.value && !slug.value && !title.value);
 

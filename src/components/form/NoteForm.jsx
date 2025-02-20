@@ -51,11 +51,11 @@ export default function NoteForm() {
         <QuickReplies />
       </div>
       <div>
-        <label htmlFor="input-tags">Tags (space separated)</label>
+        <label htmlFor="input-tags">Tags (comma separated)</label>
         <input
           id="input-tags"
           type="text"
-          placeholder="e.g. web  personal"
+          placeholder="e.g. web, personal"
           value={draft.tags}
           onChange={(e) => (draft.tags.value = e.target.value)}
           disabled={isLoading}
