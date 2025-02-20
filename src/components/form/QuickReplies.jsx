@@ -6,7 +6,7 @@ export default function QuickReplies() {
   const app = useContext(AppContext);
   const settings = useContext(Settings);
 
-  const reacji = settings.reacji;
+  const reacji = settings.reacji.value;
   if (!reacji || !reacji.length) {
     return null;
   }
