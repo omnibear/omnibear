@@ -147,14 +147,14 @@ export default function main() {
 		console.log("Registering listeners");
 		browser.runtime.onMessage.addListener(handleMessage);
 		browser.tabs.onUpdated.addListener(handleTabChange);
-		// TODO: Should this only be created if logged in?
 		// TODO: Shouldn't appear in the browser extension
 		browser.contextMenus.create({
 			id: "Reply",
 			title: "Reply to entry",
-			contexts: ["page", "selection"],
+			contexts: ["page", "image", "link", "audio", "video", "selection"],
+			// Don't want to appear on extension pages or within the omnibear popup
+			documentUrlPatterns: ["http://*/*", "https://*/*"],
 		});
-
 		browser.contextMenus.onClicked.addListener(onContextClick);
 	}
 
