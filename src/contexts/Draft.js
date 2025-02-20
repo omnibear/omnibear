@@ -23,14 +23,16 @@ export function createDraftStore() {
 	);
 	const isEmpty = computed(() => !content.value && !slug.value && !title.value);
 
-	getDraft().then((draft) => {
+	function setValuesFromDraft(draft) {
 		title.value = draft.title;
 		content.value = draft.content;
 		tags.value = draft.category?.join(", ");
 		slug.value = draft.slug;
 		syndicateList.value = draft.syndicateTo;
 		type.value = draft.type;
-	});
+	}
+
+	getDraft().then(setValuesFromDraft);
 
 	effect(() => {
 		const shouldAutoSlug = !isSlugModified.value && settingsState.autoSlug;
@@ -61,13 +63,8 @@ export function createDraftStore() {
 	}
 
 	function clear() {
-		// TODO: Can we avoid setting defaults both here and create draft?
 		batch(() => {
-			title.value = "";
-			content.value = "";
-			tags.value = "";
-			slug.value = "";
-			type.value = null;
+			setValuesFromDraft(createEmptyDraft());
 			isSlugModified.value = false;
 		});
 	}

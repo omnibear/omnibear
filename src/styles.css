@@ -89,9 +89,7 @@ label,
 .checkbox {
 	display: block;
 	color: var(--gray-40);
-	font-family:
-		Noto Serif,
-		serif;
+	font-family: Noto Serif, serif;
 	font-size: 0.8rem;
 }
 label {
@@ -294,6 +292,9 @@ fieldset > * + * {
 	border-radius: 0;
 }
 
+.button:first-of-type {
+	margin-right: 0.5em;
+}
 .button {
 	position: relative;
 	padding: 0.5em 1em;
@@ -301,6 +302,8 @@ fieldset > * + * {
 	color: white;
 	background-color: var(--yellow);
 	outline: none;
+	margin-right: 0.5em;
+	min-width: 5em;
 }
 .button:hover {
 	opacity: 0.9;
@@ -322,6 +325,13 @@ fieldset > * + * {
 	border-top-color: white;
 	border-radius: 50%;
 	animation: spin 500ms linear infinite;
+}
+
+.button.button-outline {
+	border: var(--yellow) solid 1px;
+	background-color: white;
+	color: var(--yellow);
+	min-width: 4em;
 }
 
 .button svg {
@@ -349,9 +359,7 @@ fieldset > * + * {
 .section-heading {
 	margin: 0 0 0.5rem;
 	font-size: 1.2rem;
-	font-family:
-		Noto Serif,
-		serif;
+	font-family: Noto Serif, serif;
 	font-weight: bold;
 }
 
@@ -400,9 +408,7 @@ fieldset > * + * {
 	padding: 0 1rem;
 	color: white;
 	font-size: 1rem;
-	font-family:
-		Noto Serif,
-		serif;
+	font-family: Noto Serif, serif;
 }
 
 .dropdown {

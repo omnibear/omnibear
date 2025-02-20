@@ -19,6 +19,11 @@ export default function NoteForm() {
     app.send();
     return false;
   };
+  const onClear = () => {
+    if (confirm("Are you sure you want to clear the draft?")) {
+      draft.clear();
+    }
+  };
 
   const isLoading = app.isSending.value;
   return (
@@ -87,6 +92,14 @@ export default function NoteForm() {
         className={isLoading ? "button is-loading" : "button"}
       >
         Post
+      </button>
+      <button
+        type="button"
+        onClick={onClear}
+        disabled={isLoading || !draft.content}
+        className={"button button-outline" + (isLoading ? " is-loading" : "")}
+      >
+        Clear
       </button>
     </form>
   );
