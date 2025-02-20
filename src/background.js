@@ -54,15 +54,15 @@ export default function main() {
 		authTabId = await browser.tabs.create({ url: payload.authUrl });
 	}
 
-	async function updateFocusedWindow(tabId, pageEntry, selectedEntry) {
+	async function updateFocusedWindow(pageTabId, pageEntry, itemEntry = null) {
 		await storage.set({
-			pageEntry: pageEntry,
-			pageTabId: tabId,
-			itemEntry: selectEntry,
+			pageEntry,
+			pageTabId,
+			itemEntry,
 		});
 	}
 
-	async function selectEntry(itemEntry) {
+	async function selectEntry(itemEntry = null) {
 		await storage.set({
 			itemEntry,
 		});
@@ -70,7 +70,7 @@ export default function main() {
 
 	async function clearEntry() {
 		await storage.set({
-			itemEntry: undefined,
+			itemEntry: null,
 		});
 	}
 
