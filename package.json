@@ -4,9 +4,6 @@
   "description": "A micropub browser extension",
   "type": "module",
   "scripts": {
-    "xdev": "vite",
-    "xbuild": "vite build",
-    "xbuild-only": "vite build",
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox",
     "build": "wxt build",
@@ -14,7 +11,6 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "postinstall": "wxt prepare",
-    "preview": "vite preview",
     "//test": "mocha-webpack --webpack-config webpack.test.js \"src/**/*.test.js\""
   },
   "repository": {
@@ -32,7 +28,6 @@
   "homepage": "https://omnibear.com",
   "devDependencies": {
     "@preact/preset-vite": "^2.9.3",
-    "vite-plugin-web-extension": "^4.0.0",
     "wxt": "^0.19.24"
   },
   "dependencies": {
