@@ -12,16 +12,42 @@ export default micropub;
 
 // Load settings when available
 storage
-	.get(["domain", "authEndpoint", "tokenEndpoint", "micropubEndpoint", "token"])
-	.then(({ domain, authEndpoint, tokenEndpoint, micropubEndpoint, token }) => {
-		micropub.setOptions({
-			me: domain,
+	.get([
+		"domain",
+		"authEndpoint",
+		"tokenEndpoint",
+		"micropubEndpoint",
+		"token",
+		"authSecret",
+	])
+	.then(
+		({
+			domain,
 			authEndpoint,
 			tokenEndpoint,
 			micropubEndpoint,
 			token,
-		});
-	});
+			authSecret,
+		}) => {
+			if (!authSecret) {
+				authSecret = generateAuthSecret();
+				// Secret should be stable once set
+				// TODO: Make sure background & popup use the same secret
+				storage
+					.set({ authSecret })
+					.catch((error) => console.error("Problem saving authSecret", error));
+			}
+
+			micropub.setOptions({
+				me: domain,
+				authEndpoint,
+				tokenEndpoint,
+				micropubEndpoint,
+				token,
+				state: authSecret,
+			});
+		}
+	);
 
 export function postNote(entry, aliases) {
 	return micropub.create(
@@ -79,4 +105,10 @@ export function postRepost(url) {
 		"repost-of": url,
 	};
 	return micropub.create(entry, "form");
+}
+
+function generateAuthSecret() {
+	return (
+		"very-secret-omnibear-state-" + Math.random().toString(36).substring(2, 15)
+	);
 }
