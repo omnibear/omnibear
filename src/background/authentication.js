@@ -1,4 +1,4 @@
-import __browser__ from "../browser";
+import browser from "../browser";
 import storage from "../util/storage";
 import micropub from "../util/micropub";
 import { getAuthTab, logout } from "../util/utils";
@@ -30,7 +30,7 @@ export async function fetchToken(code) {
 	} catch (err) {
 		error("Error fetching token", err);
 		const tab = getAuthTab();
-		__browser__.tabs.sendMessage(tab.id, {
+		browser.tabs.sendMessage(tab.id, {
 			action: "fetch-token-error",
 			payload: {
 				error: err,

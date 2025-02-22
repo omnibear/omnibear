@@ -1,7 +1,7 @@
 /**
  * Script injected into the omnibear auth success page.
  */
-import __browser__ from "../browser";
+import browser from "../browser";
 import storage from "../util/storage";
 import { logout } from "../util/utils";
 import { info, warning, error } from "../util/log";
@@ -16,7 +16,7 @@ function handleMessage(request) {
 			break;
 	}
 }
-__browser__.runtime.onMessage.addListener(handleMessage);
+browser.runtime.onMessage.addListener(handleMessage);
 
 function handleTokenError(error) {
 	const heading = document.getElementById("status-heading");
@@ -42,7 +42,7 @@ function handleStatusUpdate(payload) {
 export default async function main() {
 	const searchParams = new URLSearchParams(location.search);
 	if (searchParams.has("code")) {
-		__browser__.runtime.sendMessage({
+		browser.runtime.sendMessage({
 			action: "store-auth",
 			payload: {
 				code: searchParams.get("code"),

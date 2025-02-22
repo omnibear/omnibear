@@ -1,4 +1,4 @@
-import __browser__ from "../browser";
+import browser from "../browser";
 import { clearItem, focusClickedEntry, getCurrentItem } from "./entry";
 import { cleanUrl } from "../util/url";
 
@@ -22,7 +22,7 @@ function sendFocusMessage() {
 	}
 
 	console.log("Sending focus message", pageEntry, selectedEntry);
-	__browser__.runtime.sendMessage({
+	browser.runtime.sendMessage({
 		action: "focus-window",
 		payload: {
 			pageEntry,
@@ -39,8 +39,6 @@ export default async function main() {
 	document.body.addEventListener("click", clearItem);
 	document.body.addEventListener("contextmenu", focusClickedEntry);
 	window.addEventListener("focus", sendFocusMessage);
-
-	// __browser__.runtime.onMessage.addListener(handleMessage);
 
 	if (!document.hidden) {
 		sendFocusMessage();

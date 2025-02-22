@@ -1,6 +1,6 @@
 // TODO: replace this lib with a better mf parser, preferably
 // one that doesn't blow up while tests run in Node environment
-import __browser__ from "../browser";
+import browser from "../browser";
 import microformat from "microformat-shiv";
 import { getAncestorNode, getAncestorNodeByClass } from "./dom";
 
@@ -10,7 +10,7 @@ let currentItem;
 
 export function clearItem() {
 	if (currentItem) {
-		__browser__.runtime.sendMessage({
+		browser.runtime.sendMessage({
 			action: "clear-entry",
 		});
 		removeHighlight();
@@ -38,7 +38,7 @@ export function focusClickedEntry(e) {
 	if (!entry) {
 		return;
 	}
-	__browser__.runtime.sendMessage({
+	browser.runtime.sendMessage({
 		action: "select-entry",
 		payload: {
 			type: "item",
@@ -57,7 +57,7 @@ function findTweet(el) {
 		return false;
 	}
 	const url = `https://twitter.com${element.getAttribute(
-		"data-permalink-path",
+		"data-permalink-path"
 	)}`;
 	const name = element.getAttribute("data-name");
 	return {

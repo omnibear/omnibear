@@ -1,11 +1,11 @@
-import __browser__ from "../browser";
+import browser from "../browser";
 import storage from "./storage";
 import { AUTH_SUCCESS_URL } from "../constants";
 
 export function openLink(e) {
 	e.preventDefault();
 	if (e.target.href) {
-		__browser__.tabs.create({ url: e.target.href });
+		browser.tabs.create({ url: e.target.href });
 	}
 }
 
@@ -15,7 +15,7 @@ export function clone(obj) {
 
 export function getAuthTab() {
 	return new Promise(async function (resolve, reject) {
-		const tabs = await __browser__.tabs.query({ url: AUTH_SUCCESS_URL + "*" });
+		const tabs = await browser.tabs.query({ url: AUTH_SUCCESS_URL + "*" });
 
 		if (tabs.length) {
 			resolve(tabs[0]);
@@ -58,7 +58,7 @@ export function generateSlug(content) {
 export async function getPageUrl() {
 	const { pageTabId: tabId } = await storage.get(["pageTabId"]);
 	return new Promise((resolve) => {
-		__browser__.tabs.get(Number(tabId), (tab) => {
+		browser.tabs.get(Number(tabId), (tab) => {
 			resolve(tab.url);
 		});
 	});

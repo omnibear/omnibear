@@ -1,5 +1,5 @@
 import { createContext } from "preact";
-import __browser__ from "../browser";
+import browser from "../browser";
 import storage from "../util/storage";
 import { signal, computed, effect } from "@preact/signals";
 import micropub from "../util/micropub";
@@ -67,9 +67,9 @@ export function createAuthState() {
 				tokenEndpoint,
 				micropubEndpoint,
 			});
-			authTabId = await __browser__.tabs.create({ url });
+			authTabId = await browser.tabs.create({ url });
 			storage.set({ authTabId });
-			__browser__.runtime.sendMessage({
+			browser.runtime.sendMessage({
 				action: "begin-auth",
 				payload: {
 					authUrl: url,
