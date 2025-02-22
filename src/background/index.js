@@ -1,18 +1,17 @@
 // @ts-check
 /**
- * Run as a service worker in chromium browser or background page in Firefox
+ * Shared background process for browser extension.
+ * Run as a service worker in chromium browser or background page in Firefox.
+ * Not guaranteed to be running at all times in Chrome (event based).
  * Fetches auth token
  */
-import browser from "./browser";
-import storage from "./util/storage";
-import { getParamFromUrl } from "./util/url";
-import { AUTH_SUCCESS_URL } from "./constants";
-import { getAuthTab } from "./util/utils";
-import {
-	fetchToken,
-	fetchSyndicationTargets,
-} from "./background/authentication";
-import { info, error } from "./util/log";
+import browser from "../browser";
+import storage from "../util/storage";
+import { getParamFromUrl } from "../util/url";
+import { AUTH_SUCCESS_URL } from "../constants";
+import { getAuthTab } from "../util/utils";
+import { fetchToken, fetchSyndicationTargets } from "./authentication";
+import { info, error } from "../util/log";
 
 export default function main() {
 	let authTabId = null;
@@ -132,7 +131,7 @@ export default function main() {
 		return changeInfo.url?.startsWith(AUTH_SUCCESS_URL);
 	}
 
-	function onContextClick() {
+	function onContextMenuClick() {
 		// TODO: Change to reply view if not the default
 		browser.action.openPopup();
 	}
@@ -145,11 +144,13 @@ export default function main() {
 			id: "Reply",
 			title: "Reply to entry",
 			contexts: ["page", "image", "link", "audio", "video", "selection"],
-			// Don't want to appear on extension pages or within the omnibear popup
+			// Don't want "Reply" menu to appear on extension pages or within the omnibear popup
 			documentUrlPatterns: ["http://*/*", "https://*/*"],
 		});
-		browser.contextMenus.onClicked.addListener(onContextClick);
+		browser.contextMenus.onClicked.addListener(onContextMenuClick);
 	}
 
 	browser.runtime.onInstalled.addListener(registerListeners);
+	browser.action.setBadgeBackgroundColor({ color: "#444" });
+	browser.action.setBadgeTextColor({ color: "#fff" });
 }

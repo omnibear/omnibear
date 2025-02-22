@@ -1,22 +1,30 @@
-/**
- * Script injected into the omnibear auth success page.
- */
 import browser from "../browser";
-import storage from "../util/storage";
-import { logout } from "../util/utils";
-import { info, warning, error } from "../util/log";
 
-function handleMessage(request) {
-	switch (request.action) {
-		case "fetch-token-error":
-			handleTokenError(request.payload.error);
-			break;
-		case "auth-status-update":
-			handleStatusUpdate(request.payload);
-			break;
+/**
+ * Script used on the omnibear auth success page.
+ * Used to get the auth code from the URL and send it to the background script.
+ * Also shows status updates to the user.
+ */
+export default async function main() {
+	browser.runtime.onMessage.addListener(handleMessage);
+
+	const searchParams = new URLSearchParams(location.search);
+	if (searchParams.has("code")) {
+		browser.runtime.sendMessage({
+			action: "store-auth",
+			payload: {
+				code: searchParams.get("code"),
+			},
+		});
+	}
+
+	// hide paragraph used by old versions of Omnibear
+	// This can be removed if the website is updated
+	const paragraph = document.getElementById("status-paragraph");
+	if (paragraph) {
+		paragraph.textContent = "";
 	}
 }
-browser.runtime.onMessage.addListener(handleMessage);
 
 function handleTokenError(error) {
 	const heading = document.getElementById("status-heading");
@@ -39,21 +47,13 @@ function handleStatusUpdate(payload) {
 	list.appendChild(item);
 }
 
-export default async function main() {
-	const searchParams = new URLSearchParams(location.search);
-	if (searchParams.has("code")) {
-		browser.runtime.sendMessage({
-			action: "store-auth",
-			payload: {
-				code: searchParams.get("code"),
-			},
-		});
-	}
-
-	// hide paragraph used by old versions of Omnibear
-	// This can be removed if the website is updated
-	const paragraph = document.getElementById("status-paragraph");
-	if (paragraph) {
-		paragraph.textContent = "";
+function handleMessage(request) {
+	switch (request.action) {
+		case "fetch-token-error":
+			handleTokenError(request.payload.error);
+			break;
+		case "auth-status-update":
+			handleStatusUpdate(request.payload);
+			break;
 	}
 }

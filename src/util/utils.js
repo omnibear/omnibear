@@ -13,16 +13,14 @@ export function clone(obj) {
 	return JSON.parse(JSON.stringify(obj));
 }
 
-export function getAuthTab() {
-	return new Promise(async function (resolve, reject) {
-		const tabs = await browser.tabs.query({ url: AUTH_SUCCESS_URL + "*" });
+export async function getAuthTab() {
+	const tabs = await browser.tabs.query({ url: AUTH_SUCCESS_URL + "*" });
 
-		if (tabs.length) {
-			resolve(tabs[0]);
-		} else {
-			reject("Auth tab not found");
-		}
-	});
+	if (tabs.length) {
+		return tabs[0];
+	} else {
+		throw new Error("Auth tab not found");
+	}
 }
 
 export function logout() {
