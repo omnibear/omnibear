@@ -36,7 +36,6 @@ export async function fetchToken(code) {
 				error: err,
 			},
 		});
-	} finally {
 		logout();
 	}
 }
