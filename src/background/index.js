@@ -8,7 +8,7 @@
 import browser from "../browser";
 import storage from "../util/storage";
 import { getParamFromUrl } from "../util/url";
-import { AUTH_SUCCESS_URL } from "../constants";
+import { AUTH_SUCCESS_URL, MESSAGE_ACTIONS } from "../constants";
 import { getAuthTab } from "../util/utils";
 import { fetchToken, fetchSyndicationTargets } from "./authentication";
 import { info, error } from "../util/log";
@@ -19,25 +19,23 @@ export default function main() {
 	function handleMessage(request, sender) {
 		console.log("Message received", request);
 		switch (request.action) {
-			case "begin-auth":
-				// TODO: Can delete this if tab open is moved to popup
+			case MESSAGE_ACTIONS.BEGIN_AUTH:
 				handleBeginAuth(request.payload);
 				break;
-			case "store-auth":
-				// TODO: Can delete this if tab open is moved to popup
+			case MESSAGE_ACTIONS.STORE_AUTH:
 				handleAuthCode(sender.tab.id, request.payload);
 				break;
-			case "focus-window":
+			case MESSAGE_ACTIONS.FOCUS_WINDOW:
 				updateFocusedWindow(
 					sender.tab.id,
 					request.payload.pageEntry,
 					request.payload.selectedEntry
 				);
 				break;
-			case "select-entry":
+			case MESSAGE_ACTIONS.SELECT_ENTRY:
 				selectEntry(request.payload);
 				break;
-			case "clear-entry":
+			case MESSAGE_ACTIONS.CLEAR_ENTRY:
 				clearEntry();
 		}
 		return undefined;
@@ -98,6 +96,7 @@ export default function main() {
 	}
 
 	async function handleTabChange(tabId, changeInfo, tab) {
+		// TODO: Remove
 		const { authTabId } = await storage.get(["authTabId"]);
 		console.log("Processing tab change", authTabId, tabId, changeInfo, tab);
 		if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
@@ -120,7 +119,6 @@ export default function main() {
 
 	async function sendAuthStatusUpdate(message, tabId) {
 		info(message);
-		const tab = getAuthTab();
 		browser.tabs.sendMessage(tabId, {
 			action: "auth-status-update",
 			payload: { message },
@@ -139,7 +137,7 @@ export default function main() {
 	function registerListeners() {
 		console.log("Registering listeners");
 		browser.runtime.onMessage.addListener(handleMessage);
-		browser.tabs.onUpdated.addListener(handleTabChange);
+		// browser.tabs.onUpdated.addListener(handleTabChange);
 		browser.contextMenus.create({
 			id: "Reply",
 			title: "Reply to entry",

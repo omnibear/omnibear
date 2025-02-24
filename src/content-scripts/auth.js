@@ -1,4 +1,5 @@
 import browser from "../browser";
+import { MESSAGE_ACTIONS } from "../constants";
 
 /**
  * Script used on the omnibear auth success page.
@@ -11,7 +12,7 @@ export default async function main() {
 	const searchParams = new URLSearchParams(location.search);
 	if (searchParams.has("code")) {
 		browser.runtime.sendMessage({
-			action: "store-auth",
+			action: MESSAGE_ACTIONS.STORE_AUTH,
 			payload: {
 				code: searchParams.get("code"),
 			},
@@ -49,10 +50,10 @@ function handleStatusUpdate(payload) {
 
 function handleMessage(request) {
 	switch (request.action) {
-		case "fetch-token-error":
+		case MESSAGE_ACTIONS.FETCH_TOKEN_ERROR:
 			handleTokenError(request.payload.error);
 			break;
-		case "auth-status-update":
+		case MESSAGE_ACTIONS.AUTH_STATUS_UPDATE:
 			handleStatusUpdate(request.payload);
 			break;
 	}

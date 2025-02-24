@@ -19,3 +19,21 @@ export const AUTH_SUCCESS_URL = "https://omnibear.com/auth/success";
 
 export const DEFAULT_REACJI = ["👍", "👎", "🎉", "😆", "😢", "😠"];
 Object.freeze(DEFAULT_REACJI);
+
+export const MESSAGE_ACTIONS = {
+	/** User has submitted an auth URL */
+	BEGIN_AUTH: "begin-auth",
+	/** Saving the auth credentials */
+	STORE_AUTH: "store-auth",
+	/** Updates what page is focused */
+	FOCUS_WINDOW: "focus-window",
+	/** Selects a (microformats) post for interaction rather than the whole page */
+	SELECT_ENTRY: "select-entry",
+	/** Removes a (microformats) post selection */
+	CLEAR_ENTRY: "clear-entry",
+	/** Displays error on auth page */
+	FETCH_TOKEN_ERROR: "fetch-token-error",
+	/** Updates auth page text with auth status */
+	AUTH_STATUS_UPDATE: "auth-status-update",
+};
+Object.freeze(MESSAGE_ACTIONS);

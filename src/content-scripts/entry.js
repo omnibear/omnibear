@@ -1,6 +1,7 @@
 // TODO: replace this lib with a better mf parser, preferably
 // one that doesn't blow up while tests run in Node environment
 import browser from "../browser";
+import { MESSAGE_ACTIONS } from "../constants";
 import microformat from "microformat-shiv";
 import { getAncestorNode, getAncestorNodeByClass } from "./dom";
 
@@ -11,7 +12,7 @@ let currentItem;
 export function clearItem() {
 	if (currentItem) {
 		browser.runtime.sendMessage({
-			action: "clear-entry",
+			action: MESSAGE_ACTIONS.CLEAR_ENTRY,
 		});
 		removeHighlight();
 	}
@@ -39,7 +40,7 @@ export function focusClickedEntry(e) {
 		return;
 	}
 	browser.runtime.sendMessage({
-		action: "select-entry",
+		action: MESSAGE_ACTIONS.SELECT_ENTRY,
 		payload: {
 			type: "item",
 			url: entry.url,

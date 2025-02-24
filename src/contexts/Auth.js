@@ -5,6 +5,7 @@ import { signal, computed, effect } from "@preact/signals";
 import micropub from "../util/micropub";
 import { sanitizeMicropubError } from "../util/utils";
 import { info as log, error } from "../util/log";
+import { MESSAGE_ACTIONS } from "../constants";
 
 export function createAuthState() {
 	const domain = signal("");
@@ -62,7 +63,7 @@ export function createAuthState() {
 			const { authEndpoint, tokenEndpoint, micropubEndpoint } =
 				micropub.getOptions();
 			browser.runtime.sendMessage({
-				action: "begin-auth",
+				action: MESSAGE_ACTIONS.BEGIN_AUTH,
 				payload: {
 					authUrl: url,
 					domain: newDomain,

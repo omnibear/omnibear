@@ -1,4 +1,5 @@
 import browser from "../browser";
+import { MESSAGE_ACTIONS } from "../constants";
 import { clearItem, focusClickedEntry, getCurrentItem } from "./entry";
 import { cleanUrl } from "../util/url";
 
@@ -23,7 +24,7 @@ function sendFocusMessage() {
 
 	console.log("Sending focus message", pageEntry, selectedEntry);
 	browser.runtime.sendMessage({
-		action: "focus-window",
+		action: MESSAGE_ACTIONS.FOCUS_WINDOW,
 		payload: {
 			pageEntry,
 			selectedEntry,
