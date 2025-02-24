@@ -61,14 +61,6 @@ export function createAuthState() {
 			log(`authorization_endpoint found: ${url}`);
 			const { authEndpoint, tokenEndpoint, micropubEndpoint } =
 				micropub.getOptions();
-			await storage.set({
-				domain: newDomain,
-				authEndpoint,
-				tokenEndpoint,
-				micropubEndpoint,
-			});
-			authTabId = await browser.tabs.create({ url });
-			storage.set({ authTabId });
 			browser.runtime.sendMessage({
 				action: "begin-auth",
 				payload: {
