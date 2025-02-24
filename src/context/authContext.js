@@ -98,6 +98,5 @@ export function createAuthState() {
 }
 
 export const authState = createAuthState();
-const Auth = createContext(authState);
-export default Auth;
-export const AuthProvider = Auth.Provider;
+export const authContext = createContext(authState);
+export const AuthProvider = authContext.Provider;

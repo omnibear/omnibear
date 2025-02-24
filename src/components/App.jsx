@@ -1,20 +1,21 @@
 import Layout from "./Layout";
-import { AppProvider } from "../contexts/App";
-import { AuthProvider } from "../contexts/Auth";
-import { SettingsProvider } from "../contexts/Settings";
-import { DraftProvider } from "../contexts/Draft";
+// import { PublishProvider } from "../context/publishContext";
+// import { AuthProvider } from "../context/authContext";
+// import { SettingsProvider } from "../context/settingsContext";
+// import { DraftProvider } from "../context/draftContext";
 
 export default function App() {
-  return <Layout />;
-  // return (
-  //   <AppProvider>
-  //     <AuthProvider>
-  //       <SettingsProvider>
-  //         <DraftProvider>
-  //           <Layout />
-  //         </DraftProvider>
-  //       </SettingsProvider>
-  //     </AuthProvider>
-  //   </AppProvider>
-  // );
+  // TODO: Look into providers after adding unit tests
+  // We are using the default context for now
+  return (
+    //   <AppProvider>
+    //     <AuthProvider>
+    //       <SettingsProvider>
+    //         <DraftProvider>
+    <Layout />
+    //         </DraftProvider>
+    //       </SettingsProvider>
+    //     </AuthProvider>
+    //   </AppProvider>
+  );
 }

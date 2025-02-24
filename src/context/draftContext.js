@@ -2,9 +2,9 @@ import { createContext } from "preact";
 import { signal, batch, computed, effect } from "@preact/signals";
 import { createEmptyDraft, getDraft, saveDraft } from "../util/draft";
 import { generateSlug } from "../util/utils";
-import { settingsState } from "./Settings";
+import { settingsState } from "./settingsContext";
 
-export function createDraftStore() {
+export function createDraftState() {
 	const defaultDraft = createEmptyDraft();
 
 	const title = signal(defaultDraft.title);
@@ -101,7 +101,6 @@ export function createDraftStore() {
 	};
 }
 
-export const draftState = createDraftStore();
-const Draft = createContext(draftState);
-export const DraftProvider = Draft.Provider;
-export default Draft;
+export const draftState = createDraftState();
+export const draftContext = createContext(draftState);
+export const DraftProvider = draftContext.Provider;

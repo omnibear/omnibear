@@ -1,5 +1,5 @@
 import { useState, useContext, useCallback, useEffect } from "preact/hooks";
-import AppContext from "../../contexts/App";
+import { publishContext } from "../../context/publishContext";
 import DownArrow from "../svg/DownArrow";
 import WebmentionSvg from "../svg/Webmention";
 import { BOOKMARK, LIKE, REPOST } from "../../constants";
@@ -36,7 +36,7 @@ async function loadOptions() {
 }
 
 export default function UrlSelector() {
-  const app = useContext(AppContext);
+  const publish = useContext(publishContext);
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const [supportsWebmention, setSupportsWebmention] = useState(false);
@@ -56,7 +56,7 @@ export default function UrlSelector() {
   const selectEntry = (entry, initialLoad) => {
     setIsOpen(false);
     setSupportsWebmention(entry.webmention); // ?
-    app.setSelectedEntry(entry, initialLoad);
+    publish.setSelectedEntry(entry, initialLoad);
   };
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function UrlSelector() {
 
   function getLabel() {
     let action;
-    switch (app.viewType.value) {
+    switch (publish.viewType.value) {
       case BOOKMARK:
         action = "Bookmark";
         break;
@@ -97,8 +97,9 @@ export default function UrlSelector() {
 
   function findActiveOption() {
     return (
-      options.find((option) => option.url === app.selectedEntry.value?.url) ||
-      app.selectedEntry.value
+      options.find(
+        (option) => option.url === publish.selectedEntry.value?.url
+      ) || publish.selectedEntry.value
     );
   }
 
@@ -112,7 +113,7 @@ export default function UrlSelector() {
       <h2 className="header-title">{getLabel()}</h2>
       <div className={`dropdown ${isOpen ? " is-open" : ""}`}>
         <button type="button" className="dropdown__toggle" onClick={toggle}>
-          <div className="nowrap">{app.selectedEntry.value?.url}</div>
+          <div className="nowrap">{publish.selectedEntry.value?.url}</div>
           <div className="dropdown__toggle__arrow">
             <DownArrow />
           </div>
@@ -122,7 +123,7 @@ export default function UrlSelector() {
             <UrlOption
               option={option}
               isOpen={isOpen}
-              isActive={option.url === app.selectedEntry.value?.url}
+              isActive={option.url === publish.selectedEntry.value?.url}
               onClick={() => selectEntry(option)}
             />
           ))}

@@ -1,7 +1,7 @@
 import { useContext } from "preact/hooks";
-import AppContext from "../contexts/App";
-import Auth from "../contexts/Auth";
-import SettingsContext from "../contexts/Settings";
+import { publishContext } from "../context/publishContext";
+import { authContext } from "../context/authContext";
+import { settingsContext } from "../context/settingsContext";
 import Login from "./svg/Login";
 import Pen from "./svg/Pen";
 import Reply from "./svg/Reply";
@@ -35,8 +35,8 @@ const ICONS = {
 };
 
 export default function ChangeViewTabs() {
-  const auth = useContext(Auth);
-  const settings = useContext(SettingsContext);
+  const auth = useContext(authContext);
+  const settings = useContext(settingsContext);
 
   return (
     <div className="side-nav">
@@ -61,12 +61,12 @@ export default function ChangeViewTabs() {
 }
 
 function ViewTab({ type, label, onBottom }) {
-  const app = useContext(AppContext);
+  const publish = useContext(publishContext);
   const Icon = ICONS[type];
   return (
     <Tab
-      isActive={app.viewType.value === type}
-      onClick={() => app.setViewType(type)}
+      isActive={publish.viewType.value === type}
+      onClick={() => publish.setViewType(type)}
       onBottom={onBottom}
     >
       <Icon />

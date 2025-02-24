@@ -87,6 +87,5 @@ export function createSettingsState() {
 }
 
 export const settingsState = createSettingsState();
-const Settings = createContext(settingsState);
-export default Settings;
-export const SettingsProvider = Settings.Provider;
+export const settingsContext = createContext(settingsState);
+export const SettingsProvider = settingsContext.Provider;

@@ -1,10 +1,10 @@
 import { useContext } from "preact/hooks";
-import AppContext from "../../contexts/App";
-import Settings from "../../contexts/Settings";
+import { publishContext } from "../../context/publishContext";
+import { settingsContext } from "../../context/settingsContext";
 
 export default function QuickReplies() {
-  const app = useContext(AppContext);
-  const settings = useContext(Settings);
+  const publish = useContext(publishContext);
+  const settings = useContext(settingsContext);
 
   const reacji = settings.reacji.value;
   if (!reacji || !reacji.length) {
@@ -16,8 +16,8 @@ export default function QuickReplies() {
       {reacji.map((content) => (
         <Reacji
           content={content}
-          isSending={app.isSending.value}
-          send={app.addQuickReply}
+          isSending={publish.isSending.value}
+          send={publish.addQuickReply}
         />
       ))}
     </ul>

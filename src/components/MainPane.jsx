@@ -1,5 +1,5 @@
 import { useContext } from "preact/hooks";
-import AppContext from "../contexts/App";
+import { publishContext } from "../context/publishContext";
 import LoginForm from "./LoginForm";
 import NoteForm from "./form/NoteForm";
 import LikeForm from "./form/LikeForm";
@@ -18,13 +18,13 @@ import {
 } from "../constants";
 
 export default function MainPane() {
-  const app = useContext(AppContext);
+  const publish = useContext(publishContext);
 
-  switch (app.viewType.value) {
+  switch (publish.viewType.value) {
     case LOGIN:
       return <LoginForm />;
     case SETTINGS:
-      return <SettingsForm onClose={() => app.setViewType(NOTE)} />;
+      return <SettingsForm onClose={() => publish.setViewType(NOTE)} />;
     case LOGS:
       return <Logs />;
     case LIKE:
@@ -34,7 +34,7 @@ export default function MainPane() {
     case MESSAGE:
       return (
         <div className="container container--full">
-          <Message message={app.flashMessage.value} />
+          <Message message={publish.flashMessage.value} />
         </div>
       );
     default:

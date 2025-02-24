@@ -1,8 +1,8 @@
 import { createContext } from "preact";
 import { signal, batch, computed, effect } from "@preact/signals";
-import { draftState } from "./Draft";
-import { authState } from "./Auth";
-import { settingsState } from "./Settings";
+import { draftState } from "./draftContext";
+import { authState } from "./authContext";
+import { settingsState } from "./settingsContext";
 import {
 	NOTE,
 	REPLY,
@@ -19,11 +19,10 @@ import {
 	postLike,
 	postRepost,
 } from "../util/micropub";
-import { getParamFromUrl } from "../util/url";
 import { info, warning, error } from "../util/log";
 import { sanitizeMicropubError } from "../util/utils";
 
-export function createAppState() {
+export function createPublishState() {
 	const viewType = signal(_determineInitialView());
 	const currentPageUrl = signal();
 	const currentItemUrl = signal();
@@ -202,8 +201,6 @@ export function createAppState() {
 	};
 }
 
-// TODO: rename to publish context? Draft context?
-export const appState = createAppState();
-const App = createContext(appState);
-export const AppProvider = App.Provider;
-export default App;
+export const publishState = createPublishState();
+export const publishContext = createContext(publishState);
+export const PublishProvider = publishContext.Provider;

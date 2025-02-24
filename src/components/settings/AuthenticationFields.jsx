@@ -1,10 +1,10 @@
 import { useContext } from "preact/hooks";
 import { signal } from "@preact/signals";
-import Auth from "../../contexts/Auth";
+import { authContext } from "../../context/authContext";
 
 const showFields = signal(false);
 export default function AuthenticationFields() {
-  const auth = useContext(Auth);
+  const auth = useContext(authContext);
 
   const update = (fn) => {
     return (event) => {

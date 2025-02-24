@@ -1,9 +1,9 @@
 import { useState, useContext } from "preact/hooks";
-import Settings from "../../contexts/Settings";
+import { settingsContext } from "../../context/settingsContext";
 
 export default function EndpointFields() {
   const [showFields, setShowFields] = useState(false);
-  const settings = useContext(Settings);
+  const settings = useContext(settingsContext);
 
   return (
     <fieldset>

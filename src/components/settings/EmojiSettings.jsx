@@ -1,9 +1,9 @@
 import { useState, useContext } from "preact/hooks";
-import Settings from "../../contexts/Settings";
+import { settingsContext } from "../../context/settingsContext";
 
 export default function EmojiSettings() {
   const [value, setValue] = useState("");
-  const settings = useContext(Settings);
+  const settings = useContext(settingsContext);
 
   const deleteReacji = (index) => {
     const reacji = settings.reacji.value;

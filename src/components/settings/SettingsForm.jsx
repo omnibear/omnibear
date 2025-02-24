@@ -1,11 +1,11 @@
 import { useContext } from "preact/hooks";
-import Settings from "../../contexts/Settings";
+import { settingsContext } from "../../context/settingsContext";
 import EmojiSettings from "./EmojiSettings";
 import EndpointFields from "./EndpointFields";
 import AuthenticationFields from "./AuthenticationFields";
 
 export default function SettingsForm() {
-  const settings = useContext(Settings);
+  const settings = useContext(settingsContext);
 
   const updateBoolean = (sig) => {
     return (event) => {

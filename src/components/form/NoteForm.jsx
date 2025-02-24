@@ -1,22 +1,22 @@
 import { useState, useContext, useRef } from "preact/hooks";
-import AppContext from "../../contexts/App";
-import Draft from "../../contexts/Draft";
-import Settings from "../../contexts/Settings";
+import { publishContext } from "../../context/publishContext";
+import { draftContext } from "../../context/draftContext";
+import { settingsContext } from "../../context/settingsContext";
 import QuickReplies from "./QuickReplies";
 import SyndicateInputs from "./SyndicateInputs";
 import Message from "../Message";
 
 export default function NoteForm() {
-  const app = useContext(AppContext);
-  const draft = useContext(Draft);
-  const settings = useContext(Settings);
+  const publish = useContext(publishContext);
+  const draft = useContext(draftContext);
+  const settings = useContext(settingsContext);
   const [syndicateOptions, setSyndicateOptions] = useState(
     settings.syndicateOptions.value
   );
   const content = useRef(null);
   const onSubmit = (e) => {
     e.preventDefault();
-    app.send();
+    publish.send();
     return false;
   };
   const onClear = () => {
@@ -25,10 +25,10 @@ export default function NoteForm() {
     }
   };
 
-  const isLoading = app.isSending.value;
+  const isLoading = publish.isSending.value;
   return (
     <form className="container" onSubmit={onSubmit}>
-      {app.includeTitle.value ? (
+      {publish.includeTitle.value ? (
         <div>
           <label htmlFor="input-title">Title</label>
           <input
@@ -83,8 +83,8 @@ export default function NoteForm() {
         onUpdate={draft.setSyndicateList}
         isDisabled={isLoading}
       />
-      {app.flashMessage.value ? (
-        <Message message={app.flashMessage.value} />
+      {publish.flashMessage.value ? (
+        <Message message={publish.flashMessage.value} />
       ) : null}
       <button
         type="submit"

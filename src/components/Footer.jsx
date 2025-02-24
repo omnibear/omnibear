@@ -1,11 +1,11 @@
 import { useContext } from "preact/hooks";
-import AppContext from "../contexts/App";
-import Auth from "../contexts/Auth";
+import { publishContext } from "../context/publishContext";
+import { authContext } from "../context/authContext";
 import { openLink } from "../util/utils";
 
 export default function Footer() {
-  const app = useContext(AppContext);
-  const auth = useContext(Auth);
+  const publish = useContext(publishContext);
+  const auth = useContext(authContext);
 
   return (
     <footer className="l-main__footer footer">
@@ -26,7 +26,7 @@ export default function Footer() {
               key="logout"
               className="button-link"
               type="button"
-              onClick={app.logout}
+              onClick={publish.logout}
             >
               Logout
             </button>,

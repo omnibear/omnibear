@@ -1,21 +1,21 @@
 import { useContext } from "preact/hooks";
-import AppContext from "../../contexts/App";
+import { publishContext } from "../../context/publishContext";
 import Message from "../Message";
 import RepostSvg from "../svg/Repost";
 
 export default function RepostForm() {
-  const app = useContext(AppContext);
+  const publish = useContext(publishContext);
   return (
     <div className="container text-center">
       <p>Repost this entry?</p>
-      {app.flashMessage.value ? (
-        <Message message={app.flashMessage.value} />
+      {publish.flashMessage.value ? (
+        <Message message={publish.flashMessage.value} />
       ) : null}
       <button
         type="button"
-        className={`button${app.isSending.value ? " is-loading" : ""}`}
-        onClick={app.sendRepost}
-        disabled={app.isSending.value}
+        className={`button${publish.isSending.value ? " is-loading" : ""}`}
+        onClick={publish.sendRepost}
+        disabled={publish.isSending.value}
       >
         Repost <RepostSvg />
       </button>
