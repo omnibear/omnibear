@@ -61,6 +61,8 @@ function serializeError(err) {
 	};
 }
 
+// TODO: Log with correct line number
+// https://stackoverflow.com/questions/13815640/a-proper-wrapper-for-console-log-with-correct-line-number
 export function info(message, data) {
 	console.info(message, data);
 	append(message, data, INFO);

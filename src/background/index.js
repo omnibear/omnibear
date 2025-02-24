@@ -17,7 +17,7 @@ export default function main() {
 	let authTabId = null;
 
 	function handleMessage(request, sender) {
-		console.log("Message received", request);
+		console.log("Message received", request.action, request.payload);
 		switch (request.action) {
 			case MESSAGE_ACTIONS.BEGIN_AUTH:
 				handleBeginAuth(request.payload);
