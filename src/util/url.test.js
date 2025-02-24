@@ -3,35 +3,17 @@ import {
 	getParamFromUrl,
 	getParamFromUrlString,
 	cleanUrl,
-	paramsToQueryString,
 	cleanParams,
 } from "./url";
 
 describe("url", function () {
 	describe("cleanParams", function () {
 		it("should remove utm_ params", function () {
-			const params = {
-				utm_campaign: "abcdef",
-				other: "good",
-			};
-			const expected = {
-				other: "good",
-			};
-			assert.deepEqual(expected, cleanParams(params));
-		});
-	});
+			const params = new URLSearchParams("utm_campaign=abcdef&other=good");
 
-	describe("paramsToQueryString", function () {
-		it("should build param string", function () {
-			const params = {
-				one: "two",
-				foo: "bar",
-			};
-			assert.equal("?one=two&foo=bar", paramsToQueryString(params));
-		});
+			cleanParams(params);
 
-		it("should return empty string if no params", function () {
-			assert.equal("", paramsToQueryString({}));
+			assert.deepEqual("other=good", params.toString());
 		});
 	});
 

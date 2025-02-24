@@ -1,5 +1,6 @@
 import browser from "../browser";
 import { MESSAGE_ACTIONS } from "../constants";
+import { getParamFromUrl } from "../util/url";
 
 /**
  * Script used on the omnibear auth success page.
@@ -9,12 +10,12 @@ import { MESSAGE_ACTIONS } from "../constants";
 export default async function main() {
 	browser.runtime.onMessage.addListener(handleMessage);
 
-	const searchParams = new URLSearchParams(location.search);
-	if (searchParams.has("code")) {
+	const code = getParamFromUrl("code", location.search);
+	if (code) {
 		browser.runtime.sendMessage({
 			action: MESSAGE_ACTIONS.STORE_AUTH,
 			payload: {
-				code: searchParams.get("code"),
+				code,
 			},
 		});
 	}

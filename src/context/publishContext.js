@@ -21,6 +21,7 @@ import {
 } from "../util/micropub";
 import { info, warning, error } from "../util/log";
 import { sanitizeMicropubError } from "../util/utils";
+import { getParamFromUrl } from "../util/url";
 
 export function createPublishState() {
 	const viewType = signal(_determineInitialView());
@@ -86,8 +87,7 @@ export function createPublishState() {
 		if (settingsState.defaultToCurrentPage.value) {
 			return REPLY;
 		}
-		const queryParams = new URLSearchParams(location.search);
-		const type = queryParams.get("type");
+		const type = getParamFromUrl(location.search, "type");
 		return type || NOTE;
 	}
 

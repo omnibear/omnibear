@@ -1,10 +1,14 @@
-import parseUri from "parse-uri";
+// @ts-check
 
-// TODO: See if these are already handled by URL or could be simplified
-
-export function getParamFromUrl(paramName, url) {
-	var params = url.split("?")[1] || "";
-	return getParamFromUrlString(paramName, params);
+/**
+ *
+ * @param {string} paramName - The name of the parameter to get
+ * @param {string} searchString search param string (not whole URL)
+ * @returns {string | null} - The value of the parameter
+ */
+export function getParamFromUrl(paramName, searchString) {
+	const queryParams = new URLSearchParams(searchString);
+	return queryParams.get(paramName);
 }
 
 export function getParamFromUrlString(paramName, params) {
@@ -19,47 +23,33 @@ export function getParamFromUrlString(paramName, params) {
 	}
 }
 
+/**
+ * Removes utm_* params from a URLSearchParams object
+ * @param {URLSearchParams} params - URLSearchParams object to modify
+ */
 export function cleanParams(params) {
-	const clean = {};
-	for (let i in params) {
-		if (!i.startsWith("utm_")) {
-			clean[i] = params[i];
+	params.forEach((value, key) => {
+		if (key.startsWith("utm_")) {
+			params.delete(key);
 		}
-	}
-	return clean;
+	});
 }
 
-export function paramsToQueryString(params) {
-	const parts = [];
-	for (let i in params) {
-		parts.push(`${i}=${params[i]}`);
-	}
-	if (!parts.length) {
-		return "";
-	}
-	return `?${parts.join("&")}`;
-}
-
-export function getUrlOrigin(url) {
-	const parts = parseUri(url);
-	return [
-		parts.protocol,
-		"://",
-		parts.host,
-		parts.port ? `:${parts.port}` : "",
-	].join("");
-}
-
-// strip hashes and utm_* query params
+/**
+ * Strip hashes and utm_* query params
+ *
+ * @param {string} url
+ * @returns {string} cleaned url
+ */
 export function cleanUrl(url) {
-	const parts = parseUri(url);
-	const base = [
-		parts.protocol,
-		"://",
-		parts.host,
-		parts.port ? `:${parts.port}` : "",
-		parts.path,
-		paramsToQueryString(cleanParams(parts.queryKey)),
-	].join("");
-	return base;
+	const parsedUrl = URL.parse(url);
+
+	if (!parsedUrl) {
+		console.warn(`Invalid URL: ${url}`);
+		return url;
+	}
+	parsedUrl.hash = "";
+	cleanParams(parsedUrl.searchParams);
+
+	return parsedUrl.href;
 }

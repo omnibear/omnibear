@@ -34,7 +34,6 @@
     "@preact/signals": "^1.3.1",
     "microformat-shiv": "^2.0.3",
     "micropub-helper": "^2.0.0",
-    "parse-uri": "^1.0.9",
     "preact": "^10.25.1"
   }
 }
