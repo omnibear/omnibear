@@ -35,13 +35,10 @@ export function createDraftState() {
 	getDraft().then(setValuesFromDraft);
 
 	effect(() => {
-		const shouldAutoSlug = !isSlugModified.value && settingsState.autoSlug;
-
-		if (!shouldAutoSlug || isSlugModified.value) {
-			return;
+		const contentToSlugify = title.value ? title.value : content.value;
+		if (settingsState.autoSlug.value && !isSlugModified.peek()) {
+			slug.value = generateSlug(contentToSlugify);
 		}
-
-		slug.value = generateSlug(title.value ? title.value : content.value);
 	});
 
 	effect(() => {

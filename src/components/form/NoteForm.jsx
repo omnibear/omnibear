@@ -36,7 +36,7 @@ export default function NoteForm() {
             type="text"
             name="title"
             value={draft.title}
-            onInput={(e) => draft.setTitle(e.target.value)}
+            onInput={(e) => (draft.title.value = e.target.value)}
             disabled={isLoading}
           />
         </div>
