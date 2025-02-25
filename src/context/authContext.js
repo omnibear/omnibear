@@ -26,19 +26,19 @@ export function createAuthState() {
 	});
 
 	effect(() => {
-		micropub.setOptions({ me: domain.value });
+		micropub.options = { me: domain.value };
 		storage.set({ domain: domain.value });
 	});
 
 	effect(() => {
 		const normalizedToken = token.value?.trim();
-		micropub.setOptions({ token: normalizedToken });
+		micropub.options = { token: normalizedToken };
 		storage.set({ token: token.value });
 	});
 
 	effect(() => {
 		const normalizedMicropubEndpoint = micropubEndpoint.value?.trim();
-		micropub.setOptions({ micropubEndpoint: normalizedMicropubEndpoint });
+		micropub.options = { micropubEndpoint: normalizedMicropubEndpoint };
 		storage.set({ micropubEndpoint: micropubEndpoint.value });
 	});
 
@@ -61,7 +61,7 @@ export function createAuthState() {
 			const url = await micropub.getAuthUrl();
 			log(`authorization_endpoint found: ${url}`);
 			const { authEndpoint, tokenEndpoint, micropubEndpoint } =
-				micropub.getOptions();
+				micropub.options;
 			browser.runtime.sendMessage({
 				action: MESSAGE_ACTIONS.BEGIN_AUTH,
 				payload: {

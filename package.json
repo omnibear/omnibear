@@ -27,13 +27,13 @@
   },
   "homepage": "https://omnibear.com",
   "devDependencies": {
-    "@preact/preset-vite": "^2.9.3",
-    "wxt": "^0.19.24"
+    "@preact/preset-vite": "^2.10.1",
+    "wxt": "^0.19.27"
   },
   "dependencies": {
-    "@preact/signals": "^1.3.1",
+    "@preact/signals": "^2.0.1",
     "microformat-shiv": "^2.0.3",
-    "micropub-helper": "^2.0.0",
-    "preact": "^10.25.1"
+    "micropub-helper": "^2.0.1",
+    "preact": "^10.26.2"
   }
 }

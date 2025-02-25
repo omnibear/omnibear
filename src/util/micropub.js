@@ -38,14 +38,14 @@ storage
 					.catch((error) => console.error("Problem saving authSecret", error));
 			}
 
-			micropub.setOptions({
+			micropub.options = {
 				me: domain,
 				authEndpoint,
 				tokenEndpoint,
 				micropubEndpoint,
 				token,
 				state: authSecret,
-			});
+			};
 		}
 	);
 

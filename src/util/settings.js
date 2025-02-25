@@ -42,15 +42,15 @@ export async function saveAuthenticationDetails(
 ) {
 	if (domain) {
 		await storage.set({ domain });
-		micropub.setOptions({ me: domain });
+		micropub.options = { me: domain };
 	}
 	if (token) {
 		await storage.set({ token });
-		micropub.setOptions({ token });
+		micropub.options = { token };
 	}
 	if (micropubEndpoint) {
 		await storage.set({ micropubEndpoint });
-		micropub.setOptions({ micropubEndpoint });
+		micropub.options = { micropubEndpoint };
 	}
 }
 

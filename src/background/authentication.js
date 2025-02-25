@@ -11,11 +11,11 @@ export async function fetchToken(code) {
 		"tokenEndpoint",
 		"micropubEndpoint",
 	]);
-	micropub.setOptions({
+	micropub.options = {
 		me: domain,
 		tokenEndpoint: tokenEndpoint,
 		micropubEndpoint: micropubEndpoint,
-	});
+	};
 
 	try {
 		const token = await micropub.getToken(code);
@@ -25,9 +25,9 @@ export async function fetchToken(code) {
 			);
 		}
 		await storage.set({ token });
-		micropub.setOptions({
+		micropub.options = {
 			token,
-		});
+		};
 	} catch (err) {
 		error("Error fetching token", err);
 		const tab = getAuthTab();
