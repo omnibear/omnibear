@@ -1,6 +1,6 @@
-import browser from "../browser";
-import { MESSAGE_ACTIONS } from "../constants";
-import { getParamFromUrl } from "../util/url";
+import browser from "../browser.js";
+import { MESSAGE_ACTIONS } from "../constants.js";
+import { getParamFromUrl } from "../util/url.js";
 
 /**
  * Script used on the omnibear auth success page.

@@ -1,11 +1,12 @@
 // TODO: replace this lib with a better mf parser, preferably
 // one that doesn't blow up while tests run in Node environment
-import browser from "../browser";
-import { MESSAGE_ACTIONS } from "../constants";
+import browser from "../browser.js";
+import { MESSAGE_ACTIONS } from "../constants.js";
 import { mf2 } from "microformats-parser";
-import { getAncestorNode, getAncestorNodeByClass } from "./dom";
+import { getAncestorNode, getAncestorNodeByClass } from "./dom.js";
 
 const CLASS_NAME = "__omnibear-selected-item";
+/** @type {false | null | {element: HTMLElement, title: string, url: string, type: string}} */
 let currentItem;
 // let currentItemUrl;
 
@@ -25,9 +26,14 @@ export function removeHighlight() {
 	}
 }
 
+/**
+ *
+ * @param {Event} e
+ * @returns
+ */
 export function focusClickedEntry(e) {
 	clearItem();
-	let entry;
+	let entry = null;
 	if (document.location.hostname === "twitter.com") {
 		entry = findTweet(e.target);
 	} else if (document.location.hostname === "www.facebook.com") {
@@ -36,7 +42,7 @@ export function focusClickedEntry(e) {
 		entry = findHEntry(e.target);
 	}
 
-	if (!entry) {
+	if (!entry || typeof entry !== "object") {
 		return;
 	}
 	browser.runtime.sendMessage({
@@ -99,8 +105,11 @@ function findFacebookPost(el) {
 	return false;
 }
 
-// TODO: Support metaformats too
-
+/**
+ *
+ * @param {HTMLElement} el HTML Element to look in
+ * @returns {typeof currentItem}
+ */
 function findHEntry(el) {
 	const element = getAncestorNodeByClass(el, "h-entry");
 	if (!element) {
@@ -126,13 +135,13 @@ function findHEntry(el) {
 		if (element.tagName === "BODY") {
 			return false;
 		} else {
-			return findHEntry(element.parentElement, "h-entry");
+			return findHEntry(element.parentElement);
 		}
 	}
 	if (typeof url !== "string") {
 		return false;
 	}
-	return { element, url, title };
+	return { element, url, title, type: "entry" };
 }
 
 export function getCurrentItem() {

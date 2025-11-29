@@ -1,9 +1,9 @@
-import browser from "../browser";
-import { MESSAGE_ACTIONS } from "../constants";
-import storage from "../util/storage";
-import micropub from "../util/micropub";
-import { getAuthTab, logout } from "../util/utils";
-import { info, warning, error } from "../util/log";
+import browser from "../browser.js";
+import { MESSAGE_ACTIONS } from "../constants.js";
+import storage from "../util/storage.js";
+import micropub from "../util/micropub.js";
+import { getAuthTab, logout } from "../util/utils.js";
+import { info, warning, error } from "../util/log.js";
 
 export async function fetchToken(code) {
 	const { domain, tokenEndpoint, micropubEndpoint } = await storage.get([

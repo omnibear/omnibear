@@ -1,7 +1,7 @@
-import browser from "../browser";
-import { MESSAGE_ACTIONS } from "../constants";
-import { clearItem, focusClickedEntry, getCurrentItem } from "./entry";
-import { cleanUrl } from "../util/url";
+import browser from "../browser.js";
+import { MESSAGE_ACTIONS } from "../constants.js";
+import { clearItem, focusClickedEntry, getCurrentItem } from "./entry.js";
+import { cleanUrl } from "../util/url.js";
 
 function sendFocusMessage() {
 	const supportsWebmention = pageSupportsWebmention();

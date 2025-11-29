@@ -5,13 +5,13 @@
  * Not guaranteed to be running at all times in Chrome (event based).
  * Fetches auth token
  */
-import browser from "../browser";
-import storage from "../util/storage";
-import { getParamFromUrl } from "../util/url";
-import { AUTH_SUCCESS_URL, MESSAGE_ACTIONS } from "../constants";
-import { getAuthTab } from "../util/utils";
-import { fetchToken, fetchSyndicationTargets } from "./authentication";
-import { info, error } from "../util/log";
+import browser from "../browser.js";
+import storage from "../util/storage.js";
+import { getParamFromUrl } from "../util/url.js";
+import { AUTH_SUCCESS_URL, MESSAGE_ACTIONS } from "../constants.js";
+import { getAuthTab } from "../util/utils.js";
+import { fetchToken, fetchSyndicationTargets } from "./authentication.js";
+import { info, error } from "../util/log.js";
 
 export default function main() {
 	let authTabId = null;
