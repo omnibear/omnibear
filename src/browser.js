@@ -1,4 +1,8 @@
+import { browser } from "wxt/browser";
+
 if (typeof browser.action === "undefined") {
+	// Manifest v3 combines browserAction and pageAction into action
+	// @ts-ignore
 	browser.action = browser.browserAction;
 }
 
@@ -11,7 +15,7 @@ if (typeof browser.action === "undefined") {
  * We want to avoid deviating from browser APIs as much as possible.
  * To avoid confusion try to .
  */
-export default /** @type import("webextension-polyfill") */ (browser);
+export default browser;
 
 /**
  * Typed shortcut to WXT environment variables of what browser is being used.

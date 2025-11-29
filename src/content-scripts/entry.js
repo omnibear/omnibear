@@ -2,7 +2,7 @@
 // one that doesn't blow up while tests run in Node environment
 import browser from "../browser";
 import { MESSAGE_ACTIONS } from "../constants";
-import microformat from "microformat-shiv";
+import { mf2 } from "microformats-parser";
 import { getAncestorNode, getAncestorNodeByClass } from "./dom";
 
 const CLASS_NAME = "__omnibear-selected-item";
@@ -106,7 +106,14 @@ function findHEntry(el) {
 	if (!element) {
 		return false;
 	}
-	const mf = microformat.get({ node: element });
+	const mf = mf2(element.outerHTML, {
+		baseUrl: document.location.href,
+		experimental: {
+			lang: true,
+			metaformats: true,
+			textContent: true,
+		},
+	});
 	let url;
 	let title = "";
 	if (mf.items.length && mf.items[0].properties && mf.items[0].properties.url) {

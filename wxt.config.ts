@@ -1,4 +1,4 @@
-import { defineConfig, defineRunnerConfig } from "wxt";
+import { defineConfig } from "wxt";
 import preact from "@preact/preset-vite";
 
 export default defineConfig({
@@ -8,13 +8,14 @@ export default defineConfig({
   vite: () => ({
     plugins: [preact()],
   }),
-  runner: {
+  webExt: {
     startUrls: ["https://omnibear.com"],
   },
 
   entrypointsDir: "entrypoints",
-  publicDir: "../public",
+  publicDir: "./public",
 
+  modules: ['@wxt-dev/webextension-polyfill'],
   manifest: {
     permissions: ["storage", "contextMenus"],
     host_permissions: ["*://*/*"],

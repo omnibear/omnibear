@@ -1,8 +1,7 @@
-import { defineContentScript } from "wxt/sandbox";
+import { defineContentScript } from "wxt/utils/define-content-script";
 import main from "../content-scripts/page";
 
 export default defineContentScript({
 	matches: ["https://*/*", "http://*/*"],
-	type: "module",
 	main,
 });

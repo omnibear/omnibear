@@ -16,13 +16,13 @@
 ## Releases
 
 TODO: Would like to stop pushing `/dist` folder to repo.
-Instead release tags should include the browser bundles for users to download. 
+Instead release tags should include the browser bundles for users to download.
 
 ## Libraries
 
 - [webextension-polyfill](https://github.com/mozilla/webextension-polyfill): Chrome/Firefox compatibility
 - micropub-helper: Micropub API
-- microformat-shiv: Parsing pages 
+- microformats-parser: Parsing pages
 - preact: Rendering
 
 ## Application Structure
@@ -48,5 +48,6 @@ In Chrome, look for the service worker in the console selector and application s
 The `page.js` script run on each webpage to check if it supports webmention or is the authentication page.
 
 ## Helpful Docs
-- [Chrome Extensions](https://developer.chrome.com/docs/extensions/get-started) 
+
+- [Chrome Extensions](https://developer.chrome.com/docs/extensions/get-started)
 - [Firefox Extensions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)

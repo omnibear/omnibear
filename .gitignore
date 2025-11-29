@@ -27,3 +27,4 @@ dist
 # Config files
 .webextrc
 .webextrc.*
+web-ext.config.ts
