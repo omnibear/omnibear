@@ -2,6 +2,9 @@ import Micropub from "micropub-helper";
 import storage from "./storage";
 import { AUTH_SUCCESS_URL } from "../constants";
 
+/** @typedef {ReturnType<typeof import("../context/draftContext").Entity>} Entity */
+/** @typedef {ReturnType<typeof import("../util/draft").createEmptyDraft>} Entry */
+
 const micropub = new Micropub({
 	clientId: "https://omnibear.com",
 	redirectUri: AUTH_SUCCESS_URL,
@@ -49,6 +52,12 @@ storage
 		}
 	);
 
+/**
+ *
+ * @param {Entry} entry
+ * @param {*} aliases
+ * @returns
+ */
 export function postNote(entry, aliases) {
 	return micropub.create(
 		{
@@ -91,6 +100,11 @@ export function postBookmark(entry, url, aliases) {
 	);
 }
 
+/**
+ * Create a like post
+ * @param {string} url URL to like
+ * @returns Promise of post URL
+ */
 export function postLike(url) {
 	const entry = {
 		h: "entry",
@@ -99,6 +113,11 @@ export function postLike(url) {
 	return micropub.create(entry, "form");
 }
 
+/**
+ * Create a repost
+ * @param {string} url URL to repost
+ * @returns Promise of post URL
+ */
 export function postRepost(url) {
 	const entry = {
 		h: "entry",

@@ -7,15 +7,17 @@
  */
 import browser from "../browser.js";
 import storage from "../util/storage.js";
-import { getParamFromUrl } from "../util/url.js";
-import { AUTH_SUCCESS_URL, MESSAGE_ACTIONS } from "../constants.js";
-import { getAuthTab } from "../util/utils.js";
+import { MESSAGE_ACTIONS } from "../constants.js";
 import { fetchToken, fetchSyndicationTargets } from "./authentication.js";
 import { info, error } from "../util/log.js";
 
 export default function main() {
-	let authTabId = null;
-
+	/**
+	 *
+	 * @param {{action: string, payload: any}} request message event
+	 * @param {import("wxt/browser").Browser.runtime.MessageSender} sender
+	 * @returns
+	 */
 	function handleMessage(request, sender) {
 		console.log("Message received", request.action, request.payload);
 		switch (request.action) {
@@ -23,11 +25,15 @@ export default function main() {
 				handleBeginAuth(request.payload);
 				break;
 			case MESSAGE_ACTIONS.STORE_AUTH:
-				handleAuthCode(sender.tab.id, request.payload);
+				if (!sender.tab?.id) {
+					error("No tab information in sender for STORE_AUTH message");
+					return;
+				}
+				handleAuthCode(sender.tab?.id, request.payload);
 				break;
 			case MESSAGE_ACTIONS.FOCUS_WINDOW:
 				updateFocusedWindow(
-					sender.tab.id,
+					sender.tab?.id,
 					request.payload.pageEntry,
 					request.payload.selectedEntry
 				);
@@ -48,9 +54,14 @@ export default function main() {
 			tokenEndpoint: payload.metadata.tokenEndpoint,
 			micropubEndpoint: payload.metadata.micropub,
 		});
-		authTabId = await browser.tabs.create({ url: payload.authUrl });
 	}
 
+	/**
+	 *
+	 * @param {number | undefined} pageTabId Tab ID of the focused tag
+	 * @param {*} pageEntry
+	 * @param {*} itemEntry
+	 */
 	async function updateFocusedWindow(pageTabId, pageEntry, itemEntry = null) {
 		await storage.set({
 			pageEntry,
@@ -81,6 +92,11 @@ export default function main() {
 		});
 	}
 
+	/**
+	 *
+	 * @param {number} tabId ID of tab handling auth
+	 * @param {{code: string}} payload object containing the auth code
+	 */
 	async function handleAuthCode(tabId, { code }) {
 		console.log("Processing auth code");
 		try {
@@ -95,38 +111,12 @@ export default function main() {
 		}
 	}
 
-	async function handleTabChange(tabId, changeInfo, tab) {
-		// TODO: Remove
-		const { authTabId } = await storage.get(["authTabId"]);
-		console.log("Processing tab change", authTabId, tabId, changeInfo, tab);
-		if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
-			return;
-		}
-		// During migration this was also implemented on the auth page content-script
-		// TODO: Determine if that is viable or if I should get it working here
-		var code = getParamFromUrl("code", changeInfo.url);
-		try {
-			sendAuthStatusUpdate(`Retrieving access token…`, tabId);
-			await fetchToken(code);
-			sendAuthStatusUpdate("Fetching syndication targets…", tabId);
-			await fetchSyndicationTargets();
-			sendAuthStatusUpdate(`Authentication complete.`, tabId);
-			browser.tabs.remove(tab.id);
-		} catch (err) {
-			error(err.message, err);
-		}
-	}
-
 	async function sendAuthStatusUpdate(message, tabId) {
 		info(message);
 		browser.tabs.sendMessage(tabId, {
 			action: "auth-status-update",
 			payload: { message },
 		});
-	}
-
-	function isAuthRedirect(changeInfo) {
-		return changeInfo.url?.startsWith(AUTH_SUCCESS_URL);
 	}
 
 	function onContextMenuClick() {

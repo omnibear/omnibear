@@ -76,7 +76,7 @@ function serializeError(err) {
 /**
  * Print to info log
  * @param {string} message Warning log text
- * @param {any} data Optional object to include in log
+ * @param {any} [data] Optional object to include in log
  */
 export function info(message, data) {
 	console.info(message, data);
@@ -87,7 +87,7 @@ export default info;
 /**
  * Print to warning log
  * @param {string} message Warning log text
- * @param {any} data Optional object to include in log
+ * @param {any} [data] Optional object to include in log
  */
 export function warning(message, data) {
 	console.warn(message, data);
@@ -97,7 +97,7 @@ export function warning(message, data) {
 /**
  * Print to error log
  * @param {string} message Error log text
- * @param {any} data Optional object to include in log
+ * @param {any} [data] Optional object to include in log
  */
 export function error(message, data) {
 	console.error(message, data);
@@ -106,8 +106,5 @@ export function error(message, data) {
 
 async function logsEnabled() {
 	const settings = await storage.get("settings");
-	if (settings) {
-		return settings;
-	}
 	return settings.debugLog;
 }

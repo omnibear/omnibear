@@ -17,6 +17,10 @@ export async function getDraft() {
 	return { ...createEmptyDraft(), ...draft };
 }
 
+/**
+ * Saves the draft post to storage
+ * @param {ReturnType<typeof createEmptyDraft>} draft Draft post to save
+ */
 export async function saveDraft(draft) {
 	const clean = {};
 	KEYS.forEach((key) => {
@@ -25,13 +29,3 @@ export async function saveDraft(draft) {
 
 	await storage.set({ draft: clean });
 }
-
-// export function deleteDraft() {
-//   const draft = getDraft();
-//   saveDraft({
-//     content: '',
-//     category: [],
-//     slug: '',
-//     syndicateTo: draft.syndicateTo,
-//   });
-// }

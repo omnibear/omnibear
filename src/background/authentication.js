@@ -5,6 +5,10 @@ import micropub from "../util/micropub.js";
 import { getAuthTab, logout } from "../util/utils.js";
 import { info, warning, error } from "../util/log.js";
 
+/**
+ * Request the token from the micropub auth server
+ * @param {string} code Auth code
+ */
 export async function fetchToken(code) {
 	const { domain, tokenEndpoint, micropubEndpoint } = await storage.get([
 		"domain",
@@ -30,14 +34,16 @@ export async function fetchToken(code) {
 		};
 	} catch (err) {
 		error("Error fetching token", err);
-		const tab = getAuthTab();
-		browser.tabs.sendMessage(tab.id, {
-			action: MESSAGE_ACTIONS.FETCH_TOKEN_ERROR,
-			payload: {
-				error: err,
-			},
-		});
 		logout();
+		const tab = await getAuthTab();
+		if (tab?.id) {
+			browser.tabs.sendMessage(tab.id, {
+				action: MESSAGE_ACTIONS.FETCH_TOKEN_ERROR,
+				payload: {
+					error: err,
+				},
+			});
+		}
 	}
 }
 

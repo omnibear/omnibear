@@ -4,6 +4,9 @@ import { createEmptyDraft, getDraft, saveDraft } from "../util/draft";
 import { generateSlug } from "../util/utils";
 import { settingsState } from "./settingsContext";
 
+/** @typedef {ReturnType<typeof createEmptyDraft>} Entity */
+/** @typedef {ReturnType<ReturnType<typeof createDraftState>["getEntity"]>} Entry */
+
 export function createDraftState() {
 	const defaultDraft = createEmptyDraft();
 
@@ -12,7 +15,7 @@ export function createDraftState() {
 	const tags = signal(defaultDraft.category.join(", "));
 	const slug = signal(defaultDraft.slug);
 	const isSlugModified = signal(false);
-	const type = signal(defaultDraft.type);
+	const type = signal(/** @type {string | null} */ (defaultDraft.type));
 	const syndicateList = signal([]);
 
 	const tagsArray = computed(() =>
@@ -23,6 +26,10 @@ export function createDraftState() {
 	);
 	const isEmpty = computed(() => !content.value && !slug.value && !title.value);
 
+	/**
+	 *
+	 * @param {Entity} draft
+	 */
 	function setValuesFromDraft(draft) {
 		title.value = draft.title;
 		content.value = draft.content;
@@ -52,6 +59,10 @@ export function createDraftState() {
 		});
 	});
 
+	/**
+	 * Set the slug value, replacing spaces with dashes
+	 * @param {string} newSlug New raw slug value
+	 */
 	function setSlug(newSlug) {
 		batch(() => {
 			slug.value = newSlug.replace(/ /g, "-");
@@ -77,7 +88,7 @@ export function createDraftState() {
 		};
 
 		if (type.value) {
-			entity.type = [type.value];
+			entity.type = type.value;
 		}
 
 		return entity;

@@ -27,9 +27,9 @@ export function createPublishState() {
 	const viewType = signal(_determineInitialView());
 	const currentPageUrl = signal();
 	const currentItemUrl = signal();
-	const selectedEntry = signal();
+	const selectedEntry = signal(/** @type {import("../util/micropub").MicropubEntry | undefined} */ ());
 	const isSending = signal();
-	const flashMessage = signal();
+	const flashMessage = signal(null);
 
 	const includeTitle = computed(() => viewType.value === BOOKMARK);
 
@@ -39,13 +39,17 @@ export function createPublishState() {
 		}
 	});
 
+	/**
+	 *
+	 * @param {string} type Type of view to show
+	 */
 	function setViewType(type) {
 		batch(() => {
 			viewType.value = type;
-			if (type.value !== MESSAGE) {
+			if (type !== MESSAGE) {
 				flashMessage.value = null;
 			}
-			if (type.value === BOOKMARK) {
+			if (type === BOOKMARK) {
 				draftState.title.value = selectedEntry.value.title || "";
 			} else {
 				draftState.title.value = "";
@@ -115,7 +119,7 @@ export function createPublishState() {
 			});
 		} catch (err) {
 			const message = `Error sending ${viewTypeName}`;
-			error(message, sanitizeMicropubError(err));
+			error(message, sanitizeMicropubError(/** @type {Error} */ (err)));
 			flashMessage.value = {
 				message,
 				type: MESSAGE_ERROR,
@@ -176,6 +180,10 @@ export function createPublishState() {
 		return _send(() => postRepost(selectedEntry.value.url), true);
 	}
 
+	/**
+	 * Adds an emoji to the draft content
+	 * @param {string} reacji Emoji to add to the content
+	 */
 	function addQuickReply(reacji) {
 		draftState.content.value += reacji;
 	}

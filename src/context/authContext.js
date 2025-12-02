@@ -50,7 +50,7 @@ export function createAuthState() {
 
 	/**
 	 * Authenticate into a site
-	 * @param {string} domain
+	 * @param {string} newDomain Domain to authenticate into
 	 */
 	async function login(newDomain) {
 		log(`Begin authentication to ${newDomain}`);

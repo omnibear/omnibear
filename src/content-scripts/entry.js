@@ -1,5 +1,3 @@
-// TODO: replace this lib with a better mf parser, preferably
-// one that doesn't blow up while tests run in Node environment
 import browser from "../browser.js";
 import { MESSAGE_ACTIONS } from "../constants.js";
 import { mf2 } from "microformats-parser";
