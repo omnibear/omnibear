@@ -6,17 +6,22 @@ const ERROR = "error";
 
 let logs = [];
 // Load from storage
-storage.get(["log"]).then(({ log: savedLog }) => {
-	if (savedLog) {
-		logs = savedLog;
-	}
-});
+storage
+	.get(["log"])
+	.then(({ log: savedLog }) => {
+		console.log("Loaded logs from storage", savedLog);
+		if (savedLog) {
+			logs = savedLog;
+		}
+	})
+	.catch((error) => error("Problem loading logs from storage", error));
 
 export function getLogs() {
 	return logs;
 }
 
 async function saveLog(log) {
+	logs = log;
 	await storage.set({ log });
 }
 

@@ -27,7 +27,9 @@ export function createPublishState() {
 	const viewType = signal(_determineInitialView());
 	const currentPageUrl = signal();
 	const currentItemUrl = signal();
-	const selectedEntry = signal(/** @type {import("../util/micropub").MicropubEntry | undefined} */ ());
+	const selectedEntry = signal(
+		/** @type {import("../util/micropub").Entry | undefined} */ (undefined)
+	);
 	const isSending = signal();
 	const flashMessage = signal(null);
 

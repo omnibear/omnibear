@@ -6,9 +6,16 @@ const showFields = signal(false);
 export default function AuthenticationFields() {
   const auth = useContext(authContext);
 
-  const update = (fn) => {
+  /**
+   * Cleans up the input from dom events
+   * @param {import('@preact/signals').Signal<string>} signal The signal to update
+   * @returns A callback function
+   */
+  const update = (signal) => {
+    /** @param {Event} event */
     return (event) => {
-      fn(event.target.value);
+      signal.value =
+        /** @type {HTMLInputElement} */ (event.target)?.value || "";
     };
   };
 
@@ -28,7 +35,7 @@ export default function AuthenticationFields() {
                 id="domain"
                 type="text"
                 value={auth.domain}
-                onChange={update(auth.setDomain)}
+                onChange={update(auth.domain)}
                 placeholder="https://example.com"
               />
             </div>,
@@ -38,7 +45,7 @@ export default function AuthenticationFields() {
                 id="mp-endpoint"
                 type="text"
                 value={auth.micropubEndpoint}
-                onChange={update(auth.setMicropubEndpoint)}
+                onChange={update(auth.micropubEndpoint)}
                 placeholder="https://example.com/micropub"
               />
             </div>,
@@ -48,7 +55,7 @@ export default function AuthenticationFields() {
                 id="token"
                 type="text"
                 value={auth.token}
-                onChange={update(auth.setToken)}
+                onChange={update(auth.token)}
               />
             </div>,
           ]

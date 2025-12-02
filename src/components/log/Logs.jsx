@@ -1,4 +1,4 @@
-import { useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import LogItem from "./LogItem";
 import { getLogs, clearLogs } from "../../util/log";
 

@@ -53,13 +53,21 @@ export default function ChangeViewTabs() {
         <ViewTab type={LOGIN} label="Sign in" />
       )}
       {settings.debugLog.value ? (
-        <Tab type={LOGS} label="Logs" onBottom />
+        <ViewTab type={LOGS} label="Logs" onBottom />
       ) : null}
       <ViewTab type={SETTINGS} label="Settings" onBottom />
     </div>
   );
 }
 
+/**
+ * A single tab button to change the view
+ * @param {object} props
+ * @param {string} props.type Internal view type name
+ * @param {string} props.label Text label for the tab
+ * @param {boolean} [props.onBottom] Whether to align this tab to the bottom
+ * @returns
+ */
 function ViewTab({ type, label, onBottom }) {
   const publish = useContext(publishContext);
   const Icon = ICONS[type];

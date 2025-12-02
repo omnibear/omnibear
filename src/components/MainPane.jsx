@@ -26,7 +26,7 @@ export default function MainPane() {
     case SETTINGS:
       return <SettingsForm onClose={() => publish.setViewType(NOTE)} />;
     case LOGS:
-      return <Logs />;
+      return <Logs onClose={() => publish.setViewType(NOTE)} />;
     case LIKE:
       return <LikeForm />;
     case REPOST:
