@@ -1,6 +1,11 @@
-import { assert } from "chai";
-import { jsdom } from "jsdom";
+import { describe, it, expect } from "vitest";
+import { JSDOM } from "jsdom";
 import { getAncestorNode, getAncestorNodeByClass } from "./dom";
+
+/**
+ * @param {string} html HTML to render
+ */
+const jsdom = (html) => new JSDOM(html).window.document;
 
 describe("page/dom", function () {
 	describe("getAncestorNodeByClass", function () {
@@ -16,7 +21,7 @@ describe("page/dom", function () {
       `);
 			const el = document.getElementById("el");
 			// compare ids for equality check
-			assert.equal(getAncestorNodeByClass(el, "target").id, "the-container");
+			expect(getAncestorNodeByClass(el, "target").id).toEqual("the-container");
 		});
 
 		it("should find return null if not found", function () {
@@ -30,7 +35,7 @@ describe("page/dom", function () {
         </body>
       `);
 			const el = document.getElementById("el");
-			assert.isNull(getAncestorNodeByClass(el, "target"));
+			expect(getAncestorNodeByClass(el, "target")).toBeNull();
 		});
 
 		it("should not find find target if not a direct ancestor", function () {
@@ -45,7 +50,7 @@ describe("page/dom", function () {
         </body>
       `);
 			const el = document.getElementById("el");
-			assert.isNull(getAncestorNodeByClass(el, "target"));
+			expect(getAncestorNodeByClass(el, "target")).toBeNull();
 		});
 
 		it("should match from array", function () {
@@ -60,7 +65,7 @@ describe("page/dom", function () {
       `);
 			const el = document.getElementById("el");
 			const match = getAncestorNodeByClass(el, ["other", "target"]);
-			assert.equal(match.id, "the-container");
+			expect(match.id).toEqual("the-container");
 		});
 
 		it("should return body if it matches", function () {
@@ -75,7 +80,7 @@ describe("page/dom", function () {
       `);
 			const el = document.getElementById("el");
 			// compare ids for equality check
-			assert.equal(getAncestorNodeByClass(el, "target").id, "the-container");
+			expect(getAncestorNodeByClass(el, "target")?.id).toEqual("the-container");
 		});
 	});
 
@@ -94,7 +99,7 @@ describe("page/dom", function () {
 			const match = getAncestorNode(el, (e) => {
 				return e.id.startsWith("foo_");
 			});
-			assert.equal(match.id, "foo_123");
+			expect(match.id).toEqual("foo_123");
 		});
 	});
 });

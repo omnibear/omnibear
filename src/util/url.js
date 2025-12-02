@@ -28,11 +28,10 @@ export function getParamFromUrlString(paramName, params) {
  * @param {URLSearchParams} params - URLSearchParams object to modify
  */
 export function cleanParams(params) {
-	params.forEach((value, key) => {
-		if (key.startsWith("utm_")) {
-			params.delete(key);
-		}
-	});
+	// Need to iterate over a copy since we're modifying the original
+	Array.from(params.keys())
+		.filter((key) => key.startsWith("utm_"))
+		.forEach((key) => params.delete(key));
 }
 
 /**
@@ -42,14 +41,19 @@ export function cleanParams(params) {
  * @returns {string} cleaned url
  */
 export function cleanUrl(url) {
-	const parsedUrl = URL.parse(url);
-
-	if (!parsedUrl) {
+	let parsedUrl;
+	try {
+		parsedUrl = new URL(url);
+	} catch (e) {
 		console.warn(`Invalid URL: ${url}`);
 		return url;
 	}
 	parsedUrl.hash = "";
 	cleanParams(parsedUrl.searchParams);
-
-	return parsedUrl.href;
+	// Rebuild the URL without utm_* params
+	return (
+		parsedUrl.origin +
+		parsedUrl.pathname +
+		(parsedUrl.search ? parsedUrl.search : "")
+	);
 }
