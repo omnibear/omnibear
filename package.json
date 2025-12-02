@@ -40,6 +40,6 @@
     "@wxt-dev/webextension-polyfill": "^1.0.0",
     "microformats-parser": "^2.0.4",
     "micropub-helper": "^2.0.1",
-    "preact": "^10.27.2"
+    "preact": "^10.28.0"
   }
 }
