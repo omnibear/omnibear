@@ -1,32 +1,59 @@
 import storage from "./storage.js";
+import { MESSAGE_ACTIONS } from "../constants";
 
 const INFO = "info";
-const WARNING = "warning";
+const WARN = "warn";
 const ERROR = "error";
 
-let logs = [];
-// Load from storage
-storage
-	.get(["log"])
-	.then(({ log: savedLog }) => {
-		console.log("Loaded logs from storage", savedLog);
-		if (savedLog) {
-			logs = savedLog;
-		}
-	})
-	.catch((error) => error("Problem loading logs from storage", error));
+/** @typedef {typeof INFO | typeof WARN | typeof ERROR} LOG_LEVEL */
 
-export function getLogs() {
+/** @typedef LogEntry {object]
+ * @property {string} message
+ * @property {string} timestamp
+ * @property {unknown} data
+ * @property {LOG_LEVEL} type
+ * @property {string | null} context
+ */
+
+/** @type {LogEntry[]} */
+let logs = [];
+/** @type {string | null} */
+let context = null;
+
+export async function getStoredLogs() {
+	await storage
+		.get(["logs"])
+		.then(({ logs: storedLogs }) => {
+			if (storedLogs) {
+				logs = storedLogs;
+			}
+		})
+		.catch((error) => error("Problem loading logs from storage", error));
 	return logs;
 }
 
-async function saveLog(log) {
-	logs = log;
-	await storage.set({ log });
+/** @param {LogEntry[]} logs */
+async function saveLogsToStorage(logs) {
+	logs = logs;
+	await storage.set({ logs });
 }
 
-export function clearLogs() {
-	saveLog([]);
+/** @param {LogEntry} entry */
+export async function appendStoredLogs(entry) {
+	if (!logs?.length) {
+		await getStoredLogs();
+	}
+	// Load from storage
+	if (logs.length > 100) {
+		logs.unshift();
+	}
+
+	logs.push(entry);
+	saveLogsToStorage(logs);
+}
+
+export function clearStoredLogs() {
+	saveLogsToStorage([]);
 }
 
 /**
@@ -40,20 +67,25 @@ function formatDate(date) {
 	return `${day} ${time}`;
 }
 
+/**
+ *
+ * @param {string} message
+ * @param {any} data
+ * @param {LOG_LEVEL} type
+ */
 async function append(message, data, type) {
-	if (!(await logsEnabled()) && type !== ERROR) {
-		return;
-	}
-	const log = getLogs();
-	if (log.length > 100) {
-		log.unshift();
-	}
+	/** @type {LogEntry} */
 	const entry = {
 		message,
 		type,
 		timestamp: formatDate(new Date()),
-		data: undefined,
+		data: /** @type {any} */ (undefined),
+		context,
 	};
+	if (!(await logsEnabled()) && type !== ERROR) {
+		console.debug("not logged");
+		return;
+	}
 	if (data) {
 		if (data instanceof Error) {
 			entry.data = serializeError(data);
@@ -61,12 +93,21 @@ async function append(message, data, type) {
 			entry.data = data;
 		}
 	}
-	log.push(entry);
-	saveLog(log);
+	// TODO: Only send if not background script
+	console.debug("sending log event", entry);
+	browser.runtime
+		.sendMessage({
+			action: MESSAGE_ACTIONS.LOG_MESSAGE,
+			payload: {
+				...entry,
+			},
+		})
+		.catch((e) => console.error("Unable to send log", e));
+	appendStoredLogs(entry);
 }
 
 /**
- * Print to info log
+ * Simplify error to a message and stack string
  * @param {Error} err Warning log text
  */
 function serializeError(err) {
@@ -96,7 +137,7 @@ export default info;
  */
 export function warning(message, data) {
 	console.warn(message, data);
-	append(message, data, WARNING);
+	append(message, data, WARN);
 }
 
 /**
@@ -110,6 +151,28 @@ export function error(message, data) {
 }
 
 async function logsEnabled() {
-	const settings = await storage.get("settings");
+	const { settings } = await storage.get("settings");
 	return settings.debugLog;
+}
+
+/**
+ *
+ * @param {string} newContext Where the log was posted from
+ */
+export function setContext(newContext) {
+	context = newContext;
+}
+
+/**
+ * Logs from a catch block. E.g. `.catch(logCaughtError("fetching auth"))`
+ * @param {string} description a description of the context for the error
+ * @returns callback accepting an error to pass in a catch block
+ */
+export function logCaughtError(description) {
+	/**
+	 * @param {unknown | Error} caughtError
+	 */
+	return function logError(caughtError) {
+		error("Error caught " + description, caughtError);
+	};
 }

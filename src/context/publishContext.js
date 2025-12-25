@@ -46,13 +46,14 @@ export function createPublishState() {
 	 * @param {string} type Type of view to show
 	 */
 	function setViewType(type) {
+		info("Setting view", type);
 		batch(() => {
 			viewType.value = type;
 			if (type !== MESSAGE) {
 				flashMessage.value = null;
 			}
 			if (type === BOOKMARK) {
-				draftState.title.value = selectedEntry.value.title || "";
+				draftState.title.value = selectedEntry.value?.title || "";
 			} else {
 				draftState.title.value = "";
 			}
@@ -93,6 +94,8 @@ export function createPublishState() {
 		if (settingsState.defaultToCurrentPage.value) {
 			return REPLY;
 		}
+		// Not sure that it's still possible to set the query params for mv3 popups
+		// This type might never be set
 		const type = getParamFromUrl(location.search, "type");
 		return type || NOTE;
 	}

@@ -35,5 +35,7 @@ export const MESSAGE_ACTIONS = {
 	FETCH_TOKEN_ERROR: "fetch-token-error",
 	/** Updates auth page text with auth status */
 	AUTH_STATUS_UPDATE: "auth-status-update",
+	/** For logging across script */
+	LOG_MESSAGE: "log-message",
 };
 Object.freeze(MESSAGE_ACTIONS);

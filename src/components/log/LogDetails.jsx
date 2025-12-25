@@ -1,11 +1,18 @@
 export default function LogDetails({ details }) {
   return (
     <div className="log-details">
-      <LogDetail details={details} isTopLevel />
+      <LogDetail detail={details} isTopLevel />
     </div>
   );
 }
 
+/**
+ *
+ * @param {object} param
+ * @param {any} param.detail
+ * @param {boolean} [param.isTopLevel]
+ * @returns
+ */
 function LogDetail({ detail, isTopLevel }) {
   const marginLeft = `${isTopLevel ? 0 : 1}em`;
 

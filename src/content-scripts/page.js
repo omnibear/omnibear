@@ -2,6 +2,7 @@ import browser from "../browser.js";
 import { MESSAGE_ACTIONS } from "../constants.js";
 import { clearItem, focusClickedEntry, getCurrentItem } from "./entry.js";
 import { cleanUrl } from "../util/url.js";
+import { setContext } from "../util/log.js";
 
 function sendFocusMessage() {
 	const supportsWebmention = pageSupportsWebmention();
@@ -37,6 +38,7 @@ function pageSupportsWebmention() {
 }
 
 export default async function main() {
+	setContext("page");
 	document.body.addEventListener("click", clearItem);
 	document.body.addEventListener("contextmenu", focusClickedEntry);
 	window.addEventListener("focus", sendFocusMessage);

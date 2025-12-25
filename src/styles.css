@@ -680,7 +680,7 @@ legend + .settings-form__description {
 	color: var(--gray-30);
 	background-color: var(--gray-90);
 }
-.log--warning {
+.log--warn {
 	color: var(--orange);
 	background-color: var(--orange-light);
 }

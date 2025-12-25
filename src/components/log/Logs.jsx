@@ -1,13 +1,17 @@
 import { useEffect, useState } from "preact/hooks";
 import LogItem from "./LogItem";
-import { getLogs, clearLogs } from "../../util/log";
+import { getStoredLogs, clearStoredLogs } from "../../util/log";
 
 export default function Logs({ onClose }) {
-  const [logs, setLogs] = useState(getLogs());
+  const [logs, setLogs] = useState(/** @type {any[]} */ ([]));
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLogs(getLogs());
+    (async () => {
+      setLogs(await getStoredLogs());
+    })();
+
+    const interval = setInterval(async () => {
+      setLogs(await getStoredLogs());
     }, 2000);
 
     return () => clearInterval(interval);
@@ -29,7 +33,7 @@ export default function Logs({ onClose }) {
         <button
           type="button"
           onClick={() => {
-            clearLogs();
+            clearStoredLogs();
             setLogs([]);
           }}
         >

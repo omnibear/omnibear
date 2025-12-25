@@ -9,9 +9,16 @@ import browser from "../browser.js";
 import storage from "../util/storage.js";
 import { MESSAGE_ACTIONS } from "../constants.js";
 import { fetchToken, fetchSyndicationTargets } from "./authentication.js";
-import { info, error } from "../util/log.js";
+import {
+	info,
+	error,
+	setContext,
+	appendStoredLogs,
+	logCaughtError,
+} from "../util/log.js";
 
 export default function main() {
+	setContext("background");
 	/**
 	 *
 	 * @param {{action: string, payload: any}} request message event
@@ -19,7 +26,9 @@ export default function main() {
 	 * @returns
 	 */
 	function handleMessage(request, sender) {
-		console.log("Message received", request.action, request.payload);
+		if (MESSAGE_ACTIONS.LOG_MESSAGE !== request.action) {
+			console.log("Message received:", request.action, request.payload);
+		}
 		switch (request.action) {
 			case MESSAGE_ACTIONS.BEGIN_AUTH:
 				handleBeginAuth(request.payload);
@@ -43,6 +52,15 @@ export default function main() {
 				break;
 			case MESSAGE_ACTIONS.CLEAR_ENTRY:
 				clearEntry();
+				break;
+			case MESSAGE_ACTIONS.LOG_MESSAGE:
+				appendStoredLogs(request.payload);
+				/** @type {'error' | 'warn' | 'info'}} */
+				const level = ["error", "warn", "info"].includes(request.payload.type)
+					? request.payload.type
+					: "log";
+				console[level](request.payload.message, request.payload.data);
+				break;
 		}
 		return undefined;
 	}
@@ -54,6 +72,9 @@ export default function main() {
 			tokenEndpoint: payload.metadata.tokenEndpoint,
 			micropubEndpoint: payload.metadata.micropub,
 		});
+		await browser.tabs
+			.create({ url: payload.authUrl })
+			.catch(logCaughtError("opening auth tab"));
 	}
 
 	/**
@@ -111,6 +132,12 @@ export default function main() {
 		}
 	}
 
+	/**
+	 * Sends a status to the auth tab.
+	 *
+	 * @param {string} message Status description
+	 * @param {number} tabId Tab to send the update to
+	 */
 	async function sendAuthStatusUpdate(message, tabId) {
 		info(message);
 		browser.tabs.sendMessage(tabId, {
