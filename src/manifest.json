@@ -3,20 +3,9 @@
   "name": "Omnibear",
   "description": "[see package.json]",
   "version": "[see package.json]",
-  "permissions": ["contextMenus", "tabs", "storage"],
   "host_permissions": ["https://omnibear.com/", "*://*/*"],
   "action": {
     "default_popup": "src/index.html",
-    "default_icon": {
-      "16": "icon-16.png",
-      "32": "icon-32.png",
-      "48": "icon-48.png",
-      "64": "icon-64.png",
-      "128": "icon-128.png"
-    }
-  },
-  "{{firefox}}.sidebar_action": {
-    "default_panel": "src/index.html?location=sidebar",
     "default_icon": {
       "16": "icon-16.png",
       "32": "icon-32.png",
