@@ -43,4 +43,10 @@ describe("generateSlug", function () {
 		const expected = "a-post-with-accent-marks";
 		expect(expected).toEqual(generateSlug(content));
 	});
+
+	it("should strip emojis before trimming", function () {
+		const content = "a post with emoji 😊🚀 ";
+		const expected = "a-post-with-emoji";
+		expect(expected).toEqual(generateSlug(content));
+	});
 });

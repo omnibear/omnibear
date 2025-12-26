@@ -62,9 +62,11 @@ export function generateSlug(content) {
 		);
 	}
 	formatted = formatted.replace(NON_ALPHANUM, "");
-	formatted = formatted.replace(/--+/g, "-");
-	const parts = formatted.split("-");
-	return parts.splice(0, 6).join("-");
+	return formatted
+		.split("-")
+		.filter((segment) => segment?.length)
+		.splice(0, 6)
+		.join("-");
 }
 
 export async function getPageUrl() {
