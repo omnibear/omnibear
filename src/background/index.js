@@ -147,7 +147,6 @@ export default function main() {
 	}
 
 	function onContextMenuClick() {
-		// TODO: Change to reply view if not the default
 		browser.action.openPopup();
 	}
 

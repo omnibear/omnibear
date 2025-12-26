@@ -22,6 +22,7 @@ import {
 import { info, warning, error } from "../util/log";
 import { sanitizeMicropubError } from "../util/utils";
 import { getParamFromUrl } from "../util/url";
+import storage from "../util/storage";
 
 export function createPublishState() {
 	const viewType = signal(_determineInitialView());
@@ -38,6 +39,13 @@ export function createPublishState() {
 	effect(() => {
 		if (authState.isLoggedIn.value && viewType.peek() === LOGIN) {
 			viewType.value = _determineInitialView();
+		}
+	});
+
+	// Default to reply if an item is selected from the right click menu
+	storage.get(["itemEntry"]).then(({ itemEntry }) => {
+		if (itemEntry) {
+			setViewType(REPLY);
 		}
 	});
 
