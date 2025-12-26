@@ -35,8 +35,6 @@ storage
 			if (!authSecret) {
 				authSecret = generateAuthSecret();
 				// Secret should be stable once set
-				// TODO: Make sure background & popup use the same secret
-				// TODO: It's true for chrome manifest v3 extensions, but test others
 				storage
 					.set({ authSecret })
 					.catch((error) => console.error("Problem saving authSecret", error));

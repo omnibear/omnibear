@@ -83,7 +83,6 @@ async function append(message, data, type) {
 		context,
 	};
 	if (!(await logsEnabled()) && type !== ERROR) {
-		console.debug("not logged");
 		return;
 	}
 	if (data) {
@@ -93,16 +92,16 @@ async function append(message, data, type) {
 			entry.data = data;
 		}
 	}
-	// TODO: Only send if not background script
-	console.debug("sending log event", entry);
-	browser.runtime
-		.sendMessage({
-			action: MESSAGE_ACTIONS.LOG_MESSAGE,
-			payload: {
-				...entry,
-			},
-		})
-		.catch((e) => console.error("Unable to send log", e));
+	if (context !== "background") {
+		browser.runtime
+			.sendMessage({
+				action: MESSAGE_ACTIONS.LOG_MESSAGE,
+				payload: {
+					...entry,
+				},
+			})
+			.catch((e) => console.error("Unable to send log", e));
+	}
 	appendStoredLogs(entry);
 }
 
@@ -117,8 +116,6 @@ function serializeError(err) {
 	};
 }
 
-// TODO: Log with correct line number
-// https://stackoverflow.com/questions/13815640/a-proper-wrapper-for-console-log-with-correct-line-number
 /**
  * Print to info log
  * @param {string} message Warning log text
@@ -152,7 +149,7 @@ export function error(message, data) {
 
 async function logsEnabled() {
 	const { settings } = await storage.get("settings");
-	return settings.debugLog;
+	return Boolean(settings?.debugLog);
 }
 
 /**

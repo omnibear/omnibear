@@ -2,7 +2,7 @@ import browser from "../browser.js";
 import { MESSAGE_ACTIONS } from "../constants.js";
 import { clearItem, focusClickedEntry, getCurrentItem } from "./entry.js";
 import { cleanUrl } from "../util/url.js";
-import { setContext } from "../util/log.js";
+import { setContext, info } from "../util/log.js";
 
 function sendFocusMessage() {
 	const supportsWebmention = pageSupportsWebmention();
@@ -23,7 +23,7 @@ function sendFocusMessage() {
 		};
 	}
 
-	console.log("Sending focus message", pageEntry, selectedEntry);
+	info("Sending focus message", { pageEntry, selectedEntry });
 	browser.runtime.sendMessage({
 		action: MESSAGE_ACTIONS.FOCUS_WINDOW,
 		payload: {
@@ -46,6 +46,6 @@ export default async function main() {
 	if (!document.hidden) {
 		sendFocusMessage();
 	} else {
-		console.log("Not sending focus message because document is hidden");
+		info("Not sending focus message because document is hidden");
 	}
 }

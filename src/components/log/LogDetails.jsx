@@ -25,7 +25,7 @@ function LogDetail({ detail, isTopLevel }) {
       <div style={{ marginLeft }}>
         {"["}
         {detail.map((d, i) => (
-          <div key={i} style={{ marginLeft }}>
+          <div key={i} style={{ marginLeft: "1em" }}>
             <LogDetail detail={d} />
           </div>
         ))}
@@ -39,7 +39,7 @@ function LogDetail({ detail, isTopLevel }) {
     <div key="content" style={{ marginLeft }}>
       {Object.keys(detail).map((key) => (
         <div key={key} style={{ marginLeft: "1em" }}>
-          {key}: <Detail detail={detail[key]} />
+          {key}: <LogDetail detail={detail[key]} />
         </div>
       ))}
     </div>,

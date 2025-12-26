@@ -4,7 +4,7 @@ export function createEmptyDraft() {
 	return {
 		title: "",
 		content: "",
-		category: [],
+		category: /** @type {string[]} */ ([]),
 		slug: "",
 		syndicateTo: [],
 		type: null,

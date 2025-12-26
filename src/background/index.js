@@ -27,7 +27,7 @@ export default function main() {
 	 */
 	function handleMessage(request, sender) {
 		if (MESSAGE_ACTIONS.LOG_MESSAGE !== request.action) {
-			console.log("Message received:", request.action, request.payload);
+			info("Message received:", [request.action, request.payload]);
 		}
 		switch (request.action) {
 			case MESSAGE_ACTIONS.BEGIN_AUTH:
