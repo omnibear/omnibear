@@ -2,8 +2,8 @@ import { useState, useContext, useCallback, useEffect } from "preact/hooks";
 import { publishContext } from "../../context/publishContext";
 import DownArrow from "../svg/DownArrow";
 import WebmentionSvg from "../svg/Webmention";
-import { BOOKMARK, LIKE, REPOST } from "../../constants";
-import storage from "../../util/storage";
+import { BOOKMARK, LIKE, REPOST } from "../../../constants";
+import storage from "../../../util/storage";
 
 async function loadOptions() {
   const { pageEntry = {} } = await storage.get(["pageEntry"]);

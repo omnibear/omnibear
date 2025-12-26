@@ -20,7 +20,7 @@ import {
   LIKE,
   LOGS,
   SETTINGS,
-} from "../constants";
+} from "../../constants";
 
 const UNICODE_NBSP = "\u00a0";
 const ICONS = {

@@ -1,5 +1,5 @@
-import { MESSAGE_SUCCESS, MESSAGE_ERROR, MESSAGE_INFO } from "../constants";
-import { openLink } from "../util/utils";
+import { MESSAGE_SUCCESS, MESSAGE_ERROR, MESSAGE_INFO } from "../../constants";
+import { openLink } from "../../util/utils";
 
 export default function Message({ message }) {
   const getClass = () => {

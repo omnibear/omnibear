@@ -5,7 +5,7 @@ import ChangeViewTabs from "./ChangeViewTabs";
 import Header from "./Header";
 import MainPane from "./MainPane";
 import Footer from "./Footer";
-import { LOGIN } from "../constants";
+import { LOGIN } from "../../constants";
 
 export default function Layout() {
   const publish = useContext(publishContext);

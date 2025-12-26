@@ -1,6 +1,6 @@
 import { render, h } from "preact";
 import App from "./components/App";
-import { setContext } from "./util/log.js";
+import { setContext } from "../util/log.js";
 
 setContext("popup");
 

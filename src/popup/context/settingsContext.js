@@ -1,7 +1,7 @@
 import { createContext } from "preact";
 import { signal, computed, effect } from "@preact/signals";
-import { DEFAULT_REACJI } from "../constants";
-import storage from "../util/storage";
+import { DEFAULT_REACJI } from "../../constants";
+import storage from "../../util/storage";
 
 const MAX_LENGTH = 15;
 

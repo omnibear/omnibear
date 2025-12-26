@@ -1,7 +1,7 @@
 import { useContext } from "preact/hooks";
 import { publishContext } from "../context/publishContext";
 import { authContext } from "../context/authContext";
-import { openLink } from "../util/utils";
+import { openLink } from "../../util/utils";
 
 export default function Footer() {
   const publish = useContext(publishContext);

@@ -1,11 +1,11 @@
 import { createContext } from "preact";
-import browser from "../browser";
-import storage from "../util/storage";
+import browser from "../../browser";
+import storage from "../../util/storage";
 import { signal, computed, effect } from "@preact/signals";
-import micropub from "../util/micropub";
-import { sanitizeMicropubError } from "../util/utils";
-import { info as log, error } from "../util/log";
-import { MESSAGE_ACTIONS } from "../constants";
+import micropub from "../../util/micropub";
+import { sanitizeMicropubError } from "../../util/utils";
+import { info as log, error } from "../../util/log";
+import { MESSAGE_ACTIONS } from "../../constants";
 
 export function createAuthState() {
 	const domain = signal("");

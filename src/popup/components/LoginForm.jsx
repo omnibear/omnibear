@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext, useRef } from "preact/hooks";
 import { authContext } from "../context/authContext";
 import Message from "./Message";
-import { openLink } from "../util/utils";
-import { MESSAGE_ERROR, MESSAGE_INFO } from "../constants";
+import { openLink } from "../../util/utils";
+import { MESSAGE_ERROR, MESSAGE_INFO } from "../../constants";
 
 export default function LoginForm() {
   const auth = useContext(authContext);

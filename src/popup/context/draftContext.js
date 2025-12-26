@@ -1,7 +1,7 @@
 import { createContext } from "preact";
 import { signal, batch, computed, effect } from "@preact/signals";
-import { createEmptyDraft, getDraft, saveDraft } from "../util/draft";
-import { generateSlug } from "../util/utils";
+import { createEmptyDraft, getDraft, saveDraft } from "../../util/draft";
+import { generateSlug } from "../../util/utils";
 import { settingsState } from "./settingsContext";
 
 /** @typedef {ReturnType<typeof createEmptyDraft>} Entity */

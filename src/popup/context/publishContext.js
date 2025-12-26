@@ -11,25 +11,25 @@ import {
 	MESSAGE,
 	MESSAGE_SUCCESS,
 	MESSAGE_ERROR,
-} from "../constants";
+} from "../../constants";
 import {
 	postNote,
 	postReply,
 	postBookmark,
 	postLike,
 	postRepost,
-} from "../util/micropub";
-import { info, warning, error } from "../util/log";
-import { sanitizeMicropubError } from "../util/utils";
-import { getParamFromUrl } from "../util/url";
-import storage from "../util/storage";
+} from "../../util/micropub";
+import { info, warning, error } from "../../util/log";
+import { sanitizeMicropubError } from "../../util/utils";
+import { getParamFromUrl } from "../../util/url";
+import storage from "../../util/storage";
 
 export function createPublishState() {
 	const viewType = signal(_determineInitialView());
 	const currentPageUrl = signal();
 	const currentItemUrl = signal();
 	const selectedEntry = signal(
-		/** @type {import("../util/micropub").Entry | undefined} */ (undefined)
+		/** @type {import("../../util/micropub").Entry | undefined} */ (undefined)
 	);
 	const isSending = signal();
 	const flashMessage = signal(null);

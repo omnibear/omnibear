@@ -15,7 +15,7 @@ import {
   LOGS,
   SETTINGS,
   MESSAGE,
-} from "../constants";
+} from "../../constants";
 
 export default function MainPane() {
   const publish = useContext(publishContext);

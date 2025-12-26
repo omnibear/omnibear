@@ -1,7 +1,7 @@
 import { useContext } from "preact/hooks";
 import { publishContext } from "../context/publishContext";
 import UrlSelector from "./form/UrlSelector";
-import { NOTE, REPLY, BOOKMARK, LIKE, REPOST } from "../constants";
+import { NOTE, REPLY, BOOKMARK, LIKE, REPOST } from "../../constants";
 
 const headerViews = [NOTE, REPLY, BOOKMARK, LIKE, REPOST];
 

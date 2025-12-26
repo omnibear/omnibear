@@ -2,7 +2,7 @@ import Micropub from "micropub-helper";
 import storage from "./storage";
 import { AUTH_SUCCESS_URL } from "../constants";
 
-/** @typedef {ReturnType<typeof import("../context/draftContext").Entity>} Entity */
+/** @typedef {ReturnType<typeof import("../popup/context/draftContext").Entity>} Entity */
 /** @typedef {ReturnType<typeof import("../util/draft").createEmptyDraft>} Entry */
 
 const micropub = new Micropub({
