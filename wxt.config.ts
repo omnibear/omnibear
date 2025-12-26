@@ -14,10 +14,20 @@ export default defineConfig({
 
   entrypointsDir: "entrypoints",
   publicDir: "./public",
+  imports: false,
 
   modules: ['@wxt-dev/webextension-polyfill'],
   manifest: {
     permissions: ["storage", "contextMenus"],
     host_permissions: ["*://*/*"],
+    browser_specific_settings: {
+      gecko: {
+        id: "{27d422d7-d781-4ff7-a476-ba7c18601a22}",
+        strict_min_version: "140",
+        data_collection_permissions: {
+          required: ["none"]
+        }
+      }
+    }
   },
 });

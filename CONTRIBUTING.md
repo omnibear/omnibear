@@ -1,14 +1,19 @@
 # Contributing to Omnibear
 
-## Related Repos
-
-- [omnibear-site](https://github.com/omnibear/omnibear-site)
+Welcome to the Omnibear source repository.
+We welcome contributions to this project.
 
 ## Getting Started
 
 1. Install npm dependencies using `npm install` (requires [Node.js](https://nodejs.org/en/download))
 1. Run dev build `npm run dev` to build extension and open a browser with it installed
 1. When the extension loads, open the popup settings and enable logs to help with debugging
+
+## Project Documentation
+
+Most of the documentation for Omnibear should live on the omnibear.com site.
+If you would like to contribute documetation, see
+the [omnibear-site](https://github.com/omnibear/omnibear-site) GitHub repository.
 
 ## PR Submission Guidelines
 
@@ -38,26 +43,44 @@ The release process is still to be determined. See [WXT Publishing Docs](https:/
 The application is divided by the type of entrypoints.
 The entrypoints folder contains files which reference the logic in the corresponding folder.
 
-### Manifest
+### Config
 
-A JSON file holding configuration of the extension to be used by browsers.
-Differs between Firefox and Chrome depending on supported APIs.
-Much of the manifest is auto generated.
+Most of the config files are in the root of the project
+
+- `package.json`: NPM project and dependency config
+- `wxt.config.ts`: Build framework config. Also where manifest is configured.
+- `tsconfig.json`: TypeScript configuration
+- `vitest.config.ts`: Testing config
+- `.nvmrc`: Which version of Node.js to use
+- `.eslintrc.js`: ESLint config
+- `.editorconfig`: Some code style configuration
+
+### Entrypoints
+
+Based on the WXT structure, the files under `src/entrypoints` indicate starting points for extension bundles depending on where the code is used. See the following sections for more information.
 
 ### Popup
 
-UI visible when clicking on the extension icon in the browser toolbar.
+The UI visible when clicking on the extension icon in the browser toolbar.
+Most related code is in the `src/popup` folder.
+Preact is the framework of choice for the UI.
 To debug this view in Chrome, click the extension icon to view the content and right click to access the inspect menu.
 
 ### Background
 
 Off-UI script that can respond to browser events like tabs changing.
+Since manifest v3, this runs as a service worker and is primarily event based.
+The code for this service worker is in `src/background`.
 In Chrome, look for the service worker in the console selector and application settings.
 
-### Content Script
+### Content Scripts
 
-The `page.js` script run on each webpage to check if it supports webmention or is the authentication page.
-There is also a specific script for managing auth.
+The `src/content-scripts/page.js` script runs on each webpage to update the record of the current URL and check if it supports webmention.
+There is also a `src/content-scripts/auth.js` script for managing auth responses.
+
+### Utils
+
+The `src/util` folder contains various files that potentially can be used in multiple bundles.
 
 ## Helpful Docs
 
