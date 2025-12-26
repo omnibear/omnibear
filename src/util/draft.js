@@ -1,36 +1,31 @@
-const KEYS = ['title', 'content', 'category', 'slug', 'syndicateTo', 'type'];
+import storage from "./storage";
 
-const EMPTY_DRAFT = {
-  title: '',
-  content: '',
-  category: [],
-  slug: '',
-  syndicateTo: [],
-  type: null,
-};
+export function createEmptyDraft() {
+	return {
+		title: "",
+		content: "",
+		category: /** @type {string[]} */ ([]),
+		slug: "",
+		syndicateTo: [],
+		type: null,
+	};
+}
+const KEYS = Object.keys(createEmptyDraft());
 
-export function getDraft() {
-  const draft = JSON.parse(localStorage.getItem('draft'));
-  if (draft) {
-    return draft;
-  }
-  return EMPTY_DRAFT;
+export async function getDraft() {
+	const { draft } = await storage.get(["draft"]);
+	return { ...createEmptyDraft(), ...draft };
 }
 
-export function saveDraft(draft) {
-  const clean = {};
-  KEYS.forEach(key => {
-    clean[key] = draft[key];
-  });
-  localStorage.setItem('draft', JSON.stringify(clean));
-}
+/**
+ * Saves the draft post to storage
+ * @param {ReturnType<typeof createEmptyDraft>} draft Draft post to save
+ */
+export async function saveDraft(draft) {
+	const clean = {};
+	KEYS.forEach((key) => {
+		clean[key] = draft[key];
+	});
 
-// export function deleteDraft() {
-//   const draft = getDraft();
-//   saveDraft({
-//     content: '',
-//     category: [],
-//     slug: '',
-//     syndicateTo: draft.syndicateTo,
-//   });
-// }
+	await storage.set({ draft: clean });
+}

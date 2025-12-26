@@ -1,63 +1,59 @@
-import parseUri from 'parse-uri';
+// @ts-check
 
-export function getParamFromUrl(paramName, url) {
-  var params = url.split('?')[1] || '';
-  return getParamFromUrlString(paramName, params);
+/**
+ *
+ * @param {string} paramName - The name of the parameter to get
+ * @param {string} searchString search param string (not whole URL)
+ * @returns {string | null} - The value of the parameter
+ */
+export function getParamFromUrl(paramName, searchString) {
+	const queryParams = new URLSearchParams(searchString);
+	return queryParams.get(paramName);
 }
 
 export function getParamFromUrlString(paramName, params) {
-  var matches = params
-    .split('&')
-    .filter(param => param.startsWith(`${paramName}=`));
-  if (matches && matches.length) {
-    var value = matches[0].substr(paramName.length + 1);
-    return decodeURIComponent(value);
-  } else {
-    return null;
-  }
+	var matches = params
+		.split("&")
+		.filter((param) => param.startsWith(`${paramName}=`));
+	if (matches && matches.length) {
+		var value = matches[0].substr(paramName.length + 1);
+		return decodeURIComponent(value);
+	} else {
+		return null;
+	}
 }
 
+/**
+ * Removes utm_* params from a URLSearchParams object
+ * @param {URLSearchParams} params - URLSearchParams object to modify
+ */
 export function cleanParams(params) {
-  const clean = {};
-  for (let i in params) {
-    if (!i.startsWith('utm_')) {
-      clean[i] = params[i];
-    }
-  }
-  return clean;
+	// Need to iterate over a copy since we're modifying the original
+	Array.from(params.keys())
+		.filter((key) => key.startsWith("utm_"))
+		.forEach((key) => params.delete(key));
 }
 
-export function paramsToQueryString(params) {
-  const parts = [];
-  for (let i in params) {
-    parts.push(`${i}=${params[i]}`);
-  }
-  if (!parts.length) {
-    return '';
-  }
-  return `?${parts.join('&')}`;
-}
-
-export function getUrlOrigin(url) {
-  const parts = parseUri(url);
-  return [
-    parts.protocol,
-    '://',
-    parts.host,
-    parts.port ? `:${parts.port}` : '',
-  ].join('');
-}
-
-// strip hashes and utm_* query params
+/**
+ * Strip hashes and utm_* query params
+ *
+ * @param {string} url
+ * @returns {string} cleaned url
+ */
 export function cleanUrl(url) {
-  const parts = parseUri(url);
-  const base = [
-    parts.protocol,
-    '://',
-    parts.host,
-    parts.port ? `:${parts.port}` : '',
-    parts.path,
-    paramsToQueryString(cleanParams(parts.queryKey)),
-  ].join('');
-  return base;
+	let parsedUrl;
+	try {
+		parsedUrl = new URL(url);
+	} catch (e) {
+		console.warn(`Invalid URL: ${url}`);
+		return url;
+	}
+	parsedUrl.hash = "";
+	cleanParams(parsedUrl.searchParams);
+	// Rebuild the URL without utm_* params
+	return (
+		parsedUrl.origin +
+		parsedUrl.pathname +
+		(parsedUrl.search ? parsedUrl.search : "")
+	);
 }

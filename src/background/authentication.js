@@ -1,48 +1,61 @@
-import __browser__ from '../browser';
-import micropub from '../util/micropub';
-import {getAuthTab, logout} from '../util/utils';
-import {info, warning, error} from '../util/log';
+import browser from "../browser.js";
+import { MESSAGE_ACTIONS } from "../constants.js";
+import storage from "../util/storage.js";
+import micropub from "../util/micropub.js";
+import { getAuthTab, logout } from "../util/utils.js";
+import { info, warning, error } from "../util/log.js";
 
-export function fetchToken(code) {
-  micropub.options.me = localStorage.getItem('domain');
-  micropub.options.tokenEndpoint = localStorage.getItem('tokenEndpoint');
-  micropub.options.micropubEndpoint = localStorage.getItem('micropubEndpoint');
-  return micropub
-    .getToken(code)
-    .then(function(token) {
-      if (!token) {
-        throw new Error(
-          'Token not found in token endpoint response. Missing expected field `access_token`',
-        );
-      }
-      localStorage.setItem('token', token);
-      micropub.options.token = token;
-    })
-    .catch(function(err) {
-      error('Error fetching token', err);
-      getAuthTab().then(tab => {
-        __browser__.tabs.sendMessage(tab.id, {
-          action: 'fetch-token-error',
-          payload: {
-            error: err,
-          },
-        });
-        logout();
-      });
-    });
+/**
+ * Request the token from the micropub auth server
+ * @param {string} code Auth code
+ */
+export async function fetchToken(code) {
+	const { domain, tokenEndpoint, micropubEndpoint } = await storage.get([
+		"domain",
+		"tokenEndpoint",
+		"micropubEndpoint",
+	]);
+	micropub.options = {
+		me: domain,
+		tokenEndpoint: tokenEndpoint,
+		micropubEndpoint: micropubEndpoint,
+	};
+
+	try {
+		const token = await micropub.getToken(code);
+		if (!token) {
+			throw new Error(
+				"Token not found in token endpoint response. Missing expected field `access_token`"
+			);
+		}
+		await storage.set({ token });
+		micropub.options = {
+			token,
+		};
+	} catch (err) {
+		error("Error fetching token", err);
+		logout();
+		const tab = await getAuthTab();
+		if (tab?.id) {
+			browser.tabs.sendMessage(tab.id, {
+				action: MESSAGE_ACTIONS.FETCH_TOKEN_ERROR,
+				payload: {
+					error: err,
+				},
+			});
+		}
+	}
 }
 
-export function fetchSyndicationTargets() {
-  return micropub.query('syndicate-to').then(response => {
-    const syndicateTo = response['syndicate-to'];
-    info('Syndication targets retreived', syndicateTo);
-    if (Array.isArray(syndicateTo)) {
-      localStorage.setItem('syndicateTo', JSON.stringify(syndicateTo));
-    } else {
-      warning(
-        `Syndication targets not in array format. Saving as empty array.`,
-      );
-      localStorage.setItem('syndicateTo', JSON.stringify([]));
-    }
-  });
+export async function fetchSyndicationTargets() {
+	const response = await micropub.query("syndicate-to");
+	const syndicateTo = response["syndicate-to"];
+	info("Syndication targets retrieved", syndicateTo);
+
+	if (Array.isArray(syndicateTo)) {
+		storage.set({ syndicateTo });
+	} else {
+		warning(`Syndication targets not in array format. Saving as empty array.`);
+		storage.set({ syndicateTo: [] });
+	}
 }

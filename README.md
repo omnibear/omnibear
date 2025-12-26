@@ -35,7 +35,7 @@ Theoretically, this should work in MS Edge, too, but I don’t run Windows so I 
 
 Omnibear is run by three scripts:
 
-- `src/background.js` — Runs in a [background page](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts). This keeps track of which tab currently has the user's focus and handles communication between the page script and omnibear popup script.
+- `src/entrypoints/background.js` — Runs in a [background page](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts). This keeps track of which tab currently has the user's focus and handles communication between the page script and omnibear popup script.
 - `src/page.js` — A [content script](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Content_scripts) that runs in all pages (tabs). This highlights selected entries when the user right-clicks them. It alerts the background script whenever its tab receives user focus. And it watches for when the browser navigates to the authentication successful page on omnibear.com.
 - `src/index.js` — The main script of the [popup page](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Sidebars_popups_options_pages). This is a small webapp built using [Preact](https://preactjs.com/) and [MobX](https://mobx.js.org/) that includes the posting form and settings screen.
 
