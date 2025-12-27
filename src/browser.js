@@ -18,6 +18,35 @@ if (typeof browser.action === "undefined") {
 export default browser;
 
 /**
+ * This content script no longer has access to browser.runtime
+ * use this to determine when to skip sending messages
+ * to avoid "Extension context invalidated" errors
+
+ * @see https://stackoverflow.com/a/69603416/4252741
+ *
+ * @returns {boolean} true if the browser context is invalid
+ */
+export function browserContextInvalid() {
+	return browser.runtime?.id == undefined;
+}
+
+/**
+ * Checks if the code is running in the background service worker context.
+ * This is useful for determining if certain background-specific operations can be performed.
+ * e.g. Don't need to send log messages to the background script from the background script itself.
+ *
+ * @returns {boolean} true if the current context is the background service worker
+ */
+export function isInBackgroundContext() {
+	return (
+		typeof self !== "undefined" &&
+		self.registration !== undefined &&
+		self instanceof ServiceWorkerGlobalScope
+	);
+}
+
+
+/**
  * Typed shortcut to WXT environment variables of what browser is being used.
  */
 export const BROWSER_ENV = {

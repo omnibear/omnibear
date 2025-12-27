@@ -1,4 +1,4 @@
-import browser from "../browser.js";
+import browser, { browserContextInvalid } from "../browser.js";
 import { MESSAGE_ACTIONS } from "../constants.js";
 import { mf2 } from "microformats-parser";
 import { getAncestorNode, getAncestorNodeByClass } from "./dom.js";
@@ -9,7 +9,7 @@ let currentItem;
 // let currentItemUrl;
 
 export function clearItem() {
-	if (currentItem) {
+	if (currentItem && !browserContextInvalid()) {
 		browser.runtime.sendMessage({
 			action: MESSAGE_ACTIONS.CLEAR_ENTRY,
 		});
@@ -40,7 +40,7 @@ export function focusClickedEntry(e) {
 		entry = findHEntry(e.target);
 	}
 
-	if (!entry || typeof entry !== "object") {
+	if (!entry || typeof entry !== "object" || browserContextInvalid()) {
 		return;
 	}
 	browser.runtime.sendMessage({

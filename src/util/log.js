@@ -1,5 +1,6 @@
 import storage from "./storage.js";
 import { MESSAGE_ACTIONS } from "../constants";
+import { isInBackgroundContext } from "@/browser.js";
 
 const INFO = "info";
 const WARN = "warn";
@@ -93,7 +94,7 @@ async function append(message, data, type) {
 			entry.data = data;
 		}
 	}
-	if (context !== "background") {
+	if (!isInBackgroundContext()) {
 		browser.runtime
 			.sendMessage({
 				action: MESSAGE_ACTIONS.LOG_MESSAGE,

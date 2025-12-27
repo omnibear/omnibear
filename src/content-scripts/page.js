@@ -1,4 +1,4 @@
-import browser from "../browser.js";
+import browser, { browserContextInvalid } from "../browser.js";
 import { MESSAGE_ACTIONS } from "../constants.js";
 import { clearItem, focusClickedEntry, getCurrentItem } from "./entry.js";
 import { cleanUrl } from "../util/url.js";
@@ -23,14 +23,16 @@ function sendFocusMessage() {
 		};
 	}
 
-	info("Sending focus message", { pageEntry, selectedEntry });
-	browser.runtime.sendMessage({
-		action: MESSAGE_ACTIONS.FOCUS_WINDOW,
-		payload: {
-			pageEntry,
-			selectedEntry,
-		},
-	});
+	if (!browserContextInvalid()) {
+		info("Sending focus message", { pageEntry, selectedEntry });
+		browser.runtime.sendMessage({
+			action: MESSAGE_ACTIONS.FOCUS_WINDOW,
+			payload: {
+				pageEntry,
+				selectedEntry,
+			},
+		});
+	}
 }
 
 function pageSupportsWebmention() {
