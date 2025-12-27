@@ -15,6 +15,7 @@ import {
 	setContext,
 	appendStoredLogs,
 	logCaughtError,
+	logBasedOnLevel,
 } from "../util/log.js";
 
 export default function main() {
@@ -54,12 +55,12 @@ export default function main() {
 				clearEntry();
 				break;
 			case MESSAGE_ACTIONS.LOG_MESSAGE:
+				logBasedOnLevel(
+					request.payload.type,
+					request.payload.message,
+					request.payload.data
+				);
 				appendStoredLogs(request.payload);
-				/** @type {'error' | 'warn' | 'info'}} */
-				const level = ["error", "warn", "info"].includes(request.payload.type)
-					? request.payload.type
-					: "log";
-				console[level](request.payload.message, request.payload.data);
 				break;
 		}
 		return undefined;
@@ -119,7 +120,7 @@ export default function main() {
 	 * @param {{code: string}} payload object containing the auth code
 	 */
 	async function handleAuthCode(tabId, { code }) {
-		console.log("Processing auth code");
+		info("Processing auth code");
 		try {
 			sendAuthStatusUpdate(`Retrieving access token…`, tabId);
 			await fetchToken(code);

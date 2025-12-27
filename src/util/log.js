@@ -85,6 +85,7 @@ async function append(message, data, type) {
 	if (!(await logsEnabled()) && type !== ERROR) {
 		return;
 	}
+	logBasedOnLevel(type, message, data);
 	if (data) {
 		if (data instanceof Error) {
 			entry.data = serializeError(data);
@@ -117,12 +118,24 @@ function serializeError(err) {
 }
 
 /**
+ * @param {string} levelInput Will be normalized to 'error' | 'warn' | 'info'
+ * @param {string} message Text to log
+ * @param {any} data Optional object to include in log
+ */
+export function logBasedOnLevel(levelInput, message, data) {
+	/** @type {LOG_LEVEL | 'log'} */
+	const level = ["error", "warn", "info"].includes(levelInput)
+		? /** @type {LOG_LEVEL} */ (levelInput)
+		: "log";
+	console[level](message, data);
+}
+
+/**
  * Print to info log
  * @param {string} message Warning log text
  * @param {any} [data] Optional object to include in log
  */
 export function info(message, data) {
-	console.info(message, data);
 	append(message, data, INFO);
 }
 export default info;
@@ -133,7 +146,6 @@ export default info;
  * @param {any} [data] Optional object to include in log
  */
 export function warning(message, data) {
-	console.warn(message, data);
 	append(message, data, WARN);
 }
 
@@ -143,7 +155,6 @@ export function warning(message, data) {
  * @param {any} [data] Optional object to include in log
  */
 export function error(message, data) {
-	console.error(message, data);
 	append(message, data, ERROR);
 }
 
