@@ -8,6 +8,7 @@ We welcome contributions to this project.
 1. Install npm dependencies using `npm install` (requires [Node.js](https://nodejs.org/en/download))
 1. Run dev build `npm run dev` to build extension and open a browser with it installed
 1. When the extension loads, open the popup settings and enable logs to help with debugging
+1. If you need a quick login for testing, you can login anonymously with https://commentpara.de/
 
 ## Project Documentation
 
@@ -33,7 +34,6 @@ The release process is still to be determined. See [WXT Publishing Docs](https:/
 
 ## Libraries
 
-- [webextension-polyfill](https://github.com/mozilla/webextension-polyfill): Chrome/Firefox compatibility
 - [micropub-helper](https://github.com/grantcodes/micropub): Micropub API
 - [microformats-parser](https://microformats.github.io/microformats-parser/): Parsing pages
 - [preact](https://preactjs.com/): Rendering

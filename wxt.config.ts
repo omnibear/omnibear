@@ -16,7 +16,6 @@ export default defineConfig({
   publicDir: "./public",
   imports: false,
 
-  modules: ['@wxt-dev/webextension-polyfill'],
   manifest: {
     permissions: ["storage", "contextMenus"],
     host_permissions: ["*://*/*"],

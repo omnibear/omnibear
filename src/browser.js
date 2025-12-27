@@ -7,13 +7,13 @@ if (typeof browser.action === "undefined") {
 }
 
 /**
- * This exists to improve the webextension-polyfill.
- * WXT already applies the polyfill, but this gives more flexibility.
+ * This originally was a reference to the webextension-polyfill.
  * It helps apply the types and allows customization of the polyfill
  * to support differences between Firefox and Chrome.
+ * We might be able to switch to using "wxt/browser" directly in the future.
  *
  * We want to avoid deviating from browser APIs as much as possible.
- * To avoid confusion try to .
+ * To avoid confusion try to use a consistent set of APIs..
  */
 export default browser;
 
