@@ -27,10 +27,30 @@ the [omnibear-site](https://github.com/omnibear/omnibear-site) GitHub repository
 
 The release process is still to be determined. See [WXT Publishing Docs](https://wxt.dev/guide/essentials/publishing.html) for a helpful command once the flow has been improved.
 
+- The first time, set up the credentials: `npx wxt submit init`
+- Run `npm run zip && npm run zip:firefox`
+- Run the below `wxt submit` command after generating zip files
 - Create a git tag
-- Run zip command for both chrome and firefox
 - Create a release in GitHub and attach the resources
-- Upload the zip files to the respective web stores
+- Update the release notes in the web stores
+- Update the release notes on the website
+
+```bash
+npx wxt submit --dry-run \
+    --firefox-zip dist/omnibear-${VERSION}-firefox.zip --firefox-sources-zip dist/omnibear-${VERSION}-sources.zip \
+    --edge-zip dist/omnibear-${VERSION}-chrome.zip
+```
+
+When set up, add Chrome
+```bash
+    --chrome-zip dist/omnibear-${VERSION}-chrome.zip \
+```
+
+Replace `${VERSION}` with your desired version, or set it as an environment variable before running the command:
+
+```bash
+export VERSION=1.2.3
+```
 
 ## Libraries
 
