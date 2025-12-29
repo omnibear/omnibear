@@ -69,15 +69,6 @@ export function generateSlug(content) {
 		.join("-");
 }
 
-export async function getPageUrl() {
-	const { pageTabId: tabId } = await storage.get(["pageTabId"]);
-	return new Promise((resolve) => {
-		browser.tabs.get(Number(tabId), (tab) => {
-			resolve(tab.url);
-		});
-	});
-}
-
 /**
  * @typedef {{
  *   message: string,
