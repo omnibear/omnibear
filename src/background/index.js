@@ -151,10 +151,8 @@ export default function main() {
 		browser.action.openPopup();
 	}
 
-	function registerListeners() {
-		console.log("Registering listeners");
-		browser.runtime.onMessage.addListener(handleMessage);
-		// browser.tabs.onUpdated.addListener(handleTabChange);
+	function onInstall() {
+		info("Extension installed/updated");
 		browser.contextMenus.create({
 			id: "Reply",
 			title: "Reply to entry",
@@ -162,10 +160,11 @@ export default function main() {
 			// Don't want "Reply" menu to appear on extension pages or within the omnibear popup
 			documentUrlPatterns: ["http://*/*", "https://*/*"],
 		});
-		browser.contextMenus.onClicked.addListener(onContextMenuClick);
+		browser.action.setBadgeBackgroundColor({ color: "#444" });
+		browser.action.setBadgeTextColor({ color: "#fff" });
 	}
 
-	browser.runtime.onInstalled.addListener(registerListeners);
-	browser.action.setBadgeBackgroundColor({ color: "#444" });
-	browser.action.setBadgeTextColor({ color: "#fff" });
+	browser.runtime.onInstalled.addListener(onInstall);
+	browser.runtime.onMessage.addListener(handleMessage);
+	browser.contextMenus.onClicked.addListener(onContextMenuClick);
 }
