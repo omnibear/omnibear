@@ -25,6 +25,8 @@ dist
 .wxt
 
 # Config files
+.env
+.env.*
 .webextrc
 .webextrc.*
 web-ext.config.ts
