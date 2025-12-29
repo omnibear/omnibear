@@ -52,7 +52,6 @@ Most of the config files are in the root of the project
 - `tsconfig.json`: TypeScript configuration
 - `vitest.config.ts`: Testing config
 - `.nvmrc`: Which version of Node.js to use
-- `.eslintrc.js`: ESLint config
 - `.editorconfig`: Some code style configuration
 
 ### Entrypoints
