@@ -10,6 +10,10 @@ We welcome contributions to this project.
 1. When the extension loads, open the popup settings and enable logs to help with debugging
 1. If you need a quick login for testing, you can login anonymously with https://commentpara.de/
 
+## Installing a local version
+
+If you want to install a local, unsigned version of Omnibear without running the dev server, see the instructions in the [README.md](/README.md).
+
 ## Project Documentation
 
 Most of the documentation for Omnibear should live on the omnibear.com site.
@@ -23,9 +27,85 @@ the [omnibear-site](https://github.com/omnibear/omnibear-site) GitHub repository
 1. Ensure tests pass (`npm test`)
 1. Clearly describe what the change does in the PR title/description
 
+## Application Structure
+
+The application is divided by the type of entrypoints.
+The entrypoints folder contains files which reference the logic in the corresponding folder.
+
+### Config
+
+Most of the config files are in the root of the project
+
+- `package.json`: NPM project and dependency config
+- `wxt.config.ts`: Build framework config. Also where manifest is configured.
+- `tsconfig.json`: TypeScript configuration for type checking
+- `vitest.config.ts`: Testing config
+- `.nvmrc`: Which version of Node.js to use
+- `.editorconfig`: Some code style configuration
+
+### Entrypoints
+
+Based on the WXT structure, the files under `src/entrypoints` indicate starting points for extension bundles depending on where the code is used.
+Each top level file/folder here will create its own bundle.
+See the following sections for more information.
+
+### Popup
+
+The popup is the UI visible when clicking on the extension icon in the browser toolbar.
+Most of the related code is in the `src/popup` folder.
+This is implemented using the Preact framework which is similar to React.
+To debug this view in Chrome, click the extension icon to view the content and right click to access the inspect menu.
+
+### Background
+
+Thi is the off-UI script that can respond to browser events like tabs changing.
+Since the manifest v3 upgrade, this runs as a service worker and is primarily event based.
+Be aware that this code does not run constantly and will be terminated by the browser when idling.
+The code for this service worker is in `src/background`.
+In Chrome, look for the service worker in the console selector and application settings.
+You can also usually find an inspect link from the browser manage extension view with developer debugging enabled.
+
+### Content Scripts
+
+The `src/content-scripts/page.js` script runs on each webpage to update the record of the current URL and check if it supports webmention.
+There is also a `src/content-scripts/auth.js` script for managing auth responses.
+Both the content scripts pass messages to the background service to avoid impacting the main thread.
+
+### Utils
+
+The `src/util` folder contains various files that potentially can be used in multiple bundles.
+
+### Tests
+
+Unit tests should be written in a *.test.js file next to the file that it is testing.
+Please ensure all unit tests are passing before requesting PR reviews.
+
+### Types
+
+The codebase is incrementally adding type hints using JSDoc comments.
+Please add types for new code as you can but full type coverage is not expected.
+There are many existing type errors (mostly missing types defined as `any`) that you can ignore.
+Currently, I'm not planning on migrating to full TypeScript.
+There are a few type definition files (.d.ts) such as `src/globals.d.ts` which can be helpful for defining reusable types.
+
+## Helpful Docs
+
+- [WXT](https://wxt.dev/): Web extension publishing framework
+- [Chrome Extensions](https://developer.chrome.com/docs/extensions/get-started)
+- [Firefox Extensions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
+- [Mozilla Extension Workshop](https://extensionworkshop.com/)
+
+### Libraries
+
+- [micropub-helper](https://github.com/grantcodes/micropub): Micropub API
+- [microformats-parser](https://microformats.github.io/microformats-parser/): Parsing pages
+- [preact](https://preactjs.com/): Rendering
+
 ## Releases
 
-The release process is still to be determined. See [WXT Publishing Docs](https://wxt.dev/guide/essentials/publishing.html) for a helpful command once the flow has been improved.
+> **Note**: This section is primarily for the project maintainer
+
+ See [WXT Publishing Docs](https://wxt.dev/guide/essentials/publishing.html) for details on the `submit` command.
 
 - The first time, set up the credentials: `npx wxt submit init`
 - Run `npm run zip && npm run zip:firefox`
@@ -51,58 +131,3 @@ Replace `${VERSION}` with your desired version, or set it as an environment vari
 ```bash
 export VERSION=1.2.3
 ```
-
-## Libraries
-
-- [micropub-helper](https://github.com/grantcodes/micropub): Micropub API
-- [microformats-parser](https://microformats.github.io/microformats-parser/): Parsing pages
-- [preact](https://preactjs.com/): Rendering
-
-## Application Structure
-
-The application is divided by the type of entrypoints.
-The entrypoints folder contains files which reference the logic in the corresponding folder.
-
-### Config
-
-Most of the config files are in the root of the project
-
-- `package.json`: NPM project and dependency config
-- `wxt.config.ts`: Build framework config. Also where manifest is configured.
-- `tsconfig.json`: TypeScript configuration
-- `vitest.config.ts`: Testing config
-- `.nvmrc`: Which version of Node.js to use
-- `.editorconfig`: Some code style configuration
-
-### Entrypoints
-
-Based on the WXT structure, the files under `src/entrypoints` indicate starting points for extension bundles depending on where the code is used. See the following sections for more information.
-
-### Popup
-
-The UI visible when clicking on the extension icon in the browser toolbar.
-Most related code is in the `src/popup` folder.
-Preact is the framework of choice for the UI.
-To debug this view in Chrome, click the extension icon to view the content and right click to access the inspect menu.
-
-### Background
-
-Off-UI script that can respond to browser events like tabs changing.
-Since manifest v3, this runs as a service worker and is primarily event based.
-The code for this service worker is in `src/background`.
-In Chrome, look for the service worker in the console selector and application settings.
-
-### Content Scripts
-
-The `src/content-scripts/page.js` script runs on each webpage to update the record of the current URL and check if it supports webmention.
-There is also a `src/content-scripts/auth.js` script for managing auth responses.
-
-### Utils
-
-The `src/util` folder contains various files that potentially can be used in multiple bundles.
-
-## Helpful Docs
-
-- [WXT](https://wxt.dev/): Web extension publishing framework
-- [Chrome Extensions](https://developer.chrome.com/docs/extensions/get-started)
-- [Firefox Extensions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
