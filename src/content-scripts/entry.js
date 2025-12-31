@@ -62,7 +62,7 @@ function findTweet(el) {
 		return false;
 	}
 	const url = `https://twitter.com${element.getAttribute(
-		"data-permalink-path"
+		"data-permalink-path",
 	)}`;
 	const name = element.getAttribute("data-name");
 	return {

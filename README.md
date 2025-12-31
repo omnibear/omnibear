@@ -2,7 +2,7 @@
 
 [![Node.js CI](https://github.com/omnibear/omnibear/actions/workflows/ci.yaml/badge.svg)](https://github.com/omnibear/omnibear/actions/workflows/ci.yaml)
 
-Omnibear is a Micropub client browser extension for posting to your website.  For general usage information and documentation, see https://omnibear.com.
+Omnibear is a Micropub client browser extension for posting to your website. For general usage information and documentation, see https://omnibear.com.
 
 ## Extension Status
 
@@ -24,16 +24,16 @@ Unless you need to run a pre-release version of Omnibear, you should be installi
 To install in Chrome from the repository:
 
 1. Download the .zip file from the [releases](https://github.com/omnibear/omnibear/releases) page OR run `npm run zip` in the repository root (after `npm install`)
-1.  Navigate to [chrome://extensions/](chrome://extensions/)
-2.  Check the “Developer mode” box
-3.  Click “Load unpacked extension”
-3.  Navigate to the downloaded .zip file OR if building locally the .zip file from the `/dist` directory
+1. Navigate to [chrome://extensions/](chrome://extensions/)
+1. Check the “Developer mode” box
+1. Click “Load unpacked extension”
+1. Navigate to the downloaded .zip file OR if building locally the .zip file from the `/dist` directory
 
 To install in Firefox from the repository:
 
 1. Download the .zip file from the [releases](https://github.com/omnibear/omnibear/releases) page OR run `npm run zip:firefox` in the repository root (after `npm install`)
 1. In Firefox, navigate to [about:debugging#/runtime/this-firefox](about:debugging#/runtime/this-firefox) or "Manage Extensions" > "Debug Add-ons"
-2.  Click “Load Temporary Add-On”
-3.  Navigate to the downloaded .zip file OR if building locally the .zip file from the `/dist` directory
+1. Click “Load Temporary Add-On”
+1. Navigate to the downloaded .zip file OR if building locally the .zip file from the `/dist` directory
 
 To install in MS Edge from the repository, follow the Chrome directions.

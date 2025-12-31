@@ -45,7 +45,6 @@ export function isInBackgroundContext() {
 	);
 }
 
-
 /**
  * Typed shortcut to WXT environment variables of what browser is being used.
  */

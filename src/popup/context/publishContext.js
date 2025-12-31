@@ -29,7 +29,7 @@ export function createPublishState() {
 	const currentPageUrl = signal();
 	const currentItemUrl = signal();
 	const selectedEntry = signal(
-		/** @type {import("../../util/micropub").Entry | undefined} */ (undefined)
+		/** @type {import("../../util/micropub").Entry | undefined} */ (undefined),
 	);
 	const isSending = signal();
 	const flashMessage = signal(null);
@@ -157,7 +157,7 @@ export function createPublishState() {
 
 	async function sendNote() {
 		return _send(() =>
-			postNote(draftState.getEntity(), settingsState.aliases.value)
+			postNote(draftState.getEntity(), settingsState.aliases.value),
 		);
 	}
 
@@ -167,9 +167,9 @@ export function createPublishState() {
 				postReply(
 					draftState.getEntity(),
 					selectedEntry.value?.url,
-					settingsState.aliases.value
+					settingsState.aliases.value,
 				),
-			true
+			true,
 		);
 	}
 
@@ -179,9 +179,9 @@ export function createPublishState() {
 				postBookmark(
 					draftState.getEntity(),
 					selectedEntry.value.url,
-					settingsState.aliases.value
+					settingsState.aliases.value,
 				),
-			true
+			true,
 		);
 	}
 

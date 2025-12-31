@@ -10,6 +10,8 @@
     "build:firefox": "wxt build -b firefox --mv3",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox --mv3",
+    "format": "prettier --write .",
+    "check": "prettier --check .",
     "postinstall": "wxt prepare",
     "test": "vitest"
   },
@@ -31,6 +33,7 @@
     "@types/jsdom": "^27.0.0",
     "@webext-core/fake-browser": "^1.3.4",
     "jsdom": "^27.3.0",
+    "prettier": "^3.7.4",
     "vitest": "^4.0.16",
     "wxt": "^0.20.13"
   },

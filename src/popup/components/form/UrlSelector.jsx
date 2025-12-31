@@ -98,7 +98,7 @@ export default function UrlSelector() {
   function findActiveOption() {
     return (
       options.find(
-        (option) => option.url === publish.selectedEntry.value?.url
+        (option) => option.url === publish.selectedEntry.value?.url,
       ) || publish.selectedEntry.value
     );
   }

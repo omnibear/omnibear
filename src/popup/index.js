@@ -12,8 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	try {
 		render(h(App), document.getElementById("app"));
 	} catch (e) {
-		document.getElementById(
-			"app"
-		).innerHTML = `<p>Error rendering Omnibear: ${e}</p>`;
+		document.getElementById("app").innerHTML =
+			`<p>Error rendering Omnibear: ${e}</p>`;
 	}
 });

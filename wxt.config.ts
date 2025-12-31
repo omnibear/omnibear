@@ -24,14 +24,14 @@ export default defineConfig({
         id: "{27d422d7-d781-4ff7-a476-ba7c18601a22}",
         strict_min_version: "140.0",
         data_collection_permissions: {
-          required: ["none"]
-        }
-      }
-    }
+          required: ["none"],
+        },
+      },
+    },
   },
   dev: {
     server: {
       port: 3002,
-    }
+    },
   },
 });

@@ -11,7 +11,7 @@ export default function NoteForm() {
   const draft = useContext(draftContext);
   const settings = useContext(settingsContext);
   const [syndicateOptions, setSyndicateOptions] = useState(
-    settings.syndicateOptions.value
+    settings.syndicateOptions.value,
   );
   const content = useRef(null);
   const onSubmit = (e) => {

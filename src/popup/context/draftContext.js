@@ -22,7 +22,7 @@ export function createDraftState() {
 		tags.value
 			.split(",")
 			.map((t) => t.trim())
-			.filter(Boolean)
+			.filter(Boolean),
 	);
 	const isEmpty = computed(() => !content.value && !slug.value && !title.value);
 

@@ -38,7 +38,7 @@ export async function saveSettings(settings) {
 export async function saveAuthenticationDetails(
 	domain,
 	token,
-	micropubEndpoint
+	micropubEndpoint,
 ) {
 	if (domain) {
 		await storage.set({ domain });

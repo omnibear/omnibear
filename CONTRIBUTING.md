@@ -8,7 +8,7 @@ We welcome contributions to this project.
 1. Install npm dependencies using `npm install` (requires [Node.js](https://nodejs.org/en/download))
 1. Run dev build `npm run dev` to build extension and open a browser with it installed
 1. When the extension loads, open the popup settings and enable logs to help with debugging
-1. If you need a quick login for testing, you can login anonymously with https://commentpara.de/
+1. If you need a quick login for testing, you can login anonymously with https://commentpara.de/ which works for replies and likes
 
 ## Installing a local version
 
@@ -20,11 +20,25 @@ Most of the documentation for Omnibear should live on the omnibear.com site.
 If you would like to contribute documetation, see
 the [omnibear-site](https://github.com/omnibear/omnibear-site) GitHub repository.
 
+## Manual Testing Guide
+
+Ultimately, there should be some end-to-end tests for these.
+But the following are the general flows that should work.
+
+1. You can log into an IndieAuth account that supports micropub
+1. Settings are persisted and applied
+1. The replies view updates to the current page URL
+1. Individual properties of the post forms are sent correctly
+1. You can reply to a particular h-entry on a page with the context menu on a page marked up with h-feed microformats
+1. Check the logs (background, content scripts, and popup) for unexpected errors
+1. All the above should work even after the background service worker terminates (goes idle)
+
 ## PR Submission Guidelines
 
 1. Avoid large PRs without previous discussion in issues
 1. Follow the existing coding standards
 1. Ensure tests pass (`npm test`)
+1. Ensure formatting checks pass (`npm run checks` or run `npm run format` to fix)
 1. Clearly describe what the change does in the PR title/description
 
 ## Application Structure
@@ -77,7 +91,7 @@ The `src/util` folder contains various files that potentially can be used in mul
 
 ### Tests
 
-Unit tests should be written in a *.test.js file next to the file that it is testing.
+Unit tests should be written in a \*.test.js file next to the file that it is testing.
 Please ensure all unit tests are passing before requesting PR reviews.
 
 ### Types
@@ -105,7 +119,7 @@ There are a few type definition files (.d.ts) such as `src/globals.d.ts` which c
 
 > **Note**: This section is primarily for the project maintainer
 
- See [WXT Publishing Docs](https://wxt.dev/guide/essentials/publishing.html) for details on the `submit` command.
+See [WXT Publishing Docs](https://wxt.dev/guide/essentials/publishing.html) for details on the `submit` command.
 
 - The first time, set up the credentials: `npx wxt submit init`
 - Run `npm run zip && npm run zip:firefox`
@@ -122,6 +136,7 @@ npx wxt submit --dry-run \
 ```
 
 When set up, add Chrome
+
 ```bash
     --chrome-zip dist/omnibear-${VERSION}-chrome.zip \
 ```

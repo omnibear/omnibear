@@ -45,7 +45,7 @@ export default function main() {
 				updateFocusedWindow(
 					sender.tab?.id,
 					request.payload.pageEntry,
-					request.payload.selectedEntry
+					request.payload.selectedEntry,
 				);
 				break;
 			case MESSAGE_ACTIONS.SELECT_ENTRY:
@@ -58,7 +58,7 @@ export default function main() {
 				logBasedOnLevel(
 					request.payload.type,
 					request.payload.message,
-					request.payload.data
+					request.payload.data,
 				);
 				appendStoredLogs(request.payload);
 				break;

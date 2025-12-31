@@ -34,7 +34,7 @@ export function createSettingsState() {
 			const storedSettings = storedValues.settings;
 			setStateFromStorage(
 				defaultToCurrentPage,
-				storedSettings.defaultToCurrentPage
+				storedSettings.defaultToCurrentPage,
 			);
 			setStateFromStorage(autoSlug, storedSettings.autoSlug);
 			setStateFromStorage(closeAfterPosting, storedSettings.closeAfterPosting);
@@ -43,7 +43,7 @@ export function createSettingsState() {
 			setStateFromStorage(slugFieldName, storedSettings.slugFieldName);
 			setStateFromStorage(
 				syndicateToFieldName,
-				storedSettings.syndicateToFieldName
+				storedSettings.syndicateToFieldName,
 			);
 		}
 		if (storedValues.syndicateTo) {

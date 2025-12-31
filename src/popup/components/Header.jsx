@@ -8,7 +8,7 @@ const headerViews = [NOTE, REPLY, BOOKMARK, LIKE, REPOST];
 export default function Header() {
   const publish = useContext(publishContext);
   const showUrlSelector = [REPLY, BOOKMARK, LIKE, REPOST].includes(
-    publish.viewType.value
+    publish.viewType.value,
   );
 
   if (!headerViews.includes(publish.viewType.value)) {
