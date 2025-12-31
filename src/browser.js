@@ -2,7 +2,7 @@ import { browser } from "wxt/browser";
 
 if (typeof browser.action === "undefined") {
 	// Manifest v3 combines browserAction and pageAction into action
-	// @ts-ignore
+	// @ts-expect-error the types are not an exact match but close enough
 	browser.action = browser.browserAction;
 }
 

@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from "preact/hooks";
+import { useContext, useRef } from "preact/hooks";
 import { publishContext } from "../../context/publishContext";
 import { draftContext } from "../../context/draftContext";
 import { settingsContext } from "../../context/settingsContext";
@@ -10,9 +10,6 @@ export default function NoteForm() {
   const publish = useContext(publishContext);
   const draft = useContext(draftContext);
   const settings = useContext(settingsContext);
-  const [syndicateOptions, setSyndicateOptions] = useState(
-    settings.syndicateOptions.value,
-  );
   const content = useRef(null);
   const onSubmit = (e) => {
     e.preventDefault();
@@ -78,7 +75,7 @@ export default function NoteForm() {
         />
       </div>
       <SyndicateInputs
-        options={syndicateOptions}
+        options={settings.syndicateOptions.value}
         selected={draft.syndicateList}
         onUpdate={draft.setSyndicateList}
         isDisabled={isLoading}

@@ -38,7 +38,7 @@ But the following are the general flows that should work.
 1. Avoid large PRs without previous discussion in issues
 1. Follow the existing coding standards
 1. Ensure tests pass (`npm test`)
-1. Ensure formatting checks pass (`npm run checks` or run `npm run format` to fix)
+1. Ensure formatting checks pass (`npm run checks`)
 1. Clearly describe what the change does in the PR title/description
 
 ## Application Structure
@@ -53,6 +53,7 @@ Most of the config files are in the root of the project
 - `package.json`: NPM project and dependency config
 - `wxt.config.ts`: Build framework config. Also where manifest is configured.
 - `tsconfig.json`: TypeScript configuration for type checking
+- `eslint.config.js`: ESLint configuration
 - `vitest.config.ts`: Testing config
 - `.nvmrc`: Which version of Node.js to use
 - `.editorconfig`: Some code style configuration
@@ -114,6 +115,9 @@ There are a few type definition files (.d.ts) such as `src/globals.d.ts` which c
 - [micropub-helper](https://github.com/grantcodes/micropub): Micropub API
 - [microformats-parser](https://microformats.github.io/microformats-parser/): Parsing pages
 - [preact](https://preactjs.com/): Rendering
+- [typescript](https://www.typescriptlang.org/): Type checker
+- [eslint](https://eslint.org/): Code linting
+- [prettier](https://prettier.io/): Code formatting
 
 ## Releases
 

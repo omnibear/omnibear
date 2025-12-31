@@ -11,18 +11,6 @@ export function getParamFromUrl(paramName, searchString) {
 	return queryParams.get(paramName);
 }
 
-export function getParamFromUrlString(paramName, params) {
-	var matches = params
-		.split("&")
-		.filter((param) => param.startsWith(`${paramName}=`));
-	if (matches && matches.length) {
-		var value = matches[0].substr(paramName.length + 1);
-		return decodeURIComponent(value);
-	} else {
-		return null;
-	}
-}
-
 /**
  * Removes utm_* params from a URLSearchParams object
  * @param {URLSearchParams} params - URLSearchParams object to modify
@@ -44,7 +32,7 @@ export function cleanUrl(url) {
 	let parsedUrl;
 	try {
 		parsedUrl = new URL(url);
-	} catch (e) {
+	} catch {
 		console.warn(`Invalid URL: ${url}`);
 		return url;
 	}

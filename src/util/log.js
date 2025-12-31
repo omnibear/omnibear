@@ -1,6 +1,6 @@
 import storage from "./storage.js";
 import { MESSAGE_ACTIONS } from "../constants";
-import { isInBackgroundContext } from "@/browser.js";
+import browser, { isInBackgroundContext } from "@/browser.js";
 
 const INFO = "info";
 const WARN = "warn";
@@ -33,9 +33,9 @@ export async function getStoredLogs() {
 	return logs;
 }
 
-/** @param {LogEntry[]} logs */
-async function saveLogsToStorage(logs) {
-	logs = logs;
+/** @param {LogEntry[]} updatedLogs */
+async function saveLogsToStorage(updatedLogs) {
+	logs = updatedLogs;
 	await storage.set({ logs });
 }
 

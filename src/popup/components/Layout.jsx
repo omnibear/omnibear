@@ -1,6 +1,5 @@
 import { useContext } from "preact/hooks";
 import { publishContext } from "../context/publishContext";
-import { authContext } from "../context/authContext";
 import ChangeViewTabs from "./ChangeViewTabs";
 import Header from "./Header";
 import MainPane from "./MainPane";

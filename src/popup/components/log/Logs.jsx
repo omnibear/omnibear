@@ -2,7 +2,7 @@ import { useEffect, useState } from "preact/hooks";
 import LogItem from "./LogItem";
 import { getStoredLogs, clearStoredLogs } from "../../../util/log";
 
-export default function Logs({ onClose }) {
+export default function Logs() {
   const [logs, setLogs] = useState(/** @type {any[]} */ ([]));
 
   useEffect(() => {
