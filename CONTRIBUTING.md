@@ -37,8 +37,8 @@ But the following are the general flows that should work.
 
 1. Avoid large PRs without previous discussion in issues
 1. Follow the existing coding standards
+1. Ensure formatting checks pass (should be run automatically on commit)
 1. Ensure tests pass (`npm test`)
-1. Ensure formatting checks pass (`npm run checks`)
 1. Clearly describe what the change does in the PR title/description
 
 ## Application Structure
