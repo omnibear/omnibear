@@ -16,7 +16,8 @@
     "lint:fix": "eslint . --fix --ext .js,.ts,.jsx,.tsx,.json,.md",
     "check": "npm run format:check && npm run lint:check",
     "postinstall": "wxt prepare",
-    "test": "vitest"
+    "test": "vitest",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -40,7 +41,9 @@
     "@webext-core/fake-browser": "^1.3.4",
     "eslint": "^9.39.2",
     "globals": "^16.5.0",
+    "husky": "^9.1.7",
     "jsdom": "^27.3.0",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
     "typescript-eslint": "^8.51.0",
     "vitest": "^4.0.16",
@@ -51,5 +54,14 @@
     "microformats-parser": "^2.0.4",
     "micropub-helper": "^2.0.1",
     "preact": "^10.28.1"
+  },
+  "lint-staged": {
+    "*.{css,yaml,yml}": [
+      "prettier --write"
+    ],
+    "*.{js,jsx,ts,tsx,json,md}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
