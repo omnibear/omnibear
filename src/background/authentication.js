@@ -49,7 +49,7 @@ export async function fetchToken(code) {
 
 export async function fetchSyndicationTargets() {
 	const response = await micropub.query("syndicate-to");
-	const syndicateTo = response["syndicate-to"];
+	const syndicateTo = response?.["syndicate-to"];
 	info("Syndication targets retrieved", syndicateTo);
 
 	if (Array.isArray(syndicateTo)) {

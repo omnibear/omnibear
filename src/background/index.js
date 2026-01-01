@@ -125,7 +125,12 @@ export default function main() {
 			sendAuthStatusUpdate(`Retrieving access token…`, tabId);
 			await fetchToken(code);
 			sendAuthStatusUpdate("Fetching syndication targets…", tabId);
-			await fetchSyndicationTargets();
+			try {
+				await fetchSyndicationTargets();
+			} catch (err) {
+				logCaughtError("fetching syndication targets")(err);
+				sendAuthStatusUpdate("Error fetching syndication targets", tabId, true);
+			}
 			sendAuthStatusUpdate(`Authentication complete.`, tabId);
 			browser.tabs.remove(tabId);
 		} catch (err) {
@@ -138,11 +143,13 @@ export default function main() {
 	 *
 	 * @param {string} message Status description
 	 * @param {number} tabId Tab to send the update to
+	 * @param {boolean} [isError=false] Whether the status is an error
 	 */
-	async function sendAuthStatusUpdate(message, tabId) {
+	async function sendAuthStatusUpdate(message, tabId, isError = false) {
 		info(message);
 		browser.tabs.sendMessage(tabId, {
 			action: "auth-status-update",
+			isError,
 			payload: { message },
 		});
 	}
