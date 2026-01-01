@@ -6,9 +6,12 @@ We welcome contributions to this project.
 ## Getting Started
 
 1. Install npm dependencies using `npm install` (requires [Node.js](https://nodejs.org/en/download))
-1. Run dev build `npm run dev` to build extension and open a browser with it installed
-1. When the extension loads, open the popup settings and enable logs to help with debugging
-1. If you need a quick login for testing, you can login anonymously with https://commentpara.de/ which works for replies and likes
+1. Run dev build `npm run dev` to build extension and open chrome with the extension installed
+   1. If you would like to test in Firefox, run `npm run dev:firefox` instead
+1. When the browser opens, you may want to open the Extensions menu (usually a puzzle piece icon) and "pin" the extension for easy access
+1. Click on the Omnibear logo to open the popup
+1. In the popup UI, open the settings menu and enable logs to help with debugging
+1. If your site supports micropub, log in with your URL or login anonymously with https://commentpara.de/ which works for replies and likes
 
 ## Installing a local version
 
