@@ -8,7 +8,11 @@
 import browser from "../browser.js";
 import storage from "../util/storage.js";
 import { MESSAGE_ACTIONS } from "../constants.js";
-import { fetchToken, fetchSyndicationTargets } from "./authentication.js";
+import {
+	fetchToken,
+	fetchSyndicationTargets,
+	fetchPostTypes,
+} from "./authentication.js";
 import {
 	info,
 	error,
@@ -124,12 +128,19 @@ export default function main() {
 		try {
 			sendAuthStatusUpdate(`Retrieving access token…`, tabId);
 			await fetchToken(code);
-			sendAuthStatusUpdate("Fetching syndication targets…", tabId);
 			try {
+				sendAuthStatusUpdate("Fetching syndication targets…", tabId);
 				await fetchSyndicationTargets();
 			} catch (err) {
 				logCaughtError("fetching syndication targets")(err);
 				sendAuthStatusUpdate("Error fetching syndication targets", tabId, true);
+			}
+			try {
+				sendAuthStatusUpdate("Fetching post types…", tabId);
+				await fetchPostTypes();
+			} catch (err) {
+				logCaughtError("fetching post types")(err);
+				sendAuthStatusUpdate("Error fetching post types", tabId, true);
 			}
 			sendAuthStatusUpdate(`Authentication complete.`, tabId);
 			browser.tabs.remove(tabId);

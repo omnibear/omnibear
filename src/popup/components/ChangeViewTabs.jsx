@@ -70,10 +70,12 @@ export default function ChangeViewTabs() {
  */
 function ViewTab({ type, label, onBottom }) {
   const publish = useContext(publishContext);
+  const settings = useContext(settingsContext);
   const Icon = ICONS[type];
   return (
     <Tab
       isActive={publish.viewType.value === type}
+      isDisabled={!settings.postTypesMap.value[type]}
       onClick={() => publish.setViewType(type)}
       onBottom={onBottom}
     >

@@ -59,3 +59,16 @@ export async function fetchSyndicationTargets() {
 		storage.set({ syndicateTo: [] });
 	}
 }
+
+export async function fetchPostTypes() {
+	const response = await micropub.query("post-types");
+	const postTypes = response["post-types"];
+	info("Post types retrieved", postTypes);
+
+	if (Array.isArray(postTypes)) {
+		storage.set({ postTypes });
+	} else {
+		warning(`Post types not in array format. Saving as empty array.`);
+		storage.set({ postTypes: [] });
+	}
+}

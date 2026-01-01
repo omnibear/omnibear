@@ -200,6 +200,10 @@ label {
 	padding-top: 1px;
 	border-top: 0;
 }
+.side-nav > button[disabled] {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
 .side-nav > button + button {
 	margin-top: 0.5rem;
 }
