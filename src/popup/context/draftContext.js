@@ -37,6 +37,7 @@ export function createDraftState() {
 		slug.value = draft.slug;
 		syndicateList.value = draft.syndicateTo;
 		type.value = draft.type;
+		isSlugModified.value = Boolean(slug.value);
 	}
 
 	getDraft().then(setValuesFromDraft);
