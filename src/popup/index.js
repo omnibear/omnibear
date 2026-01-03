@@ -1,6 +1,6 @@
 import { render, h } from "preact";
 import App from "./components/App";
-import { setContext } from "../util/log.js";
+import { setContext, error } from "../util/log.js";
 
 setContext("popup");
 
@@ -9,10 +9,23 @@ document.addEventListener("DOMContentLoaded", function () {
 		document.body.classList.add("sidebar");
 	}
 
+	const appEl = document.getElementById("app");
+
+	if (!appEl) {
+		error("No app element found to render Omnibear.");
+		return;
+	}
+
 	try {
-		render(h(App), document.getElementById("app"));
+		render(h(App, {}), appEl);
 	} catch (e) {
-		document.getElementById("app").innerHTML =
-			`<p>Error rendering Omnibear: ${e}</p>`;
+		error("Error rendering Omnibear:", e);
+		while (appEl.firstChild) {
+			appEl.removeChild(appEl.firstChild);
+		}
+		const messageEl = document.createElement("p");
+		const messageText = "message" in e ? e.message : String(e);
+		messageEl.textContent = `Error rendering Omnibear: ${messageText}`;
+		appEl?.appendChild(messageEl);
 	}
 });
