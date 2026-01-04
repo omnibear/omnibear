@@ -169,7 +169,7 @@ export default function main() {
 		browser.action.openPopup();
 	}
 
-	function onInstall() {
+	function onInstall(installDetails) {
 		info("Extension installed/updated");
 		browser.contextMenus.create({
 			id: "Reply",
@@ -180,6 +180,12 @@ export default function main() {
 		});
 		browser.action.setBadgeBackgroundColor({ color: "#444" });
 		browser.action.setBadgeTextColor({ color: "#fff" });
+		if (installDetails.reason === "install") {
+			info("First install, opening welcome page");
+			browser.tabs
+				.create({ url: "https://www.omnibear.com/welcome/" })
+				.catch(logCaughtError("opening welcome page"));
+		}
 	}
 
 	browser.runtime.onInstalled.addListener(onInstall);
