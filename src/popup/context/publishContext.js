@@ -44,7 +44,7 @@ export function createPublishState() {
 
 	// Default to reply if an item is selected from the right click menu
 	storage.get(["itemEntry"]).then(({ itemEntry }) => {
-		if (itemEntry) {
+		if (itemEntry && authState.isLoggedIn.value) {
 			setViewType(REPLY);
 		}
 	});
