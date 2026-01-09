@@ -76,6 +76,7 @@ export default function main() {
 			authEndpoint: payload.metadata.authEndpoint,
 			tokenEndpoint: payload.metadata.tokenEndpoint,
 			micropubEndpoint: payload.metadata.micropub,
+			codeVerifier: payload.metadata.codeVerifier,
 		});
 		await browser.tabs
 			.create({ url: payload.authUrl })

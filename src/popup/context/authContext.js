@@ -58,7 +58,7 @@ export function createAuthState() {
 		errorMessage.value = "";
 		domain.value = newDomain;
 		try {
-			const url = await micropub.getAuthUrl();
+			const { url, codeVerifier } = await micropub.getAuthUrlPkce();
 			log(`authorization_endpoint found: ${url}`);
 			const { authEndpoint, tokenEndpoint, micropubEndpoint } =
 				micropub.options;
@@ -71,6 +71,7 @@ export function createAuthState() {
 						authEndpoint,
 						tokenEndpoint,
 						micropub: micropubEndpoint,
+						codeVerifier,
 					},
 				},
 			});
