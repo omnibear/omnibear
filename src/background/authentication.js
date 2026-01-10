@@ -10,11 +10,13 @@ import { info, warning, error } from "../util/log.js";
  * @param {string} code Auth code
  */
 export async function fetchToken(code) {
-	const { domain, tokenEndpoint, micropubEndpoint } = await storage.get([
-		"domain",
-		"tokenEndpoint",
-		"micropubEndpoint",
-	]);
+	const { domain, tokenEndpoint, micropubEndpoint, codeVerifier } =
+		await storage.get([
+			"domain",
+			"tokenEndpoint",
+			"micropubEndpoint",
+			"codeVerifier",
+		]);
 	micropub.options = {
 		me: domain,
 		tokenEndpoint: tokenEndpoint,
@@ -22,7 +24,7 @@ export async function fetchToken(code) {
 	};
 
 	try {
-		const token = await micropub.getToken(code);
+		const token = await micropub.getToken(code, codeVerifier);
 		if (!token) {
 			throw new Error(
 				"Token not found in token endpoint response. Missing expected field `access_token`",
