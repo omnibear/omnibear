@@ -185,6 +185,9 @@ export default function main() {
 			browser.tabs
 				.create({ url: "https://www.omnibear.com/welcome/" })
 				.catch(logCaughtError("opening welcome page"));
+			browser.action
+				.openPopup()
+				.catch(logCaughtError("opening popup on install"));
 		}
 	}
 
