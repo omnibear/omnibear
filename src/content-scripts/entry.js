@@ -1,7 +1,6 @@
 import browser, { browserContextInvalid } from "../browser.js";
 import { MESSAGE_ACTIONS } from "../constants.js";
 import { mf2 } from "microformats-parser";
-import { getAncestorNode, getAncestorNodeByClass } from "./dom.js";
 import { warning } from "../util/log.js";
 
 const CLASS_NAME = "__omnibear-selected-item";
@@ -37,8 +36,8 @@ export async function focusClickedEntry(e) {
 		entry = await findMastodonPost(e.target);
 	}
 
-	if (!entry && document.location.hostname === "www.facebook.com") {
-		entry = findFacebookPost(e.target);
+	if (!entry && document.location.hostname === "bsky.app") {
+		entry = findBlueskyPost(e.target);
 	}
 
 	if (!entry) {
@@ -73,11 +72,11 @@ async function findMastodonPost(el) {
 	if (!el) {
 		return false;
 	}
-	let element = getAncestorNodeByClass(el, "status__wrapper");
+	let element = el.closest(".status__wrapper");
 	if (!element) {
 		return false;
 	}
-	element = getAncestorNode(element, (e) => e.nodeName === "ARTICLE");
+	element = element.closest("article");
 	const postId = element?.dataset?.id;
 	if (!postId) {
 		return false;
@@ -107,31 +106,28 @@ async function findMastodonPost(el) {
 	}
 }
 
-// TODO: Remove facebook specific code
-function findFacebookPost(el) {
-	const element = getAncestorNode(el, (e) => {
-		return e.id.startsWith("hyperfeed_story_id_");
-	});
+// TODO: Move Bluesky to a separate entry point with it's own permissions
+function findBlueskyPost(el) {
+	const element = el?.closest('[data-testid^="feedItem-"]');
 	if (!element) {
 		return false;
 	}
 
-	let timestamp = element.getElementsByClassName("timestampContent");
-	if (timestamp && timestamp[0]) {
-		timestamp = timestamp[0];
-		while (timestamp.tagName != "A" && timestamp.tagName != "BODY") {
-			timestamp = timestamp.parentElement;
-		}
+	const url = element.querySelector('a[href*="/post/"]')?.href;
 
-		const url = timestamp.href;
-		if (url) {
-			return {
-				element,
-				type: "entry",
-				url,
-				title: "Facebook post",
-			};
-		}
+	const testId = element.dataset?.testid;
+	let handle = url.split("/")[4];
+	if (testId.startsWith("feedItem-by-")) {
+		handle = testId.replace("feedItem-by-", "");
+	}
+
+	if (url) {
+		return {
+			element,
+			type: "entry",
+			url,
+			title: `Bluesky post by ${handle || "unknown user"}`,
+		};
 	}
 
 	return false;
@@ -143,7 +139,7 @@ function findFacebookPost(el) {
  * @returns {typeof currentItem}
  */
 function findHEntry(el) {
-	const element = getAncestorNodeByClass(el, "h-entry");
+	const element = el?.closest(".h-entry,.h-recipe,.h-event");
 	if (!element) {
 		return false;
 	}
