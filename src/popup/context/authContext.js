@@ -58,9 +58,9 @@ export function createAuthState() {
 		errorMessage.value = "";
 		domain.value = newDomain;
 		try {
-			const { url, codeVerifier } = await micropub.getAuthUrlPkce();
+			const url = await micropub.getAuthUrl();
 			log(`authorization_endpoint found: ${url}`);
-			const { authEndpoint, tokenEndpoint, micropubEndpoint } =
+			const { authEndpoint, tokenEndpoint, micropubEndpoint, codeVerifier } =
 				micropub.options;
 			browser.runtime.sendMessage({
 				action: MESSAGE_ACTIONS.BEGIN_AUTH,

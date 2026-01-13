@@ -21,10 +21,11 @@ export async function fetchToken(code) {
 		me: domain,
 		tokenEndpoint: tokenEndpoint,
 		micropubEndpoint: micropubEndpoint,
+		codeVerifier,
 	};
 
 	try {
-		const token = await micropub.getToken(code, codeVerifier);
+		const token = await micropub.getToken(code);
 		if (!token) {
 			throw new Error(
 				"Token not found in token endpoint response. Missing expected field `access_token`",
