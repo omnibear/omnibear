@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox --mv3",
+    "dev:server": "node --env-file=e2e/server/.env.test e2e/server/test-server.js",
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox --mv3",
     "zip": "wxt zip",
@@ -36,6 +37,8 @@
     "@eslint/js": "^9.39.2",
     "@eslint/json": "^0.14.0",
     "@eslint/markdown": "^7.5.1",
+    "@indiekit/indiekit": "^1.0.0-beta.25",
+    "@indiekit/store-file-system": "^1.0.0-beta.25",
     "@preact/preset-vite": "^2.10.2",
     "@types/jsdom": "^27.0.0",
     "@webext-core/fake-browser": "^1.3.4",
