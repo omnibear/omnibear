@@ -16,7 +16,7 @@ body:
       multiple: true
       options:
         - Firefox
-        - Chrome or derrivatives (Edge, Vivaldi
+        - Chrome or derrivatives (Edge, Vivaldi, etc.)
         - Built from source
         - N/A
   - type: dropdown
@@ -40,12 +40,12 @@ body:
       label: Impact
       description: Indicate how this affects your experience
       options:
-        - label: Unable to install
-        - label: Unable to post
-        - label: Limits functionality
-        - label: Disruptive but has workaround
-        - label: Mildly annoying
-        - label: Barely noticable
+        - Unable to install
+        - Unable to post
+        - Limits functionality
+        - Disruptive but has workaround
+        - Mildly annoying
+        - Barely noticable
   - type: textarea
     id: repro
     attributes:
