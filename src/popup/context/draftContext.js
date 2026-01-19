@@ -54,7 +54,7 @@ export function createDraftState() {
 			title: title.value,
 			content: content.value,
 			category: tagsArray.value,
-			slug: slug.value,
+			slug: isSlugModified.value ? slug.value : "",
 			syndicateTo: syndicateList.value,
 			type: type.value,
 		});

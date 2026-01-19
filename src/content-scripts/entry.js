@@ -1,7 +1,7 @@
 import browser, { browserContextInvalid } from "../browser.js";
 import { MESSAGE_ACTIONS } from "../constants.js";
 import { mf2 } from "microformats-parser";
-import { getAncestorNode, getAncestorNodeByClass } from "./dom.js";
+import { warning } from "../util/log.js";
 
 const CLASS_NAME = "__omnibear-selected-item";
 /** @type {false | null | {element: HTMLElement, title: string, url: string, type: string}} */
@@ -26,17 +26,21 @@ export function removeHighlight() {
 
 /**
  *
- * @param {Event} e
+ * @param {FocusEvent} e
  * @returns
  */
-export function focusClickedEntry(e) {
+export async function focusClickedEntry(e) {
 	clearItem();
 	let entry = null;
-	if (document.location.hostname === "twitter.com") {
-		entry = findTweet(e.target);
-	} else if (document.location.hostname === "www.facebook.com") {
-		entry = findFacebookPost(e.target);
-	} else {
+	if (potentialMastodonInstance()) {
+		entry = await findMastodonPost(e.target);
+	}
+
+	if (!entry && document.location.hostname === "bsky.app") {
+		entry = findBlueskyPost(e.target);
+	}
+
+	if (!entry) {
 		entry = findHEntry(e.target);
 	}
 
@@ -55,49 +59,75 @@ export function focusClickedEntry(e) {
 	currentItem = entry;
 }
 
-// TODO: Remove twitter specific code
-function findTweet(el) {
-	const element = getAncestorNodeByClass(el, "tweet");
-	if (!element) {
-		return false;
-	}
-	const url = `https://twitter.com${element.getAttribute(
-		"data-permalink-path",
-	)}`;
-	const name = element.getAttribute("data-name");
-	return {
-		element,
-		type: "entry",
-		url,
-		title: `Tweet by ${name}`,
-	};
+function potentialMastodonInstance() {
+	return Boolean(document.querySelector("#mastodon article .status__wrapper"));
 }
 
-// TODO: Remove facebook specific code
-function findFacebookPost(el) {
-	const element = getAncestorNode(el, (e) => {
-		return e.id.startsWith("hyperfeed_story_id_");
-	});
+/**
+ * Finds the details of a Mastodon post from an element
+ * @param {HTMLElement | null} el Element the user right clicked on
+ * @returns Entry object
+ */
+async function findMastodonPost(el) {
+	if (!el) {
+		return false;
+	}
+	let element = el.closest(".status__wrapper");
+	if (!element) {
+		return false;
+	}
+	element = element.closest("article");
+	const postId = element?.dataset?.id;
+	if (!postId) {
+		return false;
+	}
+
+	try {
+		const response = await fetch(`/api/v1/statuses/${postId}`, {
+			credentials: "include",
+		});
+		if (!response.ok) {
+			return false;
+		}
+		var {
+			url,
+			account: { display_name: name },
+		} = await response.json();
+
+		return {
+			element,
+			type: "entry",
+			url,
+			title: `Mastodon post by ${name}`,
+		};
+	} catch (e) {
+		warning("Error fetching Mastodon post data", e);
+		return false;
+	}
+}
+
+// TODO: Move Bluesky to a separate entry point with it's own permissions
+function findBlueskyPost(el) {
+	const element = el?.closest('[data-testid^="feedItem-"]');
 	if (!element) {
 		return false;
 	}
 
-	let timestamp = element.getElementsByClassName("timestampContent");
-	if (timestamp && timestamp[0]) {
-		timestamp = timestamp[0];
-		while (timestamp.tagName != "A" && timestamp.tagName != "BODY") {
-			timestamp = timestamp.parentElement;
-		}
+	const url = element.querySelector('a[href*="/post/"]')?.href;
 
-		const url = timestamp.href;
-		if (url) {
-			return {
-				element,
-				type: "entry",
-				url,
-				title: "Facebook post",
-			};
-		}
+	const testId = element.dataset?.testid;
+	let handle = url.split("/")[4];
+	if (testId.startsWith("feedItem-by-")) {
+		handle = testId.replace("feedItem-by-", "");
+	}
+
+	if (url) {
+		return {
+			element,
+			type: "entry",
+			url,
+			title: `Bluesky post by ${handle || "unknown user"}`,
+		};
 	}
 
 	return false;
@@ -109,7 +139,7 @@ function findFacebookPost(el) {
  * @returns {typeof currentItem}
  */
 function findHEntry(el) {
-	const element = getAncestorNodeByClass(el, "h-entry");
+	const element = el?.closest(".h-entry,.h-recipe,.h-event");
 	if (!element) {
 		return false;
 	}
