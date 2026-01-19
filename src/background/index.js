@@ -76,6 +76,7 @@ export default function main() {
 			authEndpoint: payload.metadata.authEndpoint,
 			tokenEndpoint: payload.metadata.tokenEndpoint,
 			micropubEndpoint: payload.metadata.micropub,
+			codeVerifier: payload.metadata.codeVerifier,
 		});
 		await browser.tabs
 			.create({ url: payload.authUrl })
@@ -142,7 +143,7 @@ export default function main() {
 				logCaughtError("fetching post types")(err);
 				sendAuthStatusUpdate("Error fetching post types", tabId, true);
 			}
-			sendAuthStatusUpdate(`Authentication complete.`, tabId);
+			await sendAuthStatusUpdate(`Authentication complete.`, tabId);
 			browser.tabs.remove(tabId);
 		} catch (err) {
 			error(err.message, err);
@@ -156,13 +157,15 @@ export default function main() {
 	 * @param {number} tabId Tab to send the update to
 	 * @param {boolean} [isError=false] Whether the status is an error
 	 */
-	async function sendAuthStatusUpdate(message, tabId, isError = false) {
+	function sendAuthStatusUpdate(message, tabId, isError = false) {
 		info(message);
-		browser.tabs.sendMessage(tabId, {
-			action: "auth-status-update",
-			isError,
-			payload: { message },
-		});
+		return browser.tabs
+			.sendMessage(tabId, {
+				action: "auth-status-update",
+				isError,
+				payload: { message },
+			})
+			.catch(logCaughtError(`sending auth status update '${message}' `));
 	}
 
 	function onContextMenuClick() {
