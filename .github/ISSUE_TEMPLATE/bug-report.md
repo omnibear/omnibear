@@ -1,8 +1,9 @@
 ---
 name: Bug report
 about: Report an Omnibear bug
-labels: "bug"
-type: Bug
+title: "[BUG]: "
+labels: ["bug", "need-help-reproducing"]
+type: bug
 body:
 - type: textarea
   id: problem
@@ -28,6 +29,12 @@ body:
       - Zip file
       - Built from source
       - N/A
+- type: input
+  id: version
+  attributes:
+    label: Extension Version
+    description: "What version of Omnibear do you have installed?"
+    placeholder: "v2.0.1"
 - type: dropdown
   id: priority
   attributes:
