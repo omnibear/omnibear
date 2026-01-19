@@ -165,7 +165,18 @@ export default function main() {
 		});
 	}
 
-	function onContextMenuClick() {
+	async function onContextMenuClick(info) {
+		if (info.menuItemId === "Bookmark") {
+			const bookmarkEntry = {
+				type: ["h-entry"],
+				properties: {
+					"bookmark-of": [info.linkUrl],
+				},
+			};
+			await selectEntry(bookmarkEntry);
+		} else {
+			await clearEntry();
+		}
 		browser.action.openPopup();
 	}
 
@@ -176,6 +187,13 @@ export default function main() {
 			title: "Reply to entry",
 			contexts: ["page", "image", "link", "audio", "video", "selection"],
 			// Don't want "Reply" menu to appear on extension pages or within the omnibear popup
+			documentUrlPatterns: ["http://*/*", "https://*/*"],
+		});
+
+		browser.contextMenus.create({
+			id: "Bookmark",
+			title: "Bookmark link",
+			contexts: ["link"],
 			documentUrlPatterns: ["http://*/*", "https://*/*"],
 		});
 		browser.action.setBadgeBackgroundColor({ color: "#444" });
