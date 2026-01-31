@@ -11,7 +11,10 @@ We welcome contributions to this project.
 1. When the browser opens, you may want to open the Extensions menu (usually a puzzle piece icon) and "pin" the extension for easy access
 1. Click on the Omnibear logo to open the popup
 1. In the popup UI, open the settings menu and enable logs to help with debugging
-1. If your site supports micropub, log in with your URL or login anonymously with https://commentpara.de/ which works for replies and likes
+1. Login with a micropub server (several options)
+   1. Your site if it supports micropub
+   1. Anonymously with https://commentpara.de/ (works for replies and likes)
+   1. Spin up a local server with `npm run dev:server` and login with http://localhost:4000
 
 ## Installing a local version
 

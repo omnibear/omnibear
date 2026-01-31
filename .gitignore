@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 *.local
 dist
+e2e/server/posts
 
 # Editor directories and files
 .vscode/*
@@ -27,6 +28,7 @@ dist
 # Config files
 .env
 .env.*
+!e2e/server/.env.test
 .webextrc
 .webextrc.*
 web-ext.config.ts
