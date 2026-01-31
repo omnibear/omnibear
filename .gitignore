@@ -30,3 +30,10 @@ dist
 .webextrc
 .webextrc.*
 web-ext.config.ts
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
