@@ -50,9 +50,9 @@
     "wxt": "^0.20.13"
   },
   "dependencies": {
+    "@aciccarello/micropub-helper": "^3.0.0",
     "@preact/signals": "^2.5.1",
     "microformats-parser": "^2.0.4",
-    "micropub-helper": "^2.0.1",
     "preact": "^10.28.2"
   },
   "lint-staged": {
