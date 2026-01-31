@@ -15,7 +15,14 @@ export default defineConfig([
 			globals: {
 				...globals.browser,
 				...globals.serviceworker,
+				chrome: "readonly",
 			},
+		},
+	},
+	{
+		files: ["e2e/**/*.{js,mjs,cjs,ts,mts,cts}"],
+		rules: {
+			"no-empty-pattern": "off",
 		},
 	},
 	tseslint.configs.recommended,
