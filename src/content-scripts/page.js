@@ -36,7 +36,9 @@ function sendFocusMessage() {
 }
 
 function pageSupportsWebmention() {
-	return !!document.querySelector('link[rel="webmention"],a[rel="webmention"]');
+	return !!document.querySelector(
+		'link[rel~="webmention"],a[rel~="webmention"]',
+	);
 }
 
 export default async function main() {

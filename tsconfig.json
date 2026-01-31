@@ -4,7 +4,8 @@
     "allowJs": true,
     "checkJs": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "preact"
+    "jsxImportSource": "preact",
+    "types": ["chrome"]
   },
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.d.ts"]
 }
