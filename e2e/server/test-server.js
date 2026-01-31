@@ -1,7 +1,7 @@
 import http from "http";
 import { Indiekit } from "@indiekit/indiekit";
 import makeDebug from "debug";
-import { rmdir } from "node:fs/promises";
+import { rm } from "node:fs/promises";
 
 const hostname = "localhost"; // or */ "127.0.0.1";
 const websitePort = 4000;
@@ -48,11 +48,13 @@ function startWebsiteServer() {
  * The micropub requests will be saved to the local file system.
  */
 async function startMicropubServer() {
-	await rmdir("e2e/server/posts", { recursive: true, force: true });
+	await rm("e2e/server/posts", { recursive: true, force: true }).catch(
+		() => console.log,
+	);
 
 	// Indiekit uses the debug package for logging.
 	// Can consider reducing the logging if it is too noisy.
-	makeDebug.enable(`*`);
+	makeDebug.enable(`indiekit:*`);
 
 	const indiekit = await Indiekit.initialize({
 		config: {
