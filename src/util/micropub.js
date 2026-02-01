@@ -1,4 +1,4 @@
-import Micropub from "micropub-helper";
+import Micropub from "@aciccarello/micropub-helper";
 import storage from "./storage";
 import { AUTH_SUCCESS_URL } from "../constants";
 

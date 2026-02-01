@@ -10,15 +10,18 @@ import { info, warning, error } from "../util/log.js";
  * @param {string} code Auth code
  */
 export async function fetchToken(code) {
-	const { domain, tokenEndpoint, micropubEndpoint } = await storage.get([
-		"domain",
-		"tokenEndpoint",
-		"micropubEndpoint",
-	]);
+	const { domain, tokenEndpoint, micropubEndpoint, codeVerifier } =
+		await storage.get([
+			"domain",
+			"tokenEndpoint",
+			"micropubEndpoint",
+			"codeVerifier",
+		]);
 	micropub.options = {
 		me: domain,
 		tokenEndpoint: tokenEndpoint,
 		micropubEndpoint: micropubEndpoint,
+		codeVerifier,
 	};
 
 	try {

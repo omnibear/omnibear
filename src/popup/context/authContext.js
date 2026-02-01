@@ -60,7 +60,7 @@ export function createAuthState() {
 		try {
 			const url = await micropub.getAuthUrl();
 			log(`authorization_endpoint found: ${url}`);
-			const { authEndpoint, tokenEndpoint, micropubEndpoint } =
+			const { authEndpoint, tokenEndpoint, micropubEndpoint, codeVerifier } =
 				micropub.options;
 			browser.runtime.sendMessage({
 				action: MESSAGE_ACTIONS.BEGIN_AUTH,
@@ -71,6 +71,7 @@ export function createAuthState() {
 						authEndpoint,
 						tokenEndpoint,
 						micropub: micropubEndpoint,
+						codeVerifier,
 					},
 				},
 			});
