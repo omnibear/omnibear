@@ -26,22 +26,30 @@ export function removeHighlight() {
 
 /**
  *
- * @param {FocusEvent} e
+ * @param {FocusEvent} event
  * @returns
  */
-export async function focusClickedEntry(e) {
+export async function focusClickedEntry(event) {
 	clearItem();
 	let entry = null;
-	if (potentialMastodonInstance()) {
-		entry = await findMastodonPost(e.target);
+
+	const element = /** @type {HTMLElement | null} */ (event.target);
+	const document = element?.ownerDocument;
+
+	if (!element || !document) {
+		return;
+	}
+
+	if (potentialMastodonInstance(document)) {
+		entry = await findMastodonPost(element);
 	}
 
 	if (!entry && document.location.hostname === "bsky.app") {
-		entry = findBlueskyPost(e.target);
+		entry = findBlueskyPost(element);
 	}
 
 	if (!entry) {
-		entry = findHEntry(e.target);
+		entry = findHEntry(element);
 	}
 
 	if (!entry || typeof entry !== "object" || browserContextInvalid()) {
@@ -55,31 +63,36 @@ export async function focusClickedEntry(e) {
 			title: entry.title || "",
 		},
 	});
-	entry.element.classList.add(CLASS_NAME);
+	entry?.element?.classList.add(CLASS_NAME);
 	currentItem = entry;
 }
 
-function potentialMastodonInstance() {
+/**
+ * @param {Document} document Document element for the page
+ * @returns
+ */
+function potentialMastodonInstance(document) {
 	return Boolean(document.querySelector("#mastodon article .status__wrapper"));
 }
 
 /**
  * Finds the details of a Mastodon post from an element
  * @param {HTMLElement | null} el Element the user right clicked on
- * @returns Entry object
+ * @returns Entry object or void
  */
 async function findMastodonPost(el) {
 	if (!el) {
-		return false;
+		return;
 	}
+	/** @type {HTMLElement | null} */
 	let element = el.closest(".status__wrapper");
 	if (!element) {
-		return false;
+		return;
 	}
 	element = element.closest("article");
 	const postId = element?.dataset?.id;
 	if (!postId) {
-		return false;
+		return;
 	}
 
 	try {
@@ -87,9 +100,9 @@ async function findMastodonPost(el) {
 			credentials: "include",
 		});
 		if (!response.ok) {
-			return false;
+			return;
 		}
-		var {
+		const {
 			url,
 			account: { display_name: name },
 		} = await response.json();
@@ -102,22 +115,30 @@ async function findMastodonPost(el) {
 		};
 	} catch (e) {
 		warning("Error fetching Mastodon post data", e);
-		return false;
+		return;
 	}
 }
 
 // TODO: Move Bluesky to a separate entry point with it's own permissions
+// Could be implemented as part of https://github.com/omnibear/omnibear/issues/120
+/**
+ * Finds the details of a Bluesky post from an element
+ * @param {HTMLElement | null} el Element the user right clicked on
+ * @returns Entry object or void
+ */
 function findBlueskyPost(el) {
-	const element = el?.closest('[data-testid^="feedItem-"]');
+	const element = /** @type {HTMLElement | null | undefined} */ (
+		el?.closest('[data-testid^="feedItem-"],[data-testid^="postThreadItem-"]')
+	);
 	if (!element) {
-		return false;
+		return;
 	}
 
 	const url = element.querySelector('a[href*="/post/"]')?.href;
 
 	const testId = element.dataset?.testid;
 	let handle = url.split("/")[4];
-	if (testId.startsWith("feedItem-by-")) {
+	if (testId && testId.startsWith("feedItem-by-")) {
 		handle = testId.replace("feedItem-by-", "");
 	}
 
@@ -130,18 +151,19 @@ function findBlueskyPost(el) {
 		};
 	}
 
-	return false;
+	return;
 }
 
 /**
  *
- * @param {HTMLElement} el HTML Element to look in
- * @returns {typeof currentItem}
+ * @param {HTMLElement | null} el HTML Element to look in
+ * @returns {typeof currentItem | void}
  */
 function findHEntry(el) {
+	/** @type {HTMLElement | null | undefined} */
 	const element = el?.closest(".h-entry,.h-recipe,.h-event");
 	if (!element) {
-		return false;
+		return;
 	}
 	const mf = mf2(element.outerHTML, {
 		baseUrl: document.location.href,
@@ -161,13 +183,13 @@ function findHEntry(el) {
 	}
 	if (!url) {
 		if (element.tagName === "BODY") {
-			return false;
+			return;
 		} else {
 			return findHEntry(element.parentElement);
 		}
 	}
 	if (typeof url !== "string") {
-		return false;
+		return;
 	}
 	return { element, url, title, type: "entry" };
 }
