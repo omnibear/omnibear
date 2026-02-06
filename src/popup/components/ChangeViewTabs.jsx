@@ -71,16 +71,22 @@ export default function ChangeViewTabs() {
 function ViewTab({ type, label, onBottom }) {
   const publish = useContext(publishContext);
   const settings = useContext(settingsContext);
-  const Icon = ICONS[type];
+  const Icon = ICONS[type] ?? ICONS[NOTE];
+  // If the post type is supported but has no custom name, use the default label
+  const configuredName = settings.postTypesMap.value[type];
+  const displayName = (
+    typeof configuredName !== "string" ? label : configuredName
+  ).replace(" ", UNICODE_NBSP);
+
   return (
     <Tab
       isActive={publish.viewType.value === type}
-      isDisabled={!settings.postTypesMap.value[type]}
+      isDisabled={!configuredName}
       onClick={() => publish.setViewType(type)}
       onBottom={onBottom}
     >
       <Icon />
-      {label.replace(" ", UNICODE_NBSP)}
+      {displayName}
     </Tab>
   );
 }

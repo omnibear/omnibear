@@ -34,7 +34,7 @@ export function createSettingsState() {
 	const postTypesMap = computed(() => {
 		// If no post types are configured, assume all are supported
 		const defaultSupport = !(postTypesOptions.value?.length > 0);
-		/** @type {Record<string, boolean>} */
+		/** @type {Record<string, boolean | string>} */
 		const map = {
 			[NOTE]: defaultSupport,
 			[REPLY]: defaultSupport,
@@ -47,7 +47,7 @@ export function createSettingsState() {
 		};
 		for (const postType of postTypesOptions.value || []) {
 			if (postType.type in map) {
-				map[postType.type] = true;
+				map[postType.type] = postType.name || true;
 			}
 		}
 

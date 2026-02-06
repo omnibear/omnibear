@@ -6,7 +6,7 @@
  * @param {boolean} [props.isDisabled] Whether the tab is disabled
  * @param {boolean} [props.onBottom] Whether to align the tab to the bottom of the menu
  * @param {function} props.onClick Click handler
- * @param {import("preact").JSX.Element} props.children Tab content
+ * @param {any} props.children Tab content
  */
 export default function Tab({
   isActive,
