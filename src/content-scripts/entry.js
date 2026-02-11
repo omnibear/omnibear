@@ -40,9 +40,7 @@ export async function focusClickedEntry(event) {
 		return;
 	}
 
-	if (potentialMastodonInstance(document)) {
-		entry = await findMastodonPost(element);
-	}
+	entry = await findMastodonPost(element);
 
 	if (!entry && document.location.hostname === "bsky.app") {
 		entry = findBlueskyPost(element);
@@ -68,31 +66,38 @@ export async function focusClickedEntry(event) {
 }
 
 /**
- * @param {Document} document Document element for the page
- * @returns
- */
-function potentialMastodonInstance(document) {
-	return Boolean(document.querySelector("#mastodon article .status__wrapper"));
-}
-
-/**
- * Finds the details of a Mastodon post from an element
- * @param {HTMLElement | null} el Element the user right clicked on
+ * Finds the details of a Mastodon post from an element.
+ *
+ * @param {HTMLElement | null} eventTarget Element the user right clicked on
  * @returns Entry object or void
  */
-async function findMastodonPost(el) {
-	if (!el) {
-		return;
-	}
-	/** @type {HTMLElement | null} */
-	let element = el.closest(".status__wrapper");
-	if (!element) {
-		return;
-	}
-	element = element.closest("article");
+async function findMastodonPost(eventTarget) {
+	/** Check if feed element selected @type {HTMLElement | null | undefined} */
+	const element = eventTarget?.closest("#mastodon .status[data-id]");
 	const postId = element?.dataset?.id;
 	if (!postId) {
-		return;
+		/*
+		 * Check if there is a mastodon post on the page or if we are in an embed iframe
+		 */
+		const mastodonPost = eventTarget?.ownerDocument.querySelector(
+			"#mastodon .detailed-status, #mastodon-status",
+		);
+		const name = mastodonPost
+			?.querySelector(".display-name__html")
+			?.textContent?.trim();
+		const url =
+			eventTarget?.ownerDocument.querySelector('link[rel="canonical"]')?.href ||
+			mastodonPost?.querySelector("a.embed__overlay")?.href;
+		if (!mastodonPost || !name || !url) {
+			return;
+		}
+
+		return {
+			element: mastodonPost,
+			type: "entry",
+			url,
+			title: `Mastodon post by ${name}`,
+		};
 	}
 
 	try {
@@ -160,13 +165,11 @@ function findBlueskyPost(el) {
  * @returns {typeof currentItem | void}
  */
 function findHEntry(el) {
+	const doc = el?.ownerDocument ?? document;
 	/** @type {HTMLElement | null | undefined} */
-	const element = el?.closest(".h-entry,.h-recipe,.h-event");
-	if (!element) {
-		return;
-	}
+	const element = el?.closest(".h-entry,.h-recipe,.h-event") ?? doc.body;
 	const mf = mf2(element.outerHTML, {
-		baseUrl: document.location.href,
+		baseUrl: doc.location.href,
 		experimental: {
 			lang: true,
 			metaformats: true,

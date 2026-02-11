@@ -21,7 +21,7 @@ describe(focusClickedEntry.name, () => {
 	beforeEach(() => {
 		fakeBrowser.reset();
 		fetchMock.mockReset();
-		sendMessageSpy = vi.spyOn(browser.runtime, "sendMessage");
+		sendMessageSpy.mockReset();
 	});
 
 	it("should find a mastodon post in a feed", async () => {
@@ -57,31 +57,77 @@ describe(focusClickedEntry.name, () => {
 
 	it("should find a mastodon post in a post page", async () => {
 		const dirname = fileURLToPath(new URL("./fixtures", import.meta.url));
-		const mastodonFeed = await readFile(
+		const mastodonPost = await readFile(
 			join(dirname, "mastodon-post.html"),
 			"utf-8",
 		);
 		const mastodonApi = await readFile(
-			join(dirname, "mastodon-feed-post.json"),
+			join(dirname, "mastodon-post-comment.json"),
 			"utf-8",
 		);
-		const { window } = new JSDOM(mastodonFeed, {
-			url: "https://indieweb.social/tags/indieweb",
+		const { window } = new JSDOM(mastodonPost, {
+			url: "https://indieweb.social/@alabut@techhub.social/115980505754407833",
 		});
 		fetchMock.mockResolvedValue(createFetchResponse(JSON.parse(mastodonApi)));
 
-		const secondPost = window.document.querySelectorAll(".status__info")[0];
+		const comment = window.document.querySelectorAll(".status__info")[5];
 		/** @type {any} */
-		const mockEvent = { target: secondPost };
+		const mockEventOne = { target: comment };
 
-		await focusClickedEntry(mockEvent);
+		await focusClickedEntry(mockEventOne);
 
 		expect(sendMessageSpy).toHaveBeenCalledWith({
 			action: MESSAGE_ACTIONS.SELECT_ENTRY,
 			payload: {
 				type: "item",
-				url: "https://caneandable.social/@WeirdWriter/115994330375025255",
-				title: "Mastodon post by Robert Kingett",
+				url: "https://shellsharks.social/@shellsharks/115984895197933759",
+				title: "Mastodon post by shellsharks",
+			},
+		});
+		sendMessageSpy.mockClear();
+
+		const primaryPost = window.document.querySelector(
+			".detailed-status .status__content",
+		);
+		/** @type {any} */
+		const mockEventTwo = { target: primaryPost };
+
+		await focusClickedEntry(mockEventTwo);
+
+		expect(sendMessageSpy).toHaveBeenCalledWith({
+			action: MESSAGE_ACTIONS.SELECT_ENTRY,
+			payload: {
+				type: "item",
+				url: "https://techhub.social/@alabut/115980505718574875",
+				title: "Mastodon post by Al Abut",
+			},
+		});
+	});
+
+	it("should find a mastodon post in an embed", async () => {
+		const dirname = fileURLToPath(new URL("./fixtures", import.meta.url));
+		const mastodonEmbed = await readFile(
+			join(dirname, "mastodon-embed.html"),
+			"utf-8",
+		);
+		const { window } = new JSDOM(mastodonEmbed, {
+			url: "https://techhub.social/@alabut/115980505718574875/embed",
+		});
+
+		const primaryPost = window.document.querySelector(
+			".detailed-status .status__content",
+		);
+		/** @type {any} */
+		const mockEventTwo = { target: primaryPost };
+
+		await focusClickedEntry(mockEventTwo);
+
+		expect(sendMessageSpy).toHaveBeenCalledWith({
+			action: MESSAGE_ACTIONS.SELECT_ENTRY,
+			payload: {
+				type: "item",
+				url: "https://techhub.social/@alabut/115980505718574875",
+				title: "Mastodon post by Al Abut",
 			},
 		});
 	});
