@@ -15,6 +15,7 @@ export default defineConfig([
 			globals: {
 				...globals.browser,
 				...globals.serviceworker,
+				...globals.node, // Needed for access to global in tests
 			},
 		},
 	},

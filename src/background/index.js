@@ -146,7 +146,7 @@ export default function main() {
 			await sendAuthStatusUpdate(`Authentication complete.`, tabId);
 			browser.tabs.remove(tabId);
 		} catch (err) {
-			error(err.message, err);
+			error(/** @type {Error} */ (err).message, err);
 		}
 	}
 
@@ -172,6 +172,9 @@ export default function main() {
 		browser.action.openPopup();
 	}
 
+	/**
+	 * @param {import("wxt/browser").Browser.runtime.InstalledDetails} installDetails
+	 */
 	function onInstall(installDetails) {
 		info("Extension installed/updated");
 		browser.contextMenus.create({

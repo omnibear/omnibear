@@ -1,0 +1,101 @@
+{
+  "id": "115994330784616458",
+  "created_at": "2026-02-01T08:03:39.000Z",
+  "in_reply_to_id": null,
+  "in_reply_to_account_id": null,
+  "sensitive": false,
+  "spoiler_text": "",
+  "visibility": "public",
+  "language": "en",
+  "uri": "https://caneandable.social/users/WeirdWriter/statuses/115994330375025255",
+  "url": "https://caneandable.social/@WeirdWriter/115994330375025255",
+  "replies_count": 0,
+  "reblogs_count": 5,
+  "favourites_count": 0,
+  "quotes_count": 0,
+  "edited_at": null,
+  "content": "<p>How LLMs &amp; Chatbots Are Bad For the Indie Web <a href=\"https://osteophage.neocities.org/essays/bots-bad-indie-web\" rel=\"nofollow noopener\" translate=\"no\" target=\"_blank\"><span class=\"invisible\">https://</span><span class=\"ellipsis\">osteophage.neocities.org/essay</span><span class=\"invisible\">s/bots-bad-indie-web</span></a> <a href=\"https://caneandable.social/tags/LLM\" class=\"mention hashtag\" rel=\"nofollow noopener\" target=\"_blank\">#<span>LLM</span></a> <a href=\"https://caneandable.social/tags/AI\" class=\"mention hashtag\" rel=\"nofollow noopener\" target=\"_blank\">#<span>AI</span></a> <a href=\"https://caneandable.social/tags/IndieWeb\" class=\"mention hashtag\" rel=\"nofollow noopener\" target=\"_blank\">#<span>IndieWeb</span></a></p>",
+  "reblog": null,
+  "account": {
+    "id": "113277638411075157",
+    "username": "WeirdWriter",
+    "acct": "WeirdWriter@caneandable.social",
+    "display_name": "Robert Kingett",
+    "locked": false,
+    "bot": false,
+    "discoverable": true,
+    "indexable": true,
+    "group": false,
+    "created_at": "2024-10-08T00:00:00.000Z",
+    "note": "<p>I’m  a blind and gay romance writer that loves fiction podcasts, audiobooks, cookies, and cats! I follow more hashtags than people. Because I take frequent social media breaks, the best way to reach me quickly is via my website or email.</p>",
+    "url": "https://caneandable.social/@WeirdWriter",
+    "uri": "https://caneandable.social/users/WeirdWriter",
+    "avatar": "https://cdn.masto.host/indiewebsocial/cache/accounts/avatars/113/277/638/411/075/157/original/29d76d74fb5b70c1.jpg",
+    "avatar_static": "https://cdn.masto.host/indiewebsocial/cache/accounts/avatars/113/277/638/411/075/157/original/29d76d74fb5b70c1.jpg",
+    "header": "https://indieweb.social/headers/original/missing.png",
+    "header_static": "https://indieweb.social/headers/original/missing.png",
+    "followers_count": 3697,
+    "following_count": 237,
+    "statuses_count": 1175,
+    "last_status_at": "2026-02-01",
+    "hide_collections": false,
+    "emojis": [],
+    "fields": [
+      {
+        "name": "Website",
+        "value": "<a href=\"https://sightlessscribbles.com/\" rel=\"nofollow noopener\" translate=\"no\" target=\"_blank\"><span class=\"invisible\">https://</span><span class=\"\">sightlessscribbles.com/</span><span class=\"invisible\"></span></a>",
+        "verified_at": null
+      },
+      {
+        "name": "RSS",
+        "value": "<a href=\"https://sightlessscribbles.com/feed.xml\" rel=\"nofollow noopener\" translate=\"no\" target=\"_blank\"><span class=\"invisible\">https://</span><span class=\"\">sightlessscribbles.com/feed.xml</span><span class=\"invisible\"></span></a>",
+        "verified_at": null
+      },
+      {
+        "name": "Newsletter",
+        "value": "<a href=\"https://buttondown.com/weirdwriter/\" target=\"_blank\" rel=\"nofollow noopener\" translate=\"no\"><span class=\"invisible\">https://</span><span class=\"\">buttondown.com/weirdwriter/</span><span class=\"invisible\"></span></a>",
+        "verified_at": "2026-01-31T06:15:50.216+00:00"
+      },
+      {
+        "name": "Podcast",
+        "value": "<a href=\"https://weirdwritings.pinecast.co/?page=1\" rel=\"nofollow noopener\" translate=\"no\" target=\"_blank\"><span class=\"invisible\">https://</span><span class=\"ellipsis\">weirdwritings.pinecast.co/?pag</span><span class=\"invisible\">e=1</span></a>",
+        "verified_at": null
+      }
+    ]
+  },
+  "media_attachments": [],
+  "mentions": [],
+  "tags": [
+    { "name": "LLM", "url": "https://indieweb.social/tags/LLM" },
+    { "name": "ai", "url": "https://indieweb.social/tags/ai" },
+    { "name": "indieweb", "url": "https://indieweb.social/tags/indieweb" }
+  ],
+  "emojis": [],
+  "quote": null,
+  "card": {
+    "url": "https://osteophage.neocities.org/essays/bots-bad-indie-web",
+    "title": "How LLMs & Chatbots Are Bad For the Indie Web",
+    "description": "Large language models and their associated bots are bad for the indie web in at least three ways: 1) their logistical consequences are bad for bandwidth, 2) their social consequences are bad for guides, and 3) their citational consequences are bad for surfability.",
+    "language": "en",
+    "type": "link",
+    "author_name": "",
+    "author_url": "",
+    "provider_name": "Coyote’s Link Hub",
+    "provider_url": "",
+    "html": "",
+    "width": 0,
+    "height": 0,
+    "image": null,
+    "image_description": "",
+    "embed_url": "",
+    "blurhash": null,
+    "published_at": "2026-01-31T17:25:00.000Z",
+    "authors": []
+  },
+  "poll": null,
+  "quote_approval": {
+    "automatic": ["public"],
+    "manual": [],
+    "current_user": "denied"
+  }
+}
