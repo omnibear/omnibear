@@ -21,13 +21,15 @@ import {
 	logCaughtError,
 	logBasedOnLevel,
 } from "../util/log.js";
+/** @import { Browser } from "wxt/browser"; */
+/** @import { SelectedEntry } from "../omnibear.d.ts"; */
 
 export default function main() {
 	setContext("background");
 	/**
 	 *
 	 * @param {{action: string, payload: any}} request message event
-	 * @param {import("wxt/browser").Browser.runtime.MessageSender} sender
+	 * @param {Browser.runtime.MessageSender} sender
 	 * @returns
 	 */
 	function handleMessage(request, sender) {
@@ -107,6 +109,10 @@ export default function main() {
 		}
 	}
 
+	/**
+	 *
+	 * @param {SelectedEntry | null} [itemEntry]
+	 */
 	async function selectEntry(itemEntry = null) {
 		await storage.set({
 			itemEntry,
@@ -173,7 +179,7 @@ export default function main() {
 	}
 
 	/**
-	 * @param {import("wxt/browser").Browser.runtime.InstalledDetails} installDetails
+	 * @param {Browser.runtime.InstalledDetails} installDetails
 	 */
 	function onInstall(installDetails) {
 		info("Extension installed/updated");

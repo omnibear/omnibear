@@ -2,13 +2,15 @@ import { useContext } from "preact/hooks";
 import { signal } from "@preact/signals";
 import { authContext } from "../../context/authContext";
 
+/** @import {Signal} from "@preact/signals" */
+
 const showFields = signal(false);
 export default function AuthenticationFields() {
   const auth = useContext(authContext);
 
   /**
    * Cleans up the input from dom events
-   * @param {import('@preact/signals').Signal<string>} signal The signal to update
+   * @param {Signal<string>} signal The signal to update
    * @returns A callback function
    */
   const update = (signal) => {

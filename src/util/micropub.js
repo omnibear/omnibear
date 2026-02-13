@@ -2,8 +2,7 @@ import Micropub from "@aciccarello/micropub-helper";
 import storage from "./storage";
 import { AUTH_SUCCESS_URL } from "../constants";
 
-/** @typedef {ReturnType<typeof import("../popup/context/draftContext").Entity>} Entity */
-/** @typedef {ReturnType<typeof import("../util/draft").createEmptyDraft>} Entry */
+/** @import {Entity} from "../omnibear.d.ts" */
 
 const micropub = new Micropub({
 	clientId: "https://omnibear.com",
@@ -53,7 +52,7 @@ storage
 
 /**
  *
- * @param {Entry} entry
+ * @param {Entity} entry
  * @param {*} aliases
  * @returns
  */

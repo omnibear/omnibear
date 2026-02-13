@@ -23,14 +23,13 @@ import { info, warning, error } from "../../util/log";
 import { sanitizeMicropubError } from "../../util/utils";
 import { getParamFromUrl } from "../../util/url";
 import storage from "../../util/storage";
+/** @import {Entry} from "../../omnibear.d.ts" */
 
 export function createPublishState() {
 	const viewType = signal(_determineInitialView());
 	const currentPageUrl = signal();
 	const currentItemUrl = signal();
-	const selectedEntry = signal(
-		/** @type {import("../../util/micropub").Entry | undefined} */ (undefined),
-	);
+	const selectedEntry = signal(/** @type {Entry | undefined} */ (undefined));
 	const isSending = signal();
 	const flashMessage = signal(null);
 
