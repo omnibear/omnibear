@@ -5,7 +5,7 @@ import { AUTH_SUCCESS_URL } from "../constants";
 /** @import {Entity} from "../omnibear.d.ts" */
 
 const micropub = new Micropub({
-	clientId: "https://omnibear.com",
+	clientId: "https://omnibear.com/client_id.json",
 	redirectUri: AUTH_SUCCESS_URL,
 	state: "very-secret-omnibear-state",
 	scope: "create delete update",
