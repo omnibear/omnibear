@@ -157,8 +157,14 @@ function findBlueskyPost(el) {
 		return;
 	}
 
+	// Get current element URL from time link or fallback to page URL
+	// Note: Cannot use canonical URL since SPA doesn't update it on navigation
 	const url =
-		element.querySelector(/** @type {'a'} */ ('a[href*="/post/"]'))?.href || "";
+		element.querySelector(
+			/** @type {'a'} */ ('a[href*="/post/"][data-tooltip]'),
+		)?.href ||
+		element?.ownerDocument.location?.href ||
+		"";
 
 	const testId = element.dataset?.testid;
 	let handle = url.split("/")[4];
@@ -166,7 +172,7 @@ function findBlueskyPost(el) {
 		handle = testId.replace("feedItem-by-", "");
 	}
 
-	if (url) {
+	if (element && url) {
 		return {
 			element,
 			type: "entry",
