@@ -68,6 +68,11 @@ export function createPublishState() {
 		});
 	}
 
+	/**
+	 *
+	 * @param {Entry} entry
+	 * @param {boolean} preserveDraftTitle
+	 */
 	function setSelectedEntry(entry, preserveDraftTitle) {
 		batch(() => {
 			selectedEntry.value = entry;

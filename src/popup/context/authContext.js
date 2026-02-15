@@ -1,11 +1,10 @@
 import { createContext } from "preact";
-import browser from "../../browser";
 import storage from "../../util/storage";
 import { signal, computed, effect } from "@preact/signals";
 import micropub from "../../util/micropub";
 import { sanitizeMicropubError } from "../../util/utils";
 import { info as log, error } from "../../util/log";
-import { MESSAGE_ACTIONS } from "../../constants";
+import { sendBeginAuthMessage } from "../../util/messages";
 
 export function createAuthState() {
 	const domain = signal("");
@@ -62,17 +61,14 @@ export function createAuthState() {
 			log(`authorization_endpoint found: ${url}`);
 			const { authEndpoint, tokenEndpoint, micropubEndpoint, codeVerifier } =
 				micropub.options;
-			browser.runtime.sendMessage({
-				action: MESSAGE_ACTIONS.BEGIN_AUTH,
-				payload: {
-					authUrl: url,
-					domain: newDomain,
-					metadata: {
-						authEndpoint,
-						tokenEndpoint,
-						micropub: micropubEndpoint,
-						codeVerifier,
-					},
+			sendBeginAuthMessage({
+				authUrl: url,
+				domain: newDomain,
+				metadata: {
+					authEndpoint,
+					tokenEndpoint,
+					micropub: micropubEndpoint,
+					codeVerifier,
 				},
 			});
 			authorizationPageOpened.value = true;

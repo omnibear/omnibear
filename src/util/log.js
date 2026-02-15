@@ -1,6 +1,6 @@
 import storage from "./storage.js";
-import { MESSAGE_ACTIONS } from "../constants";
-import browser, { isInBackgroundContext } from "@/browser.js";
+import { isInBackgroundContext } from "../browser.js";
+import { sendLogMessage } from "./messages.js";
 
 const INFO = "info";
 const WARN = "warn";
@@ -95,14 +95,7 @@ async function append(message, data, type) {
 		}
 	}
 	if (!isInBackgroundContext()) {
-		browser.runtime
-			.sendMessage({
-				action: MESSAGE_ACTIONS.LOG_MESSAGE,
-				payload: {
-					...entry,
-				},
-			})
-			.catch((e) => console.error("Unable to send log", e));
+		sendLogMessage(entry).catch((e) => console.error("Unable to send log", e));
 	}
 	appendStoredLogs(entry);
 }

@@ -1,10 +1,9 @@
-import browser, { browserContextInvalid } from "../browser.js";
-import { MESSAGE_ACTIONS } from "../constants.js";
 import { clearItem, focusClickedEntry, getCurrentItem } from "./entry.js";
 import { cleanUrl } from "../util/url.js";
 import { setContext, info } from "../util/log.js";
+import { sendFocusMessage } from "../util/messages.js";
 
-function sendFocusMessage() {
+function onWindowFocus() {
 	const supportsWebmention = pageSupportsWebmention();
 	const pageEntry = {
 		type: "page",
@@ -23,16 +22,7 @@ function sendFocusMessage() {
 		};
 	}
 
-	if (!browserContextInvalid()) {
-		info("Sending focus message", { pageEntry, selectedEntry });
-		browser.runtime.sendMessage({
-			action: MESSAGE_ACTIONS.FOCUS_WINDOW,
-			payload: {
-				pageEntry,
-				selectedEntry,
-			},
-		});
-	}
+	sendFocusMessage(pageEntry, selectedEntry);
 }
 
 function pageSupportsWebmention() {
@@ -43,10 +33,10 @@ export default async function main() {
 	setContext("page");
 	document.body.addEventListener("click", clearItem);
 	document.body.addEventListener("contextmenu", focusClickedEntry);
-	window.addEventListener("focus", sendFocusMessage);
+	window.addEventListener("focus", onWindowFocus);
 
 	if (!document.hidden) {
-		sendFocusMessage();
+		onWindowFocus();
 	} else {
 		info("Not sending focus message because document is hidden");
 	}

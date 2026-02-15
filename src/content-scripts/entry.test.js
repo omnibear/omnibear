@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { JSDOM } from "jsdom";
-import browser from "../browser.js";
 import { focusClickedEntry } from "./entry";
 import { fakeBrowser } from "@webext-core/fake-browser";
 import { MESSAGE_ACTIONS } from "@/constants.js";
@@ -16,12 +15,13 @@ function createFetchResponse(data) {
 }
 
 describe(focusClickedEntry.name, () => {
-	let sendMessageSpy = vi.spyOn(browser.runtime, "sendMessage");
+	let sendMessageSpy = vi.spyOn(fakeBrowser.runtime, "sendMessage");
 
 	beforeEach(() => {
 		fakeBrowser.reset();
 		fetchMock.mockReset();
 		sendMessageSpy.mockReset();
+		sendMessageSpy.mockResolvedValue();
 	});
 
 	it("should find a mastodon post in a feed", async () => {

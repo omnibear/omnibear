@@ -1,18 +1,18 @@
-import browser, { browserContextInvalid } from "../browser.js";
-import { MESSAGE_ACTIONS } from "../constants.js";
 import { mf2 } from "microformats-parser";
+import {
+	sendClearEntryMessage,
+	sendSelectEntryMessage,
+} from "../util/messages.js";
 import { warning } from "../util/log.js";
 
 const CLASS_NAME = "__omnibear-selected-item";
-/** @type {false | null | {element: HTMLElement, title: string, url: string, type: string}} */
+/** @type {null | {element: HTMLElement, title: string, url: string, type: string}} */
 let currentItem;
 // let currentItemUrl;
 
 export function clearItem() {
-	if (currentItem && !browserContextInvalid()) {
-		browser.runtime.sendMessage({
-			action: MESSAGE_ACTIONS.CLEAR_ENTRY,
-		});
+	if (currentItem) {
+		sendClearEntryMessage();
 		removeHighlight();
 	}
 }
@@ -49,17 +49,32 @@ export async function focusClickedEntry(event) {
 	if (!entry) {
 		entry = findHEntry(element);
 	}
+	const entryIsCurrentPage = document.location.href.startsWith(
+		entry?.url || null,
+	);
 
-	if (!entry || typeof entry !== "object" || browserContextInvalid()) {
+	// Fallback to link text if we haven't found an entry or the entry is the current page
+	if (!entry || entryIsCurrentPage) {
+		/** @type {HTMLAnchorElement | null} */
+		const anchor = element?.closest("a");
+
+		if (anchor && anchor.href) {
+			entry = {
+				element,
+				type: "link",
+				url: anchor.href,
+				title: anchor.textContent.trim(),
+			};
+		}
+	}
+
+	if (!entry || typeof entry !== "object") {
 		return;
 	}
-	browser.runtime.sendMessage({
-		action: MESSAGE_ACTIONS.SELECT_ENTRY,
-		payload: {
-			type: "item",
-			url: entry.url,
-			title: entry.title || "",
-		},
+	sendSelectEntryMessage({
+		type: "item",
+		url: entry.url,
+		title: entry.title || "",
 	});
 	entry?.element?.classList.add(CLASS_NAME);
 	currentItem = entry;
@@ -86,8 +101,11 @@ async function findMastodonPost(eventTarget) {
 			?.querySelector(".display-name__html")
 			?.textContent?.trim();
 		const url =
-			eventTarget?.ownerDocument.querySelector('link[rel="canonical"]')?.href ||
-			mastodonPost?.querySelector("a.embed__overlay")?.href;
+			eventTarget?.ownerDocument.querySelector(
+				/** @type {'link'} */ ('link[rel="canonical"]'),
+			)?.href ||
+			mastodonPost?.querySelector(/** @type {'a'} */ ("a.embed__overlay"))
+				?.href;
 		if (!mastodonPost || !name || !url) {
 			return;
 		}
@@ -139,7 +157,8 @@ function findBlueskyPost(el) {
 		return;
 	}
 
-	const url = element.querySelector('a[href*="/post/"]')?.href;
+	const url =
+		element.querySelector(/** @type {'a'} */ ('a[href*="/post/"]'))?.href || "";
 
 	const testId = element.dataset?.testid;
 	let handle = url.split("/")[4];
@@ -199,4 +218,13 @@ function findHEntry(el) {
 
 export function getCurrentItem() {
 	return currentItem;
+}
+
+/**
+ *
+ * @param {HTMLElement} el
+ * @returns {el is HTMLAnchorElement}
+ */
+export function isAnchorElement(el) {
+	return el?.tagName === "A" && Boolean(el.getAttribute("href"));
 }
