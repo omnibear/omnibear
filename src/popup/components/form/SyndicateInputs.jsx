@@ -24,7 +24,9 @@ export default function SyndicateInputs({
       {options.map((option) => (
         <Option
           option={option}
-          isChecked={selected ? selected.indexOf(option.uid) > -1 : false}
+          isChecked={
+            selected.value ? selected.value.indexOf(option.uid) > -1 : false
+          }
           isDisabled={isDisabled}
           onToggle={toggle}
         />
