@@ -16,7 +16,9 @@ export function createDraftState() {
 	const slug = signal(defaultDraft.slug);
 	const isSlugModified = signal(false);
 	const type = signal(/** @type {string | null} */ (defaultDraft.type));
-	const syndicateList = signal([]);
+	const syndicateList = signal(
+		/** @type {string[]} */ (defaultDraft.syndicateTo),
+	);
 
 	const tagsArray = computed(() =>
 		tags.value
