@@ -1,11 +1,29 @@
+/**
+ * @import {MicropubSyndicationTarget} from '../../../omnibear.d.ts'
+ */
+
+/**
+ *
+ * @param {object} props
+ * @param {MicropubSyndicationTarget[]} props.options
+ * @param {string[]} props.selected Array of selected syndication target uids
+ * @param {(updated: string[]) => void} props.onUpdate Callback for when syndication targets are updated, receives the updated array of selected syndication target uids
+ * @param {boolean} [props.isDisabled] Whether the inputs are disabled
+ * @returns
+ */
 export default function SyndicateInputs({
   options,
-  selected,
+  selected = [],
   onUpdate,
   isDisabled,
 }) {
+  /**
+   *
+   * @param {string} uid Unique id for syndicate selection
+   * @param {boolean} isChecked true if the option is active
+   */
   const toggle = (uid, isChecked) => {
-    const updated = [...selected] || [];
+    const updated = [...selected];
     if (isChecked) {
       updated.push(uid);
     } else {
@@ -33,6 +51,15 @@ export default function SyndicateInputs({
   );
 }
 
+/**
+ * Render a single syndication target option
+ * @param {object} props
+ * @param {MicropubSyndicationTarget} props.option
+ * @param {boolean} props.isChecked
+ * @param {boolean} props.isDisabled
+ * @param {(uid: string, isChecked: boolean) => void} props.onToggle
+ * @returns
+ */
 function Option({ option, isChecked, isDisabled, onToggle }) {
   return (
     <label>
@@ -40,7 +67,12 @@ function Option({ option, isChecked, isDisabled, onToggle }) {
         type="checkbox"
         checked={isChecked}
         disabled={isDisabled}
-        onClick={(e) => onToggle(option.uid, e.target.checked)}
+        onClick={(e) =>
+          onToggle(
+            option.uid,
+            /** @type {HTMLInputElement} */ (e.target).checked,
+          )
+        }
       />
       {option.name}
     </label>

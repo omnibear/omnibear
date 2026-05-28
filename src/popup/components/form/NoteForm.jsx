@@ -11,11 +11,6 @@ export default function NoteForm() {
   const draft = useContext(draftContext);
   const settings = useContext(settingsContext);
   const content = useRef(null);
-  const onSubmit = (e) => {
-    e.preventDefault();
-    publish.send();
-    return false;
-  };
   const onClear = () => {
     if (confirm("Are you sure you want to clear the draft?")) {
       draft.clear();
@@ -24,7 +19,14 @@ export default function NoteForm() {
 
   const isLoading = publish.isSending.value;
   return (
-    <form className="container" onSubmit={onSubmit}>
+    <form
+      className="container"
+      onSubmit={(e) => {
+        e.preventDefault();
+        publish.send();
+        return false;
+      }}
+    >
       {publish.includeTitle.value ? (
         <div>
           <label htmlFor="input-title">Title</label>
@@ -33,7 +35,7 @@ export default function NoteForm() {
             type="text"
             name="title"
             value={draft.title}
-            onInput={(e) => (draft.title.value = e.target.value)}
+            onInput={(e) => (draft.title.value = e.currentTarget.value)}
             disabled={isLoading}
           />
         </div>
@@ -43,13 +45,13 @@ export default function NoteForm() {
         <textarea
           id="input-content"
           value={draft.content}
-          onInput={(e) => (draft.content.value = e.target.value)}
-          onBlur={(e) => (draft.content.value = e.target.value)}
-          rows="4"
+          onInput={(e) => (draft.content.value = e.currentTarget.value)}
+          onBlur={(e) => (draft.content.value = e.currentTarget.value)}
+          rows={4}
           disabled={isLoading}
           ref={content}
         />
-        <div className="input-extra">{draft.content.length}</div>
+        <div className="input-extra">{draft.content.value?.length}</div>
         <QuickReplies />
       </div>
       <div>
@@ -59,7 +61,7 @@ export default function NoteForm() {
           type="text"
           placeholder="e.g. web, personal"
           value={draft.tags}
-          onChange={(e) => (draft.tags.value = e.target.value)}
+          onChange={(e) => (draft.tags.value = e.currentTarget.value)}
           disabled={isLoading}
         />
       </div>
@@ -70,14 +72,14 @@ export default function NoteForm() {
           type="text"
           name="mp-slug"
           value={draft.slug}
-          onInput={(e) => draft.setSlug(e.target.value)}
+          onInput={(e) => draft.setSlug(e.currentTarget.value)}
           disabled={isLoading}
         />
       </div>
       <SyndicateInputs
         options={settings.syndicateOptions.value}
-        selected={draft.syndicateList}
-        onUpdate={draft.setSyndicateList}
+        selected={draft.syndicateList.value}
+        onUpdate={(updatedList) => (draft.syndicateList.value = updatedList)}
         isDisabled={isLoading}
       />
       {publish.flashMessage.value ? (
