@@ -31,7 +31,7 @@ export function removeHighlight() {
  */
 export async function focusClickedEntry(event) {
 	clearItem();
-	let entry = null;
+	let entry;
 
 	const element = /** @type {HTMLElement | null} */ (event.target);
 	const document = element?.ownerDocument;
