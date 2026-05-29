@@ -16,7 +16,7 @@
     "lint:fix": "eslint . --fix --ext .js,.ts,.jsx,.tsx,.json,.md",
     "check": "npm run format:check && npm run lint:check",
     "postinstall": "wxt prepare",
-    "test": "npm run test:unit -- --run && npm run test:e2e",
+    "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "vitest --run",
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
