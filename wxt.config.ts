@@ -7,6 +7,10 @@ export default defineConfig({
 
   vite: () => ({
     plugins: [preact()],
+    optimizeDeps: {
+      // Avoid build trying to resolve test fixtures as entrypoints
+      entries: ["src/entrypoints/**"],
+    },
   }),
   webExt: {
     startUrls: ["https://omnibear.com"],
