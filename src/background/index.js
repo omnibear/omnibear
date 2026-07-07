@@ -158,6 +158,7 @@ export default function main() {
 
 			sendAuthStatusUpdate(`Retrieving access token…`, tabId);
 			await fetchToken(code);
+
 			await runAuthStep("fetching Micropub config", async () => {
 				config = await fetchMicropubConfig();
 			});
@@ -170,6 +171,11 @@ export default function main() {
 			await sendAuthStatusUpdate(`Authentication complete.`, tabId);
 			browser.tabs.remove(tabId);
 		} catch (err) {
+			await sendAuthStatusUpdate(
+				"Error during authentication: " + (err?.message || err),
+				tabId,
+				true,
+			);
 			error(/** @type {Error} */ (err).message, err);
 		}
 	}

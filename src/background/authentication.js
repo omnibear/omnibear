@@ -51,6 +51,7 @@ export async function fetchToken(code) {
 				},
 			});
 		}
+		throw err;
 	}
 }
 

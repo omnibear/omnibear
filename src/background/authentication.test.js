@@ -81,7 +81,7 @@ describe("authentication config queries", () => {
 	it("logs out and sends auth error message when token is missing", async () => {
 		micropub.getToken.mockResolvedValue(null);
 
-		await fetchToken("auth-code-123");
+		await expect(fetchToken("auth-code-123")).rejects.toThrow();
 
 		expect(logout).toHaveBeenCalled();
 		expect(logError).toHaveBeenCalledWith(
@@ -100,7 +100,7 @@ describe("authentication config queries", () => {
 		const tokenError = new Error("token endpoint unavailable");
 		micropub.getToken.mockRejectedValue(tokenError);
 
-		await fetchToken("auth-code-123");
+		await expect(fetchToken("auth-code-123")).rejects.toThrow(tokenError);
 
 		expect(logout).toHaveBeenCalled();
 		expect(logError).toHaveBeenCalledWith("Error fetching token", tokenError);
@@ -118,7 +118,7 @@ describe("authentication config queries", () => {
 			new Error("token endpoint unavailable"),
 		);
 
-		await fetchToken("auth-code-123");
+		await expect(fetchToken("auth-code-123")).rejects.toThrow();
 
 		expect(logout).toHaveBeenCalled();
 		expect(logError).toHaveBeenCalledWith(
