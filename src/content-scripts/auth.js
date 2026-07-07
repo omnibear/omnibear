@@ -28,11 +28,16 @@ export default async function main() {
 	}
 }
 
+/**
+ *
+ * @param {Error | unknown} error
+ */
 function handleTokenError(error) {
-	const heading = document.getElementById("status-heading");
-	const paragraph = document.getElementById("status-paragraph");
-	heading.textContent = "Error fetching token from token endpoint";
-	paragraph.textContent = error.message;
+	const message = error?.message || String(error);
+	handleStatusUpdate({
+		message: `Error fetching token from token endpoint: ${message}`,
+		isError: true,
+	});
 }
 
 function handleStatusUpdate(payload) {
