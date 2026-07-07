@@ -1,5 +1,9 @@
 import browser from "../browser.js";
 import { MESSAGE_ACTIONS } from "../constants.js";
+
+/**
+ * @typedef {Record<string, unknown>} MicropubConfig
+ */
 import storage from "../util/storage.js";
 import micropub from "../util/micropub.js";
 import { getAuthTab, logout } from "../util/utils.js";
@@ -50,28 +54,49 @@ export async function fetchToken(code) {
 	}
 }
 
-export async function fetchSyndicationTargets() {
-	const response = await micropub.query("syndicate-to");
-	const syndicateTo = response?.["syndicate-to"];
+/**
+ * @param {MicropubConfig} config
+ */
+export async function storeSyndicationTargets(config) {
+	const syndicateTo = config?.["syndicate-to"];
 	info("Syndication targets retrieved", syndicateTo);
 
 	if (Array.isArray(syndicateTo)) {
-		storage.set({ syndicateTo });
+		await storage.set({ syndicateTo });
 	} else {
 		warning(`Syndication targets not in array format. Saving as empty array.`);
-		storage.set({ syndicateTo: [] });
+		await storage.set({ syndicateTo: [] });
 	}
 }
 
-export async function fetchPostTypes() {
-	const response = await micropub.query("post-types");
-	const postTypes = response["post-types"];
+/**
+ * @param {MicropubConfig} config
+ */
+export async function storePostTypes(config) {
+	const postTypes = config?.["post-types"];
 	info("Post types retrieved", postTypes);
 
 	if (Array.isArray(postTypes)) {
-		storage.set({ postTypes });
+		await storage.set({ postTypes });
 	} else {
 		warning(`Post types not in array format. Saving as empty array.`);
-		storage.set({ postTypes: [] });
+		await storage.set({ postTypes: [] });
 	}
+}
+
+/**
+ * @returns {Promise<MicropubConfig>}
+ */
+export async function fetchMicropubConfig() {
+	const response = await micropub.query("config");
+	if (
+		response !== null &&
+		typeof response === "object" &&
+		!Array.isArray(response)
+	) {
+		return response;
+	}
+
+	warning("Micropub config query returned an unexpected response", response);
+	return {};
 }

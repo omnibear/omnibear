@@ -10,8 +10,9 @@ import storage from "../util/storage.js";
 import { MESSAGE_ACTIONS } from "../constants.js";
 import {
 	fetchToken,
-	fetchSyndicationTargets,
-	fetchPostTypes,
+	fetchMicropubConfig,
+	storeSyndicationTargets,
+	storePostTypes,
 } from "./authentication.js";
 import {
 	info,
@@ -133,22 +134,39 @@ export default function main() {
 	async function handleAuthCode(tabId, { code }) {
 		info("Processing auth code");
 		try {
+			/** @type {Record<string, unknown>} */
+			let config = {};
+
+			/**
+			 * Run an auth step with consistent status updates and error handling.
+			/**
+			 * @param {string} step lowercase description, e.g. "fetching Micropub config"
+			 * @param {() => Promise<void>} run
+			 */
+			const runAuthStep = async (step, run) => {
+				try {
+					sendAuthStatusUpdate(
+						step[0].toUpperCase() + step.slice(1) + "…",
+						tabId,
+					);
+					await run();
+				} catch (err) {
+					logCaughtError(step)(err);
+					sendAuthStatusUpdate("Error " + step, tabId, true);
+				}
+			};
+
 			sendAuthStatusUpdate(`Retrieving access token…`, tabId);
 			await fetchToken(code);
-			try {
-				sendAuthStatusUpdate("Fetching syndication targets…", tabId);
-				await fetchSyndicationTargets();
-			} catch (err) {
-				logCaughtError("fetching syndication targets")(err);
-				sendAuthStatusUpdate("Error fetching syndication targets", tabId, true);
-			}
-			try {
-				sendAuthStatusUpdate("Fetching post types…", tabId);
-				await fetchPostTypes();
-			} catch (err) {
-				logCaughtError("fetching post types")(err);
-				sendAuthStatusUpdate("Error fetching post types", tabId, true);
-			}
+			await runAuthStep("fetching Micropub config", async () => {
+				config = await fetchMicropubConfig();
+			});
+			await runAuthStep("processing syndication targets", async () => {
+				await storeSyndicationTargets(config);
+			});
+			await runAuthStep("processing post types", async () => {
+				await storePostTypes(config);
+			});
 			await sendAuthStatusUpdate(`Authentication complete.`, tabId);
 			browser.tabs.remove(tabId);
 		} catch (err) {
