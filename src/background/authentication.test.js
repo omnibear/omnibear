@@ -199,6 +199,31 @@ describe("authentication config queries", () => {
 		);
 	});
 
+	it("removes stale syndication selections from the saved draft", async () => {
+		storage.get.mockImplementation((keys) => {
+			if (keys.includes("draft")) {
+				return Promise.resolve({
+					draft: {
+						content: "My post",
+						syndicateTo: ["stale-uid", "valid-uid"],
+					},
+				});
+			}
+			return Promise.resolve({});
+		});
+
+		await storeSyndicationTargets({
+			"syndicate-to": [
+				{ uid: "valid-uid", name: "Valid Target" },
+				{ uid: "new-uid", name: "New Target" },
+			],
+		});
+
+		expect(storage.set).toHaveBeenCalledWith({
+			draft: { content: "My post", syndicateTo: ["valid-uid"] },
+		});
+	});
+
 	it("stores post types from config response", async () => {
 		await storePostTypes({
 			"post-types": [{ type: "bookmark", name: "Bookmark" }],

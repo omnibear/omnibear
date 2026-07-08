@@ -40,6 +40,7 @@ export function logout() {
 		"tokenEndpoint",
 		"micropubEndpoint",
 		"syndicateTo",
+		"postTypes",
 	]);
 }
 

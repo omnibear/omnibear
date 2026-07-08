@@ -62,11 +62,22 @@ export async function storeSyndicationTargets(config) {
 	const syndicateTo = config?.["syndicate-to"];
 	info("Syndication targets retrieved", syndicateTo);
 
-	if (Array.isArray(syndicateTo)) {
-		await storage.set({ syndicateTo });
-	} else {
+	const validTargets = Array.isArray(syndicateTo) ? syndicateTo : [];
+	if (!Array.isArray(syndicateTo)) {
 		warning(`Syndication targets not in array format. Saving as empty array.`);
-		await storage.set({ syndicateTo: [] });
+	}
+	await storage.set({ syndicateTo: validTargets });
+
+	// Clear any stale syndication selections from the saved draft
+	const { draft } = await storage.get(["draft"]);
+	if (draft?.syndicateTo?.length) {
+		const validUids = new Set(validTargets.map((t) => t.uid));
+		await storage.set({
+			draft: {
+				...draft,
+				syndicateTo: draft.syndicateTo.filter((uid) => validUids.has(uid)),
+			},
+		});
 	}
 }
 
