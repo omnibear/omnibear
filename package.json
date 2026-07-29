@@ -53,7 +53,7 @@
     "prettier": "^3.8.1",
     "typescript-eslint": "^8.55.0",
     "vitest": "^4.0.18",
-    "wxt": "^0.20.26"
+    "wxt": "^0.21.2"
   },
   "dependencies": {
     "@preact/signals": "^2.8.0",
