@@ -25,8 +25,7 @@ export default function AuthenticationFields() {
     <fieldset>
       <legend>Authentication details (advanced)</legend>
       <div className="settings-form__description">
-        These values are set automatically upon logging in. Only edit them if
-        you are having trouble authenticating and wish to do so manually.
+        Automatically set upon logging in. Override for manual auth.
       </div>
 
       {showFields.value

@@ -616,8 +616,8 @@ fieldset > * + * {
 
 .settings-form__description {
 	margin: 0;
-	padding-left: 1em;
 	color: var(--gray-40);
+	font-style: italic;
 }
 legend + .settings-form__description {
 	margin-bottom: 1em;

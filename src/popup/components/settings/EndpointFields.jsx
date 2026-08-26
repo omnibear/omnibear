@@ -7,10 +7,10 @@ export default function EndpointFields() {
 
   return (
     <fieldset>
-      <legend>Customize endpoint fields</legend>
+      <legend>Customize endpoint fields (legacy)</legend>
       <div className="settings-form__description">
-        If your micropub server expects custom or legacy fieldnames, you can
-        specify those here
+        Override micropub field names.Typically only needed to support legacy
+        servers.
       </div>
 
       {showFields
@@ -25,10 +25,7 @@ export default function EndpointFields() {
                   (settings.slugFieldName.value = e.target.value)
                 }
               />
-              <div className="settings-form__description">
-                Choose the name of the field that the slug will be sent in. This
-                should be <code>mp-slug</code> for up-to-date endpoints.
-              </div>
+              <div className="settings-form__description">Default: mp-slug</div>
             </div>,
             <div key="syndicate">
               <label htmlFor="syndicate-to">Syndicate To</label>
@@ -41,9 +38,7 @@ export default function EndpointFields() {
                 }
               />
               <div className="settings-form__description">
-                Choose the name of the field that the syndicate-to UIDs will be
-                sent in. This should be <code>mp-syndicate-to</code> for
-                up-to-date endpoints.
+                Default: mp-syndicate-to
               </div>
             </div>,
           ]
