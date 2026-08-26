@@ -1,6 +1,6 @@
 {
   "name": "Omnibear",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "A micropub browser extension",
   "type": "module",
   "scripts": {
@@ -58,7 +58,7 @@
   "dependencies": {
     "@preact/signals": "^2.8.0",
     "microformats-parser": "^2.0.4",
-    "micropub-helper": "^2.1.0",
+    "micropub-helper": "^2.1.1",
     "preact": "^10.28.3"
   },
   "lint-staged": {
