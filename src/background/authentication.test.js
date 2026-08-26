@@ -24,7 +24,6 @@ vi.mock("../util/micropub.js", () => ({
 }));
 
 vi.mock("../util/utils.js", () => ({
-	getAuthTab: vi.fn(),
 	logout: vi.fn(),
 }));
 
@@ -43,9 +42,8 @@ import {
 import browser from "../browser.js";
 import micropub from "../util/micropub.js";
 import storage from "../util/storage.js";
-import { getAuthTab, logout } from "../util/utils.js";
-import { warning, error as logError } from "../util/log.js";
-import { MESSAGE_ACTIONS } from "../constants.js";
+import { logout } from "../util/utils.js";
+import { warning } from "../util/log.js";
 
 describe("authentication config queries", () => {
 	beforeEach(() => {
@@ -58,7 +56,6 @@ describe("authentication config queries", () => {
 		});
 		storage.set.mockResolvedValue(undefined);
 		micropub.getToken.mockResolvedValue("token-123");
-		getAuthTab.mockResolvedValue({ id: 99 });
 		browser.tabs.sendMessage.mockResolvedValue(undefined);
 	});
 
@@ -78,53 +75,25 @@ describe("authentication config queries", () => {
 		expect(browser.tabs.sendMessage).not.toHaveBeenCalled();
 	});
 
-	it("logs out and sends auth error message when token is missing", async () => {
+	it("logs out and re-throws when token is missing", async () => {
 		micropub.getToken.mockResolvedValue(null);
 
 		await expect(fetchToken("auth-code-123")).rejects.toThrow();
 
 		expect(logout).toHaveBeenCalled();
-		expect(logError).toHaveBeenCalledWith(
-			"Error fetching token",
-			expect.any(Error),
-		);
-		expect(browser.tabs.sendMessage).toHaveBeenCalledWith(99, {
-			action: MESSAGE_ACTIONS.FETCH_TOKEN_ERROR,
-			payload: {
-				error: expect.any(Error),
-			},
-		});
+		expect(browser.tabs.sendMessage).not.toHaveBeenCalled();
 	});
 
-	it("logs out and sends auth error message when token request throws", async () => {
-		const tokenError = new Error("token endpoint unavailable");
-		micropub.getToken.mockRejectedValue(tokenError);
-
-		await expect(fetchToken("auth-code-123")).rejects.toThrow(tokenError);
-
-		expect(logout).toHaveBeenCalled();
-		expect(logError).toHaveBeenCalledWith("Error fetching token", tokenError);
-		expect(browser.tabs.sendMessage).toHaveBeenCalledWith(99, {
-			action: MESSAGE_ACTIONS.FETCH_TOKEN_ERROR,
-			payload: {
-				error: tokenError,
-			},
-		});
-	});
-
-	it("does not send auth error message when no auth tab exists", async () => {
-		getAuthTab.mockResolvedValue(null);
+	it("logs out and re-throws when token request throws", async () => {
 		micropub.getToken.mockRejectedValue(
 			new Error("token endpoint unavailable"),
 		);
 
-		await expect(fetchToken("auth-code-123")).rejects.toThrow();
+		await expect(fetchToken("auth-code-123")).rejects.toThrow(
+			"token endpoint unavailable",
+		);
 
 		expect(logout).toHaveBeenCalled();
-		expect(logError).toHaveBeenCalledWith(
-			"Error fetching token",
-			expect.any(Error),
-		);
 		expect(browser.tabs.sendMessage).not.toHaveBeenCalled();
 	});
 

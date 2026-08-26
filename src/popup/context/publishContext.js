@@ -136,11 +136,12 @@ export function createPublishState() {
 			});
 		} catch (err) {
 			const message = `Error sending ${viewTypeName}`;
-			error(message, sanitizeMicropubError(/** @type {Error} */ (err)));
+			const sanitizedError = sanitizeMicropubError(/** @type {Error} */ (err));
+			error(message, sanitizedError);
 			flashMessage.value = {
 				message,
 				type: MESSAGE_ERROR,
-				err,
+				err: sanitizedError,
 			};
 		} finally {
 			isSending.value = false;

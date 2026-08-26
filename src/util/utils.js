@@ -83,7 +83,10 @@ export function generateSlug(content) {
  */
 
 /**
- *
+ * This function does a few things for errors:
+ * 1. Ensures the error object has a consistent shape
+ * 2. Avoids properties like stack traces that can be very long
+ * 3. Ensures properties like message are enumerable and will JSON stringify
  * @param {Error} [error] Caught JS error
  * @returns {SanitizedMicropubError|null} Sanitized error object
  */

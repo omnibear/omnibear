@@ -191,9 +191,8 @@ export default function main() {
 		info(message);
 		return browser.tabs
 			.sendMessage(tabId, {
-				action: "auth-status-update",
-				isError,
-				payload: { message },
+				action: MESSAGE_ACTIONS.AUTH_STATUS_UPDATE,
+				payload: { message, isError },
 			})
 			.catch(logCaughtError(`sending auth status update '${message}' `));
 	}

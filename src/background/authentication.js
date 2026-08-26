@@ -1,13 +1,11 @@
-import browser from "../browser.js";
-import { MESSAGE_ACTIONS } from "../constants.js";
+import storage from "../util/storage.js";
+import micropub from "../util/micropub.js";
+import { logout } from "../util/utils.js";
+import { info, warning } from "../util/log.js";
 
 /**
  * @typedef {Record<string, unknown>} MicropubConfig
  */
-import storage from "../util/storage.js";
-import micropub from "../util/micropub.js";
-import { getAuthTab, logout } from "../util/utils.js";
-import { info, warning, error } from "../util/log.js";
 
 /**
  * Request the token from the micropub auth server
@@ -40,17 +38,7 @@ export async function fetchToken(code) {
 			token,
 		};
 	} catch (err) {
-		error("Error fetching token", err);
 		logout();
-		const tab = await getAuthTab();
-		if (tab?.id) {
-			browser.tabs.sendMessage(tab.id, {
-				action: MESSAGE_ACTIONS.FETCH_TOKEN_ERROR,
-				payload: {
-					error: err,
-				},
-			});
-		}
 		throw err;
 	}
 }

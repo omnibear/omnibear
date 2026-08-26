@@ -28,18 +28,6 @@ export default async function main() {
 	}
 }
 
-/**
- *
- * @param {Error | unknown} error
- */
-function handleTokenError(error) {
-	const message = error?.message || String(error);
-	handleStatusUpdate({
-		message: `Error fetching token from token endpoint: ${message}`,
-		isError: true,
-	});
-}
-
 function handleStatusUpdate(payload) {
 	const { message, isError } = payload;
 	const list = document.getElementById("status-list");
@@ -56,9 +44,6 @@ function handleStatusUpdate(payload) {
 
 function handleMessage(request) {
 	switch (request.action) {
-		case MESSAGE_ACTIONS.FETCH_TOKEN_ERROR:
-			handleTokenError(request.payload.error);
-			break;
 		case MESSAGE_ACTIONS.AUTH_STATUS_UPDATE:
 			handleStatusUpdate(request.payload);
 			break;
